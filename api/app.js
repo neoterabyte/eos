@@ -144,7 +144,7 @@ router.get('/bulk_verify', function(req, res) {
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
 				msg = msg.replace("@oauthURI", oauthURI);
 
-				res.end(responseHeaderHTML + responseContentHTMLHTML.replace("@message",msg) + responseFooterHTML);
+				res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
 					
 			}else{
 
