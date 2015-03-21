@@ -72,6 +72,7 @@ router.get('/oauth', function(req, res) {
 
 		//Get user id from redirected end point
 		var user_id = req.query.user_id;
+		var instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@uid", user_id));
 
 		request.post(
 		    'https://api.instagram.com/oauth/access_token',
