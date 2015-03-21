@@ -194,6 +194,83 @@ router.get('/bulk_verify', function(req, res) {
 });
 
 
+router.get('/bulk_load_agents', function(req, res) {
+
+	
+	var filepath = req.query.filepath;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!filepath) {
+		dataOk = false;
+		invalidParam = 'filepath';
+	}
+
+
+	if (dataOk){
+
+		cache.hgetall(CACHE_PREFIX + 'user:' + apiUser, function (err, user) {
+
+
+			if((err) || (user == null)){
+
+				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@uid", apiUser));
+				
+				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
+				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
+				msg = msg.replace("@oauthURI", oauthURI);
+
+				res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
+					
+			}else{
+                
+				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
+				var csv = require("fast-csv");
+
+				csv
+					.fromStream(stream, {headers : true})
+					.on("data", function(data){
+						var options = {
+							url: "https://api.instagram.com/v1/users/search?q=" + data.user_name + "&count=1&access_token=" + user.access_token
+						};
+
+						request(options, function (error, response, body) {
+
+							if (error){
+								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+								logger.error(errmsg);
+							} else if (response && response.statusCode != 200) {
+								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+								logger.error(errmsg);
+							}else{
+								var userdata = (JSON.parse(body)).data;
+								if (userdata.length > 0){
+									msg = "user name: " + userdata[0].username + " user id: " + userdata[0].id;
+									
+									logger.info(JSON.stringify(userdata[0]));							
+								}else{
+									logger.info("invalid user: " + data.user_name);
+								}
+							}
+
+						});
+
+					})
+					.on("end", function(){
+						res.end(responseHeaderHTML + responseContentHTML.replace("@message","Instagram agents loaded") + responseFooterHTML);
+					});
+			}
+		});
+
+	}else{
+		res.statusCode = ERROR_RESPONSE_CODE;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+});
+
+
 router.get('/html/*', function(req, res) {
 	res.sendFile(process.cwd() + '/api' + req.path);	
 });

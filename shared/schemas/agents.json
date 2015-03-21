@@ -1,9 +1,9 @@
 {
-  "name": "String",
-  "slackHandle": "String",
-  "slackToken": "String",
-  "adminContact": "String",
-  "adminEmail": "String",
+  "user_name": "String",
+  "user_id": "String",
+  "following": "Number",
+  "followers": "Number",
+  "media_count": "Number",
   "isActive": "Boolean"
 }
 
