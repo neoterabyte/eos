@@ -161,7 +161,7 @@ router.get('/bulk_verify', function(req, res) {
 						request(options, function (error, response, body) {
 
 							if (error){
-								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+								errmsg = "Instagram API error: " + error;	    				
 								logger.error(errmsg);
 							} else if (response && response.statusCode != 200) {
 								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
@@ -240,7 +240,7 @@ router.get('/bulk_load_agents', function(req, res) {
 						request(options, function (error, response, body) {
 
 							if (error){
-								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+								errmsg = "Instagram API error: " + error;
 								logger.error(errmsg);
 							} else if (response && response.statusCode != 200) {
 								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
@@ -249,18 +249,17 @@ router.get('/bulk_load_agents', function(req, res) {
 								var userdata = (JSON.parse(body)).data;
 								if (userdata.length > 0){
 
+									//logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id);	
+									
 									//User was found, now search for Media
-
 									var options1 = {
 										url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=20&access_token=" + user.access_token
 									};
 
-									logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id);	
-
 									request(options1, function (error1, response1, body1) {
 
 										if (error1){
-											errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+											errmsg = "Instagram API error: " + error1;
 											logger.error(errmsg);
 										} else if (response1 && response1.statusCode != 200) {
 											errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
@@ -270,7 +269,62 @@ router.get('/bulk_load_agents', function(req, res) {
 											var mediadata = (JSON.parse(body1)).data;
 											if (mediadata.length > 0){
 
-												logger.info(JSON.stringify(mediadata[0]));
+												logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id + " media count: " + mediadata.length);
+
+											}else{
+
+											}
+										}
+									});
+
+
+									//User was found, now search for follows
+									var options2 = {
+										url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/follows?access_token=" + user.access_token
+									};
+
+									request(options2, function (error2, response2, body2) {
+
+										if (error2){
+											errmsg = "Instagram API error: " + error2;		    				
+											logger.error(errmsg);
+										} else if (response2 && response2.statusCode != 200) {
+											errmsg = "Instagram API error: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";		    				
+											logger.error(errmsg);
+										}else{
+
+											var followsdata = (JSON.parse(body2)).data;
+											if (followsdata.length > 0){
+
+												logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id + " media count: " + followsdata.length);
+
+
+											}else{
+
+											}
+										}
+									});
+
+									//User was found, now search for followed-by
+									var options3 = {
+										url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/followed-by?access_token=" + user.access_token
+									};
+
+									request(options3, function (error3, response3, body3) {
+
+										if (error3){
+											errmsg = "Instagram API error: " + error3;		    				
+											logger.error(errmsg);
+										} else if (response3 && response3.statusCode != 200) {
+											errmsg = "Instagram API error: " + http.STATUS_CODES[response3.statusCode] + " (" + response3.statusCode + ")";		    				
+											logger.error(errmsg);
+										}else{
+
+											var followedbydata = (JSON.parse(body3)).data;
+											if (followedbydata.length > 0){
+
+												logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id + " media count: " + followedbydata.length);
+
 
 											}else{
 

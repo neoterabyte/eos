@@ -1,8 +1,8 @@
 {
   "user_name": "String",
   "user_id": "String",
-  "following": "Number",
-  "followers": "Number",
+  "follows": "Number",
+  "followed_by": "Number",
   "media_count": "Number",
   "isActive": "Boolean"
 }
