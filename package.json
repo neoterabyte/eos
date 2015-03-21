@@ -1,7 +1,7 @@
 {
-  "name": "piper-api",
+  "name": "promogram",
   "version": "0.1.0",
-  "description": "Piper API endpoints",
+  "description": "Project Eos",
   "main": "server.js",
   "scripts": {
     "test": "test"
@@ -31,7 +31,8 @@
     "underscore": "1.7.0",
     "log": "1.4.0",
     "redis": "0.12.1",
-    "vhost": "^3.0.0"
+    "vhost": "^3.0.0",
+    "fast-csv": "0.6.0"
   },
   "devDependencies": {
     "mocha": "1.21.4",
