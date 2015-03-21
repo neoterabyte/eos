@@ -191,7 +191,7 @@ router.get('/bulk_verify', function(req, res) {
 
 */
 				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
-				 
+				var csv = require("fast-csv"); 
 				csv
 				 .fromStream(stream, {headers : true})
 				 .on("data", function(data){
