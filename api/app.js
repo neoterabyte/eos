@@ -72,9 +72,9 @@ router.get('/oauth', function(req, res) {
 
 		//Get user id from redirected end point
 		var user_id = req.query.user_id;
-		//var instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@uid", user_id));
+		//no need to encode URL because its an http post
 		var instagram_redirect_uri = params.instagram_redirect_uri.replace("@uid", user_id);
-		logger.info('Redirect URI: ' + instagram_redirect_uri);
+
 
 		request.post(
 		    'https://api.instagram.com/oauth/access_token',
@@ -158,47 +158,49 @@ router.get('/bulk_verify', function(req, res) {
 				res.end(responseFooterHTML);
 					
 			}else{
+
+				res.write(responseHeaderHTML);
+
+				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
+				var csv = require("fast-csv");
+
+				csv
+					.fromStream(stream, {headers : true})
+					.on("data", function(data){
+					
+						var options = {
+							url: "https://api.instagram.com/v1/users/search?q=" + data.UserID + "&count=1&access_token=" + user.access_token
+						};
+
+						request(options, function (error, respose, body) {
+
+						if (error){
+							errmsg = "Instagram API error: " + http.STATUS_CODES[respose.statusCode] + " (" + respose.statusCode + ")";		    				
+							res.write(responseErrorHTML.replace("@message",errmsg));
+							logger.error(errmsg);
+						} else if (response && response.statusCode != 200) {
+							errmsg = "Instagram API error: " + http.STATUS_CODES[respose.statusCode] + " (" + respose.statusCode + ")";		    				
+							res.write(responseErrorHTML.replace("@message",errmsg));
+							logger.error(errmsg);
+						}else{
+							var userdata = (JSON.parse(body)).data;
+							if (userdata.length > 0){
+								msg = userdata[0].username + ": valid user";
+								res.write(responseContentHTML.replace("@message",msg));
+								logger.info(msg);							
+							}else{
+								logger.info(data.UserID  + ": invalid user");
+							}
+						}
+
+						});
+
+					})
+					.on("end", function(){
+						res.end(responseFooterHTML);
+					});
 			}
 		});
-
-/*
-		var stream = fs.createReadStream("/tmp/accounts.csv");
-		var csv = require("fast-csv");
-
-
-		csv
-			.fromStream(stream, {headers : true})
-			.on("data", function(data){
-			
-				var options = {
-					url: "https://api.instagram.com/v1/users/search?q=" + data.UserID + "&count=1&access_token=" + user.access_token
-				};
-
-
-				request(options, function (error, response, body) {
-
-				if (error){
-					errmsg = "Cannot get User from Instagram " + error;
-					logger.info(errmsg);
-				} else if (response && response.statusCode != 200) {
-					errmsg = "Cannot get User from Instagram: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
-					logger.info(errmsg);
-				}else{
-					var userdata = (JSON.parse(body)).data;
-					if (userdata.length > 0){
-						logger.info(userdata[0].username + ": valid user");								
-					}else{
-						logger.info(data.UserID  + ": invalid user");
-					}
-				}
-
-				});
-
-			})
-			.on("end", function(){
-				//console.log("done");
-			});
-*/
 
 	}else{
 		res.statusCode = ERROR_RESPONSE_CODE;
