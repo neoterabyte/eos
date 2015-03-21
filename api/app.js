@@ -168,30 +168,31 @@ router.get('/bulk_verify', function(req, res) {
 					.fromStream(stream, {headers : true})
 					.on("data", function(data){
 					
+						logger.info("User in File: " + data.user_id);
 						var options = {
 							url: "https://api.instagram.com/v1/users/search?q=" + data.user_id + "&count=1&access_token=" + user.access_token
 						};
 
 						request(options, function (error, response, body) {
 
-						if (error){
-							errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-							res.write(responseErrorHTML.replace("@message",errmsg));
-							logger.error(errmsg);
-						} else if (response && response.statusCode != 200) {
-							errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-							res.write(responseErrorHTML.replace("@message",errmsg));
-							logger.error(errmsg);
-						}else{
-							var userdata = (JSON.parse(body)).data;
-							if (userdata.length > 0){
-								msg = userdata[0].username + ": valid user";
-								res.write(responseContentHTML.replace("@message",msg));
-								logger.info(msg);							
+							if (error){
+								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+								res.write(responseErrorHTML.replace("@message",errmsg));
+								logger.error(errmsg);
+							} else if (response && response.statusCode != 200) {
+								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+								res.write(responseErrorHTML.replace("@message",errmsg));
+								logger.error(errmsg);
 							}else{
-								logger.info(data.user_id  + ": invalid user");
+								var userdata = (JSON.parse(body)).data;
+								if (userdata.length > 0){
+									msg = userdata[0].username + ": valid user";
+									res.write(responseContentHTML.replace("@message",msg));
+									logger.info(msg);							
+								}else{
+									logger.info(data.user_id  + ": invalid user");
+								}
 							}
-						}
 
 						});
 
