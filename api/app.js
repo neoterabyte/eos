@@ -147,8 +147,7 @@ router.get('/bulk_verify', function(req, res) {
 				res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
 					
 			}else{
-                /*
-				tempHTML = "";
+                
 				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
 				var csv = require("fast-csv");
 
@@ -163,17 +162,15 @@ router.get('/bulk_verify', function(req, res) {
 
 							if (error){
 								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-								res.send(responseErrorHTML.replace("@message",errmsg));
 								logger.error(errmsg);
 							} else if (response && response.statusCode != 200) {
 								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-								res.send(responseErrorHTML.replace("@message",errmsg));
 								logger.error(errmsg);
 							}else{
 								var userdata = (JSON.parse(body)).data;
 								if (userdata.length > 0){
 									msg = "user name: " + userdata[0].username + " user id: " + userdata[0].id;
-									tempHTML += msg;
+									//tempHTML += msg;
 									logger.info(msg);							
 								}else{
 									logger.info("invalid user: " + data.user_name);
@@ -184,51 +181,8 @@ router.get('/bulk_verify', function(req, res) {
 
 					})
 					.on("end", function(){
-						logger.info("Temp HTML is: " + tempHTML);
-						res.end(responseHeaderHTML + tempHTML + responseFooterHTML);
+						res.end(responseHeaderHTML + responseContentHTML.replace("@message","Instagram accounts verified") + responseFooterHTML);
 					});
-
-
-*/
-				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
-				var csv = require("fast-csv"); 
-				tempHTML = "";
-				csv
-				 .fromStream(stream, {headers : true})
-				 .on("data", function(data){
-				     
-				     var options = {
-							url: "https://api.instagram.com/v1/users/search?q=" + data.user_name + "&count=1&access_token=" + user.access_token
-						};
-
-						request(options, function (error, response, body) {
-
-							if (error){
-								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-								res.send(responseErrorHTML.replace("@message",errmsg));
-								logger.error(errmsg);
-							} else if (response && response.statusCode != 200) {
-								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-								res.send(responseErrorHTML.replace("@message",errmsg));
-								logger.error(errmsg);
-							}else{
-								var userdata = (JSON.parse(body)).data;
-								if (userdata.length > 0){
-									msg = "user name: " + userdata[0].username + " user id: " + userdata[0].id;
-									tempHTML += msg;
-									logger.info(msg);							
-								}else{
-									logger.info("invalid user: " + data.user_name);
-								}
-							}
-
-						});
-				 })
-				 .on("end", function(){
-				     console.log("done");
-				 });
-
-
 			}
 		});
 
