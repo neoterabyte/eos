@@ -259,10 +259,10 @@ router.get('/bulk_load_agents', function(req, res) {
 									request(options1, function (error1, response1, body1) {
 
 										if (error1){
-											errmsg = "Instagram API error: " + error1;
+											errmsg = "Instagram API error: " + error1 + " user name: " + userdata[0].username;
 											logger.error(errmsg);
 										} else if (response1 && response1.statusCode != 200) {
-											errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+											errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ") user name: " + userdata[0].username;		    				
 											logger.error(errmsg);
 										}else{
 
@@ -276,7 +276,7 @@ router.get('/bulk_load_agents', function(req, res) {
 											}
 										}
 									});
-
+/*
 
 									//User was found, now search for follows
 									var options2 = {
@@ -331,7 +331,7 @@ router.get('/bulk_load_agents', function(req, res) {
 											}
 										}
 									});
-
+*/
 
 								}else{
 									logger.info("invalid user: " + data.user_name);
