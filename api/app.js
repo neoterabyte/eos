@@ -62,9 +62,7 @@ router.get('/oauth', function(req, res) {
 		
 	if (error) {
 		errmsg = 'Authentication Error: ' + error + " Error reason: " + req.query.error_reason + ", " + req.query.error_description;
-		res.send(responseHeaderHTML);
-		res.send(responseErrorHTML.replace("@message",errmsg));
-		res.end(responseFooterHTML);
+		res.end(responseHeaderHTML + responseErrorHTML.replace("@message",errmsg) + responseFooterHTML);
 		logger.error(errmsg);
 	}else {
 		var temporaryCode = req.query.code; // use temporary code that instagram gives you to use to extract the token
@@ -90,16 +88,12 @@ router.get('/oauth', function(req, res) {
 		    	if (error){
 
 		    		errmsg = "Instagram authentication Error: " + error;
-		            res.send(responseHeaderHTML);
-					res.send(responseErrorHTML.replace("@message",errmsg));
-					res.end(responseFooterHTML);
+		            res.end(responseHeaderHTML + responseErrorHTML.replace("@message",errmsg) + responseFooterHTML);
 					logger.error(errmsg);
 
 		    	} else if (response && response.statusCode != 200) {
 		    		errmsg = "Instagram authentication Error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
-		    		res.send(responseHeaderHTML);
-					res.send(responseErrorHTML.replace("@message",errmsg));
-					res.end(responseFooterHTML);
+		    		res.end(responseHeaderHTML + responseErrorHTML.replace("@message",errmsg) + responseFooterHTML);
 					logger.error(errmsg);
 		        }else{
 		        	
@@ -110,10 +104,7 @@ router.get('/oauth', function(req, res) {
 					cache.hmset(CACHE_PREFIX + 'user:' + apiUser, 'access_token', access_token);  
 					
 		        	msg = "Congratulations, you have successfully registered for this service. You can now use Promogram.me";
-		        	res.send(responseHeaderHTML);
-					res.send(responseContentHTML.replace("@message",msg));
-					res.end(responseFooterHTML);
-
+		        	res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
 		        	logger.info("Token obtained: " + access_token + " for " + user_id);
 
 		        }
@@ -153,13 +144,11 @@ router.get('/bulk_verify', function(req, res) {
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
 				msg = msg.replace("@oauthURI", oauthURI);
 
-				res.send(responseHeaderHTML);
-				res.send(responseContentHTML.replace("@message",msg));
-				res.end(responseFooterHTML);
+				res.end(responseHeaderHTML + responseContentHTMLHTML.replace("@message",msg) + responseFooterHTML);
 					
 			}else{
 
-				res.send(responseHeaderHTML);
+				var validusers = '';
 
 				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
 				var csv = require("fast-csv");
@@ -185,7 +174,7 @@ router.get('/bulk_verify', function(req, res) {
 								var userdata = (JSON.parse(body)).data;
 								if (userdata.length > 0){
 									msg = "user name: " + userdata[0].username + " user id: " + userdata[0].id;
-									res.send(responseContentHTML.replace("@message",msg));
+									validusers = validusers + msg;
 									logger.info(msg);							
 								}else{
 									logger.info("invalid user: " + data.user_name);
@@ -196,7 +185,7 @@ router.get('/bulk_verify', function(req, res) {
 
 					})
 					.on("end", function(){
-						res.end(responseFooterHTML);
+						res.end(responseHeaderHTML + validusers + responseFooterHTML);
 					});
 			}
 		});
