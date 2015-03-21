@@ -22,7 +22,7 @@ var router = express.Router();
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
 
-var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
+var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML, tempHTML;
 
 fs.readFile('./api/html/header.html', 'utf8', function (err,data) {
 	if (!err) {
@@ -148,8 +148,7 @@ router.get('/bulk_verify', function(req, res) {
 					
 			}else{
 
-				var validusers = '';
-
+				tempHTML = "";
 				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
 				var csv = require("fast-csv");
 
@@ -174,7 +173,7 @@ router.get('/bulk_verify', function(req, res) {
 								var userdata = (JSON.parse(body)).data;
 								if (userdata.length > 0){
 									msg = "user name: " + userdata[0].username + " user id: " + userdata[0].id;
-									validusers = validusers + msg;
+									tempHTML += msg;
 									logger.info(msg);							
 								}else{
 									logger.info("invalid user: " + data.user_name);
@@ -185,7 +184,8 @@ router.get('/bulk_verify', function(req, res) {
 
 					})
 					.on("end", function(){
-						res.end(responseHeaderHTML + validusers + responseFooterHTML);
+						ogger.info("Temp HTML is: " + tempHTML);
+						res.end(responseHeaderHTML + tempHTML + responseFooterHTML);
 					});
 			}
 		});
