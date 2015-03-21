@@ -169,7 +169,7 @@ router.get('/bulk_verify', function(req, res) {
 					.on("data", function(data){
 					
 						var options = {
-							url: "https://api.instagram.com/v1/users/search?q=" + data.UserID + "&count=1&access_token=" + user.access_token
+							url: "https://api.instagram.com/v1/users/search?q=" + data.user_id + "&count=1&access_token=" + user.access_token
 						};
 
 						request(options, function (error, response, body) {
@@ -189,7 +189,7 @@ router.get('/bulk_verify', function(req, res) {
 								res.write(responseContentHTML.replace("@message",msg));
 								logger.info(msg);							
 							}else{
-								logger.info(data.UserID  + ": invalid user");
+								logger.info(data.user_id  + ": invalid user");
 							}
 						}
 
