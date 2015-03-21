@@ -22,7 +22,7 @@ var router = express.Router();
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
 
-var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML, tempHTML;
+var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
 
 fs.readFile('./api/html/header.html', 'utf8', function (err,data) {
 	if (!err) {
