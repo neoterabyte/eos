@@ -252,7 +252,7 @@ router.get('/bulk_load_agents', function(req, res) {
 									//User was found, now search for Media
 
 									var options1 = {
-										"https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=20&access_token=" + user.access_token
+										url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=20&access_token=" + user.access_token
 									};
 
 									logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id);	
