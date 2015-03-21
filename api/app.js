@@ -172,14 +172,14 @@ router.get('/bulk_verify', function(req, res) {
 							url: "https://api.instagram.com/v1/users/search?q=" + data.UserID + "&count=1&access_token=" + user.access_token
 						};
 
-						request(options, function (error, respose, body) {
+						request(options, function (error, response, body) {
 
 						if (error){
-							errmsg = "Instagram API error: " + http.STATUS_CODES[respose.statusCode] + " (" + respose.statusCode + ")";		    				
+							errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
 							res.write(responseErrorHTML.replace("@message",errmsg));
 							logger.error(errmsg);
 						} else if (response && response.statusCode != 200) {
-							errmsg = "Instagram API error: " + http.STATUS_CODES[respose.statusCode] + " (" + respose.statusCode + ")";		    				
+							errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
 							res.write(responseErrorHTML.replace("@message",errmsg));
 							logger.error(errmsg);
 						}else{
