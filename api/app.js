@@ -147,7 +147,7 @@ router.get('/bulk_verify', function(req, res) {
 				res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
 					
 			}else{
-
+                /*
 				tempHTML = "";
 				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
 				var csv = require("fast-csv");
@@ -187,6 +187,21 @@ router.get('/bulk_verify', function(req, res) {
 						logger.info("Temp HTML is: " + tempHTML);
 						res.end(responseHeaderHTML + tempHTML + responseFooterHTML);
 					});
+
+
+*/
+				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
+				 
+				csv
+				 .fromStream(stream, {headers : true})
+				 .on("data", function(data){
+				     console.log(data);
+				 })
+				 .on("end", function(){
+				     console.log("done");
+				 });
+
+
 			}
 		});
 
