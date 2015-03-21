@@ -231,6 +231,8 @@ router.get('/bulk_load_agents', function(req, res) {
 				csv
 					.fromStream(stream, {headers : true})
 					.on("data", function(data){
+
+						// Search for User
 						var options = {
 							url: "https://api.instagram.com/v1/users/search?q=" + data.user_name + "&count=1&access_token=" + user.access_token
 						};
@@ -246,9 +248,37 @@ router.get('/bulk_load_agents', function(req, res) {
 							}else{
 								var userdata = (JSON.parse(body)).data;
 								if (userdata.length > 0){
-									msg = "user name: " + userdata[0].username + " user id: " + userdata[0].id;
-									
-									logger.info(JSON.stringify(userdata[0]));							
+
+									//User was found, now search for Media
+
+									var options1 = {
+										"https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=20&access_token=" + user.access_token
+									};
+
+									logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id);	
+
+									request(options1, function (error1, response1, body1) {
+
+										if (error1){
+											errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+											logger.error(errmsg);
+										} else if (response1 && response1.statusCode != 200) {
+											errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+											logger.error(errmsg);
+										}else{
+
+											var mediadata = (JSON.parse(body1)).data;
+											if (mediadata.length > 0){
+
+												logger.info(JSON.stringify(mediadata[0]));
+
+											}else{
+
+											}
+										}
+									});
+
+
 								}else{
 									logger.info("invalid user: " + data.user_name);
 								}
