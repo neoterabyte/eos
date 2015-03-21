@@ -184,7 +184,7 @@ router.get('/bulk_verify', function(req, res) {
 
 					})
 					.on("end", function(){
-						ogger.info("Temp HTML is: " + tempHTML);
+						logger.info("Temp HTML is: " + tempHTML);
 						res.end(responseHeaderHTML + tempHTML + responseFooterHTML);
 					});
 			}
