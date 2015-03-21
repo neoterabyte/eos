@@ -167,8 +167,6 @@ router.get('/bulk_verify', function(req, res) {
 				csv
 					.fromStream(stream, {headers : true})
 					.on("data", function(data){
-					
-						logger.info("User in File: " + data.user_id);
 						var options = {
 							url: "https://api.instagram.com/v1/users/search?q=" + data.user_name + "&count=1&access_token=" + user.access_token
 						};
@@ -186,9 +184,9 @@ router.get('/bulk_verify', function(req, res) {
 							}else{
 								var userdata = (JSON.parse(body)).data;
 								if (userdata.length > 0){
-									msg = "user name: " + userdata[0].username + "user id " + userdata[0].id;
+									msg = "user name: " + userdata[0].username + " user id: " + userdata[0].id;
 									res.write(responseContentHTML.replace("@message",msg));
-									logger.info(msg);							
+									logger.info(responseContentHTML.replace("@message",msg));							
 								}else{
 									logger.info("invalid user: " + data.user_name);
 								}
