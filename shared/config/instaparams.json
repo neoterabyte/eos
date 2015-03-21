@@ -1,0 +1,6 @@
+{
+	"instagram_client_id": "8409d3e26cc84366b4527d90fb2bfa7d", 
+	"instagram_client_secret": "5c39cec67a0e4cd6993940cc6bf8e942", 
+	"instagram_redirect_uri": "http://api.promogram.me/oauth/?user_id=@uid"
+}
+

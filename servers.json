@@ -1,0 +1,12 @@
+{
+	"services": [
+		{
+			"host" : "api.promogram.me",
+			"path" : "./api"
+		},
+		{
+			"host" : "apilocal.promogram.me",
+			"path" : "./api"
+		}
+	]
+}
