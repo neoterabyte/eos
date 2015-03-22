@@ -494,17 +494,56 @@ router.get('/agent_inter_follow', function(req, res) {
 	cache.lpush("temp_queue","2");
 	cache.lpush("temp_queue","3");
 	cache.lpush("temp_queue","4");
-	cache.lpush("temp_queue","5");
-	cache.lpush("temp_queue","6");
+	
 
-	console.log("Queue output " + cache.rpop("temp_queue"));
-	console.log("Queue output " + cache.rpop("temp_queue"));
-	console.log("Queue output " + cache.rpop("temp_queue"));
-	console.log("Queue output " + cache.rpop("temp_queue"));
-	console.log("Queue output " + cache.rpop("temp_queue"));
-	console.log("Queue output " + cache.rpop("temp_queue"));
-	console.log("Queue output " + cache.rpop("temp_queue"));
-	console.log("Queue output " + cache.rpop("temp_queue"));
+	cache.rpop(temp_queue, function (err, result) {
+		if(err){
+			console.log("Error: " + err);
+		}else{
+			console.log("pop result: " + result);
+		}
+	});
+
+	cache.rpop(temp_queue, function (err, result) {
+		if(err){
+			console.log("Error: " + err);
+		}else{
+			console.log("pop result: " + result);
+		}
+	});
+
+	cache.rpop(temp_queue, function (err, result) {
+		if(err){
+			console.log("Error: " + err);
+		}else{
+			console.log("pop result: " + result);
+		}
+	});
+
+	cache.rpop(temp_queue, function (err, result) {
+		if(err){
+			console.log("Error: " + err);
+		}else{
+			console.log("pop result: " + result);
+		}
+	});
+
+	cache.rpop(temp_queue, function (err, result) {
+		if(err){
+			console.log("Error: " + err);
+		}else{
+			console.log("pop result: " + result);
+		}
+	});
+
+	cache.rpop(temp_queue, function (err, result) {
+		if(err){
+			console.log("Error: " + err);
+		}else{
+			console.log("pop result: " + result);
+		}
+	});
+
 
 
 	res.end ('Missing parameter for: ');
