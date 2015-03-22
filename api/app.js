@@ -389,9 +389,9 @@ router.get('/register_agent', function(req, res) {
 
 			if((err) || (agent == null)){
 
-				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", user_name));
+				instagram_redirect_uri = params.instagram_redirect_uri.replace("@user_name", user_name);
 				
-				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
+				var oauthURI = encodeURIComponent('https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri + "&scope=likes+comments+relationships");		
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
 				msg = msg.replace("@oauthURI", oauthURI);
 
@@ -454,7 +454,7 @@ router.get('/agent_inter_follow', function(req, res) {
 
 	cache.keys("*" + params.cache_prefix + "agent:*", function (err, keys) {
 		if(err){
-			console.log("Error delete keys for agent queue: " + err);
+			console.log("Error getting keys from follow queue  ->" + err);
 		}else{
 			
 			//delete all follow keys
@@ -473,11 +473,39 @@ router.get('/agent_inter_follow', function(req, res) {
 						logger.error("Error getting all agents: Result returned null");	
 					}else{
 
+						//populate the queues
 						for (i in agent) {
 							for (j in agent) {
 
 								if (i != j){ //do not add self
-									cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent[j].user_name);
+
+									logger.info("User: " + agent[i].user_id + " is being followed by: " + agent[j].user_id);
+
+									request.post(
+									    "https://api.instagram.com/v1/users/" + agent[i].user_id + "/relationship",
+									    { form: { 
+									    	access_token: agent[j].access_token, 
+											action: "follow" 
+										} },
+									    function (error, response, body) {									        
+									    	if (error){
+									    		errmsg = "Instagram follow error: " + error;
+									            logger.error(errmsg);
+									    	} else if (response && response.statusCode != 200) {
+									    		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
+									    		logger.error(errmsg);
+									        }else{
+									        	var code = (JSON.parse(body)).meta.code;
+									        	if(code != "200"){
+									        		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
+									    			logger.error(errmsg);
+									        	}else{
+									        		logger.error("follow requested: status: " + JSON.parse(body)).data.outgoing_status);
+									        	}
+									        }
+									    }
+									);
+									//cache.lpush(params.cache_prefix + "agent:" + agent[i].access_token, agent[j].user_id);
 								}
 							}				
 						}
@@ -487,19 +515,7 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	/*
-
-	cache.rpop("temp_queue", function (err, result) {
-		if(err){
-			console.log("Error: " + err);
-		}else{
-			console.log("pop result: " + result);
-		}
-	});
-
-*/
-
-	res.end ('Donex');
+	res.end ('Done');
 });
 
 
