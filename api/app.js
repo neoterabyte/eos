@@ -1,6 +1,6 @@
 var fs = require('fs');
 var db = require('../shared/lib/db');
-var params = require('../shared/config/instaparams.json');
+var params = require('../shared/config/params.json');
 var express = require('express');
 var Log = require('log');
 var cache = require('../shared/lib/cache').getRedisClient();
