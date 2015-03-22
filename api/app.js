@@ -452,49 +452,44 @@ router.get('/find_agent', function(req, res) {
 
 router.get('/agent_inter_follow', function(req, res) {
 
-/*
-	
-	var where = req.query.where;
+	//get all agents
+	var query  = Agents.where({});		
+	query.find(function (err, agent) {
+		if(err){
+			logger.error("Error getting all agents: " + error);		
+		}else{
 
-	var dataOk = true,
-	invalidParam = '';
-		
-	if (!where) {
-		dataOk = false;
-		invalidParam = 'where';
-	}
-
-
-	if (dataOk){
-
-		var query  = Agents.where(JSON.parse(where));
-		
-		query.find(function (err, agent) {
-			if(err){
-				res.statusCode = params.error_response_code
-				res.end("Error: " + err);				
+			if (agent == null){
+				logger.error("Error getting all agents: Result returned null");	
 			}else{
 
-				if (agent == null){
-					res.statusCode = params.error_response_code
-					res.end("No record found: " + err);
-				}else{
-					res.end(JSON.stringify(agent));
-				}
-  			}
-		});
-	}else{
-		res.statusCode = params.error_response_code;
-		res.end ('Missing parameter for: ' + invalidParam);
-		logger.error("Missing parameter for: " + invalidParam);
-	}
-	*/
+				for (i in agent) {
 
-	cache.lpush("temp_queue","1");
-	cache.lpush("temp_queue","2");
-	cache.lpush("temp_queue","3");
-	cache.lpush("temp_queue","4");
-	
+					//load follow queue for each agent (excluse self)
+					var query1  = Agents.where({user_id: {$ne: agent[i].user_id} );		
+					query1.find(function (err1, agent1) {
+						if(err1){
+							logger.error("Error getting all follow agents for agent: " + agent[i].user_name + ", Error: " + err1);				
+						}else{
+							if (agent1 == null){
+								logger.error("Error getting all follow agents for agent: " + agent[i].user_name + ", Error: null follow agents");		
+							}else{
+
+								for (j in agent1) {
+									cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent1[j].user_name);
+								}
+							}
+						}
+					});
+				}
+				
+				
+			}
+		}
+	});
+
+
+	/*
 
 	cache.rpop("temp_queue", function (err, result) {
 		if(err){
@@ -504,58 +499,22 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (result == null)){
-			console.log("Redis retrieval error");
+*/
+
+/*
+	cache.keys("*" + params.cache_prefix + "agent:*", function (err, result) {
+		if(err){
+			console.log("Error delete keys for agent queue: " + err);
 		}else{
-			console.log("pop result: " + result);
+			
+			for (k = 0; k < results.length; k++) { 
+				cache.del(results[k]);
+			}
 		}
 	});
+*/
 
-	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (result == null)){
-			console.log("Redis retrieval error");
-		}else{
-			console.log("pop result: " + result);
-		}
-	});
-
-	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (result == null)){
-			console.log("Redis retrieval error");
-		}else{
-			console.log("pop result: " + result);
-		}
-	});
-
-	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (result == null)){
-			console.log("Redis retrieval error");
-		}else{
-			console.log("pop result: " + result);
-		}
-	});
-
-	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (result == null)){
-			console.log("Redis retrieval error");
-		}else{
-			console.log("pop result: " + result);
-		}
-	});
-
-	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (result == null)){
-			console.log("Redis retrieval error");
-		}else{
-			console.log("pop result: " + result);
-		}
-	});
-
-
-
-	res.end ('Missing parameter for: ');
-
+	res.end ('Done');
 });
 
 
