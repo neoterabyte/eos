@@ -397,6 +397,58 @@ router.get('/like_engine', function(req, res) {
 
 						for (k = 0; k < activeAgentTokens.length; k++) { 
 							console.log("Subscriber: " + subscriber[i].user_name + ", Agent Token: " + activeAgentTokens[k]);
+
+							var options1 = {
+								url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=1&access_token=" + activeAgentTokens[k]
+							};
+
+							request(options1, function (error1, response1, body1) {
+
+								if (error1){
+									errmsg = "Instagram API error: " + error1;
+									logger.error(errmsg);
+
+								} else if (response1 && response1.statusCode != 200) {
+									errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+									logger.error(errmsg);
+
+								}else{
+									var mediadata = (JSON.parse(body1)).data;
+
+									console.log(mediadata);
+
+									if(mediadata.length > 0){
+									/*
+										request.post(
+										    "https://api.instagram.com/v1/media/" + mediadata[0]. + "/likes",
+										    { form: { 
+										    	access_token: agent[j].access_token, 
+												action: "follow" 
+											} },
+										    function (error, response, body) {									        
+										    	if (error){
+										    		errmsg = "Instagram follow error: " + error;
+										            logger.error(errmsg);
+										    	} else if (response && response.statusCode != 200) {
+										    		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
+										    		logger.error(errmsg);
+										        }else{
+										        	var code = (JSON.parse(body)).meta.code;
+										        	if(code != "200"){
+										        		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
+										    			logger.error(errmsg);
+										        	}else{
+										        		logger.info("follow requested: status: " + (JSON.parse(body)).data.outgoing_status);
+										        	}
+										        }
+										    }
+										);
+									  */	
+
+									}
+
+								}
+							});
 						}
 
 					}
@@ -475,8 +527,6 @@ router.get('/add_like_subscriber', function(req, res) {
 							logger.error(errmsg +  ", user name: " + userdata[0].username);
 
 						}else{
-
-							console.log("Hereeeeeee  3");
 
 							var udata = (JSON.parse(body1)).data;
 
