@@ -457,34 +457,34 @@ router.get('/agent_inter_follow', function(req, res) {
 			console.log("Error delete keys for agent queue: " + err);
 		}else{
 			
+			//delete all follow keys
 			for (k = 0; k < keys.length; k++) { 
 				cache.del(keys[k]);
 			}
-		}
-	});
-/*
-	//get all agents
-	var query  = Agents.where({});		
-	query.find(function (err, agent) {
-		if(err){
-			logger.error("Error getting all agents: " + error);		
-		}else{
 
-			if (agent == null){
-				logger.error("Error getting all agents: Result returned null");	
-			}else{
+			//get all agents
+			var query  = Agents.where({});		
+			query.find(function (err, agent) {
+				if(err){
+					logger.error("Error getting all agents: " + error);		
+				}else{
 
-				for (i in agent) {
-					console.log(agent[i].user_name);
+					if (agent == null){
+						logger.error("Error getting all agents: Result returned null");	
+					}else{
 
-					for (j in agent) {
-						cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent[j].user_name);
-					}				
+						for (i in agent) {
+							console.log(agent[i].user_name);
+
+							for (j in agent) {
+								cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent[j].user_name);
+							}				
+						}
+					}
 				}
-			}
+			});
 		}
 	});
-*/
 
 	/*
 
@@ -498,20 +498,7 @@ router.get('/agent_inter_follow', function(req, res) {
 
 */
 
-/*
-	cache.keys("*" + params.cache_prefix + "agent:*", function (err, result) {
-		if(err){
-			console.log("Error delete keys for agent queue: " + err);
-		}else{
-			
-			for (k = 0; k < results.length; k++) { 
-				cache.del(results[k]);
-			}
-		}
-	});
-*/
-
-	res.end ('Done');
+	res.end ('Donex');
 });
 
 
