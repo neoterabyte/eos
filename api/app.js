@@ -243,7 +243,7 @@ router.get('/update_agents', function(req, res) {
 					for (i in agent) {
 						updateAgentData(Agents, agent[i].user_name, agent[i].access_token);	
 					}
-					res.end("Update initiated fro agents, check logs for details ");
+					res.end("Update initiated for agents, check logs for details ");
 				}
   			}
 		});
@@ -370,9 +370,10 @@ function updateAgentData(Agents, user_name, access_token) {
 				// update model with user_id
 				Agents.update({ user_name: user_name }, { $set: { user_id: userdata[0].id }}).exec();
 
-				//user_id was found, now search for Media
+				
+				//user_id was update other parameters
 				var options1 = {
-					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=" + params.instagram_max_media_count + "&access_token=" + access_token
+					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/?access_token=" + access_token
 				};
 
 				request(options1, function (error1, response1, body1) {
@@ -393,74 +394,13 @@ function updateAgentData(Agents, user_name, access_token) {
 
 					}else{
 
-						var mediadata = (JSON.parse(body1)).data;
+						var udata = (JSON.parse(body1)).data;
 
 						// update model with media count
-						Agents.update({ user_name: user_name }, { $set: { media_count: mediadata.length }}).exec();
+						Agents.update({ user_name: user_name }, { $set: { media_count: udata.counts.media, follows: udata.counts.follows, followed_by: udata.counts.followed_by }}).exec();
 
 					}
 				});
-
-
-				//user_id was found, now search for follows
-				var options2 = {
-					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/follows?access_token=" + access_token
-				};
-
-				request(options2, function (error2, response2, body2) {
-
-					if (error2){
-						errmsg = "Instagram API error: " + error2;
-						logger.error(errmsg  + ", user name: " + userdata[0].username);
-
-						// update model with last_error
-						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
-					} else if (response2 && response2.statusCode != 200) {
-						errmsg = "Instagram API error: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";		    				
-						logger.error(errmsg +  ", user name: " + userdata[0].username);
-
-						// update model with last_error
-						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
-					}else{
-
-						var followsdata = (JSON.parse(body2)).data;
-
-						// update model with media count
-						Agents.update({ user_name: user_name }, { $set: { follows: followsdata.length }}).exec();
-					}
-				});
-
-				//User was found, now search for followed-by
-				var options3 = {
-					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/followed-by?access_token=" + access_token
-				};
-
-				request(options3, function (error3, response3, body3) {
-
-					if (error3){
-						errmsg = "Instagram API error: " + error3;
-						logger.error(errmsg  + ", user name: " + userdata[0].username);
-
-						// update model with last_error
-						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
-					} else if (response3 && response3.statusCode != 200) {
-						errmsg = "Instagram API error: " + http.STATUS_CODES[response3.statusCode] + " (" + response3.statusCode + ")";		    				
-						logger.error(errmsg +  ", user name: " + userdata[0].username);
-
-						// update model with last_error
-						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-					}else{
-
-						var followedbydata = (JSON.parse(body3)).data;
-
-						// update model with media count
-						Agents.update({ user_name: user_name }, { $set: { followed_by: followedbydata.length }}).exec();
-					}
-				});
-
 
 			}else{
 				errmsg = "Agent not found: Agent name: " + user_name;	    				
