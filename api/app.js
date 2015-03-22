@@ -474,10 +474,11 @@ router.get('/agent_inter_follow', function(req, res) {
 					}else{
 
 						for (i in agent) {
-							console.log(agent[i].user_name);
-
 							for (j in agent) {
-								cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent[j].user_name);
+
+								if (i != j){ //do not add self
+									cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent[j].user_name);
+								}
 							}				
 						}
 					}
