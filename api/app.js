@@ -452,6 +452,18 @@ router.get('/find_agent', function(req, res) {
 
 router.get('/agent_inter_follow', function(req, res) {
 
+
+	cache.keys("*" + params.cache_prefix + "agent:*", function (err, result) {
+		if(err){
+			console.log("Error delete keys for agent queue: " + err);
+		}else{
+			
+			for (k = 0; k < results.length; k++) { 
+				cache.del(results[k]);
+			}
+		}
+	});
+
 	//get all agents
 	var query  = Agents.where({});		
 	query.find(function (err, agent) {
@@ -465,30 +477,10 @@ router.get('/agent_inter_follow', function(req, res) {
 
 				for (i in agent) {
 
-					
-					//load follow queue for each agent (excluse self)
-					var query1  = Agents.where({user_id: {$ne: agent[i].user_id}});		
-					query1.find(function (err1, agent1) {
-
-						console.log(agent[i].user_name);
-						
-						if(err1){
-							logger.error("Error getting all follow agents for agent: " + agent[i].user_name + ", Error: " + err1);				
-						}else{
-							if (agent1 == null){
-								logger.error("Error getting all follow agents for agent: " + agent[i].user_name + ", Error: null follow agents");		
-							}else{
-
-								for (j in agent1) {
-									cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent1[j].user_name);
-								}
-							}
-						}
-					});					
-					
+					for (j in agent) {
+						cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent[j].user_name);
+					}				
 				}
-				
-				
 			}
 		}
 	});
