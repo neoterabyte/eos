@@ -1,9 +1,11 @@
 {
   "user_name": "String",
   "user_id": "String",
+  "access_token": "String",
   "follows": "Number",
   "followed_by": "Number",
   "media_count": "Number",
-  "isActive": "Boolean"
+  "last_error": "Boolean",
+  "is_active": "Boolean"
 }
 

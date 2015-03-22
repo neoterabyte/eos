@@ -10,6 +10,9 @@ var request = require('request');
 var http = require('http');
 var apiUser="neoterabyte";
 
+// Initialize logger
+var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
+
 // Create the Express application
 var app = exports.app = express(); 
 
@@ -19,10 +22,17 @@ var port = process.env.PORT || 80;
 // Create our Express router
 var router = express.Router();
 
-// Initialize logger
-var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
-
 var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
+
+
+// Retrieve leave context
+db.getModel('agents', function(err, model) {
+    if (err) {
+        logger.error('Fatal error: ' + err + '. Cannot retrieve agents schema');
+    } else {
+        Agents = model;
+    }   
+});
 
 fs.readFile('./api/html/header.html', 'utf8', function (err,data) {
 	if (!err) {
@@ -68,10 +78,10 @@ router.get('/oauth', function(req, res) {
 		var temporaryCode = req.query.code; // use temporary code that instagram gives you to use to extract the token
 		logger.info('Temporary instagram code obtained: ' + temporaryCode);
 
-		//Get user id from redirected end point
-		var user_id = req.query.user_id;
+		//Get user name from redirected end point
+		var user_name = req.query.user_name;
 		//no need to encode URL because its an http post
-		var instagram_redirect_uri = params.instagram_redirect_uri.replace("@uid", user_id);
+		var instagram_redirect_uri = params.instagram_redirect_uri.replace("@user_name", user_name);
 
 
 		request.post(
@@ -101,11 +111,15 @@ router.get('/oauth', function(req, res) {
 					
 					//Todo: consider also updating Mongo DB with the same information. 
 					//update cache with user's access token
-					cache.hmset(CACHE_PREFIX + 'user:' + apiUser, 'access_token', access_token);  
+					//cache.hmset(CACHE_PREFIX + 'user:' + apiUser, 'access_token', access_token);  
 					
+					//update agents in mongo
+					Agents.findOneAndUpdate({user_name:user_name}, {user_name:user_name, access_token: access_token, is_active: true}, {upsert: true}, function (err, agent) {});
+					updateAgentData(Agents, user_name, access_token);		
+		        	
 		        	msg = "Congratulations, you have successfully registered for this service. You can now use Promogram.me";
 		        	res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
-		        	logger.info("Token obtained: " + access_token + " for " + user_id);
+		        	logger.info("Token obtained: " + access_token + " for " + user_name);
 
 		        }
 
@@ -138,7 +152,7 @@ router.get('/bulk_verify', function(req, res) {
 
 			if((err) || (user == null)){
 
-				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@uid", apiUser));
+				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", apiUser));
 				
 				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
@@ -215,7 +229,7 @@ router.get('/bulk_load_agents', function(req, res) {
 
 			if((err) || (user == null)){
 
-				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@uid", apiUser));
+				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", apiUser));
 				
 				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
@@ -355,6 +369,51 @@ router.get('/bulk_load_agents', function(req, res) {
 });
 
 
+router.get('/register_agent', function(req, res) {
+
+	
+	var user_name = req.query.user_name;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!user_name) {
+		dataOk = false;
+		invalidParam = 'user_name';
+	}
+
+
+	if (dataOk){
+
+		var query  = Agents.where({ user_name: user_name });
+
+		query.findOne(function (err, agent) {
+
+
+			if((err) || (agent == null)){
+
+				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", user_name));
+				
+				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
+				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
+				msg = msg.replace("@oauthURI", oauthURI);
+
+				res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
+					
+			}else{
+                
+				updateAgentData(Agents, user_name, agent.access_token);				
+			}
+		});
+
+	}else{
+		res.statusCode = ERROR_RESPONSE_CODE;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+});
+
+
 router.get('/html/*', function(req, res) {
 	res.sendFile(process.cwd() + '/api' + req.path);	
 });
@@ -362,6 +421,146 @@ router.get('/html/*', function(req, res) {
 
 // Register all our routes with /
 app.use('/', router);
+
+//---------------------------
+//  FUNCTIONS 
+//---------------------------
+
+function updateAgentData(Agents, user_name, access_token) {
+    
+	// Search for User
+	var options = {
+		url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&count=1&access_token=" + access_token
+	};
+
+	request(options, function (error, response, body) {
+
+		if (error){
+			errmsg = "Instagram API error: " + error;
+			logger.error(errmsg + ", Agent name: " + user_name);	
+			
+			// update model with last_error
+			Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();	
+		
+		} else if (response && response.statusCode != 200) {
+			errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+			logger.error(errmsg  + ", Agent name: " + user_name);
+
+			// update model with last_error
+			Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();	
+
+		}else{
+			var userdata = (JSON.parse(body)).data;
+
+			if (userdata.length > 0){	
+				
+				
+				// update model with user_id
+				Agents.update({ user_name: user_name }, { $set: { user_id: userdata[0].id }}).exec();
+
+				//user_id was found, now search for Media
+				var options1 = {
+					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=20&access_token=" + access_token
+				};
+
+				request(options1, function (error1, response1, body1) {
+
+					if (error1){
+						errmsg = "Instagram API error: " + error1;
+						logger.error(errmsg  + ", user name: " + userdata[0].username);
+
+						// update model with last_error
+						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+
+					} else if (response1 && response1.statusCode != 200) {
+						errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+						logger.error(errmsg +  ", user name: " + userdata[0].username);
+
+						// update model with last_error
+						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+
+					}else{
+
+						var mediadata = (JSON.parse(body1)).data;
+
+						// update model with media count
+						Agents.update({ user_name: user_name }, { $set: { media_count: mediadata.length }}).exec();
+
+					}
+				});
+
+
+				//user_id was found, now search for follows
+				var options2 = {
+					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/follows?access_token=" + access_token
+				};
+
+				request(options2, function (error2, response2, body2) {
+
+					if (error2){
+						errmsg = "Instagram API error: " + error2;
+						logger.error(errmsg  + ", user name: " + userdata[0].username);
+
+						// update model with last_error
+						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+
+					} else if (response2 && response2.statusCode != 200) {
+						errmsg = "Instagram API error: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";		    				
+						logger.error(errmsg +  ", user name: " + userdata[0].username);
+
+						// update model with last_error
+						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+
+					}else{
+
+						var followsdata = (JSON.parse(body2)).data;
+
+						// update model with media count
+						Agents.update({ user_name: user_name }, { $set: { follows: followsdata.length }}).exec();
+					}
+				});
+
+				//User was found, now search for followed-by
+				var options3 = {
+					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/followed-by?access_token=" + access_token
+				};
+
+				request(options3, function (error3, response3, body3) {
+
+					if (error3){
+						errmsg = "Instagram API error: " + error3;
+						logger.error(errmsg  + ", user name: " + userdata[0].username);
+
+						// update model with last_error
+						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+
+					} else if (response3 && response3.statusCode != 200) {
+						errmsg = "Instagram API error: " + http.STATUS_CODES[response3.statusCode] + " (" + response3.statusCode + ")";		    				
+						logger.error(errmsg +  ", user name: " + userdata[0].username);
+
+						// update model with last_error
+						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+					}else{
+
+						var followedbydata = (JSON.parse(body3)).data;
+
+						// update model with media count
+						Agents.update({ user_name: user_name }, { $set: { followed_by: followedbydata.length }}).exec();
+					}
+				});
+
+
+			}else{
+				errmsg = "Agent not found: Agent name: " + user_name;	    				
+				logger.error(errmsg);
+
+				// update model with last_error
+				Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();	
+			}
+		}
+
+	});    
+}
 
 
 
