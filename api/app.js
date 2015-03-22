@@ -128,244 +128,6 @@ router.get('/oauth', function(req, res) {
 
 
 
-router.get('/bulk_verify', function(req, res) {
-
-	
-	var filepath = req.query.filepath;
-
-	var dataOk = true,
-	invalidParam = '';
-		
-	if (!filepath) {
-		dataOk = false;
-		invalidParam = 'filepath';
-	}
-
-
-	if (dataOk){
-
-		cache.hgetall(params.cache_prefix + 'user:' + params.default_api_user, function (err, user) {
-
-
-			if((err) || (user == null)){
-
-				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", params.default_api_user));
-				
-				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
-				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
-				msg = msg.replace("@oauthURI", oauthURI);
-
-				res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
-					
-			}else{
-                
-				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
-				var csv = require("fast-csv");
-
-				csv
-					.fromStream(stream, {headers : true})
-					.on("data", function(data){
-						var options = {
-							url: "https://api.instagram.com/v1/users/search?q=" + data.user_name + "&count=1&access_token=" + user.access_token
-						};
-
-						request(options, function (error, response, body) {
-
-							if (error){
-								errmsg = "Instagram API error: " + error;	    				
-								logger.error(errmsg);
-							} else if (response && response.statusCode != 200) {
-								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-								logger.error(errmsg);
-							}else{
-								var userdata = (JSON.parse(body)).data;
-								if (userdata.length > 0){
-									msg = "user name: " + userdata[0].username + " user id: " + userdata[0].id;
-									//tempHTML += msg;
-									logger.info(msg);							
-								}else{
-									logger.info("invalid user: " + data.user_name);
-								}
-							}
-
-						});
-
-					})
-					.on("end", function(){
-						res.end(responseHeaderHTML + responseContentHTML.replace("@message","Instagram accounts verified") + responseFooterHTML);
-					});
-			}
-		});
-
-	}else{
-		res.statusCode = params.error_response_code;
-		res.end ('Missing parameter for: ' + invalidParam);
-		logger.error("Missing parameter for: " + invalidParam);
-	}
-});
-
-
-router.get('/bulk_load_agents', function(req, res) {
-
-	
-	var filepath = req.query.filepath;
-
-	var dataOk = true,
-	invalidParam = '';
-		
-	if (!filepath) {
-		dataOk = false;
-		invalidParam = 'filepath';
-	}
-
-
-	if (dataOk){
-
-		cache.hgetall(params.cache_prefix + 'user:' + params.default_api_user, function (err, user) {
-
-
-			if((err) || (user == null)){
-
-				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", params.default_api_user));
-				
-				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
-				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
-				msg = msg.replace("@oauthURI", oauthURI);
-
-				res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
-					
-			}else{
-                
-				var stream = fs.createReadStream("/tmp/promogram/agent_accounts.txt");
-				var csv = require("fast-csv");
-
-				csv
-					.fromStream(stream, {headers : true})
-					.on("data", function(data){
-
-						// Search for User
-						var options = {
-							url: "https://api.instagram.com/v1/users/search?q=" + data.user_name + "&count=1&access_token=" + user.access_token
-						};
-
-						request(options, function (error, response, body) {
-
-							if (error){
-								errmsg = "Instagram API error: " + error;
-								logger.error(errmsg);
-							} else if (response && response.statusCode != 200) {
-								errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-								logger.error(errmsg);
-							}else{
-								var userdata = (JSON.parse(body)).data;
-								if (userdata.length > 0){
-
-									//logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id);	
-									
-									//User was found, now search for Media
-									var options1 = {
-										url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=20&access_token=" + user.access_token
-									};
-
-									request(options1, function (error1, response1, body1) {
-
-										if (error1){
-											errmsg = "Instagram API error: " + error1 + " user name: " + userdata[0].username;
-											logger.error(errmsg);
-										} else if (response1 && response1.statusCode != 200) {
-											errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ") user name: " + userdata[0].username;		    				
-											logger.error(errmsg);
-										}else{
-
-											var mediadata = (JSON.parse(body1)).data;
-											if (mediadata.length > 0){
-
-												logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id + " media count: " + mediadata.length);
-
-											}else{
-
-											}
-										}
-									});
-/*
-
-									//User was found, now search for follows
-									var options2 = {
-										url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/follows?access_token=" + user.access_token
-									};
-
-									request(options2, function (error2, response2, body2) {
-
-										if (error2){
-											errmsg = "Instagram API error: " + error2;		    				
-											logger.error(errmsg);
-										} else if (response2 && response2.statusCode != 200) {
-											errmsg = "Instagram API error: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";		    				
-											logger.error(errmsg);
-										}else{
-
-											var followsdata = (JSON.parse(body2)).data;
-											if (followsdata.length > 0){
-
-												logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id + " media count: " + followsdata.length);
-
-
-											}else{
-
-											}
-										}
-									});
-
-									//User was found, now search for followed-by
-									var options3 = {
-										url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/followed-by?access_token=" + user.access_token
-									};
-
-									request(options3, function (error3, response3, body3) {
-
-										if (error3){
-											errmsg = "Instagram API error: " + error3;		    				
-											logger.error(errmsg);
-										} else if (response3 && response3.statusCode != 200) {
-											errmsg = "Instagram API error: " + http.STATUS_CODES[response3.statusCode] + " (" + response3.statusCode + ")";		    				
-											logger.error(errmsg);
-										}else{
-
-											var followedbydata = (JSON.parse(body3)).data;
-											if (followedbydata.length > 0){
-
-												logger.info("user name: " + userdata[0].username + " user id: " + userdata[0].id + " media count: " + followedbydata.length);
-
-
-											}else{
-
-											}
-										}
-									});
-*/
-
-								}else{
-									logger.info("invalid user: " + data.user_name);
-								}
-							}
-
-						});
-
-					})
-					.on("end", function(){
-						res.end(responseHeaderHTML + responseContentHTML.replace("@message","Instagram agents loaded") + responseFooterHTML);
-					});
-			}
-		});
-
-	}else{
-		res.statusCode = params.error_response_code;
-		res.end ('Missing parameter for: ' + invalidParam);
-		logger.error("Missing parameter for: " + invalidParam);
-	}
-});
-
-
 router.get('/register_agent', function(req, res) {
 
 	
@@ -411,6 +173,7 @@ router.get('/register_agent', function(req, res) {
 	}
 });
 
+
 router.get('/find_agent', function(req, res) {
 
 	
@@ -449,6 +212,49 @@ router.get('/find_agent', function(req, res) {
 		logger.error("Missing parameter for: " + invalidParam);
 	}
 });
+
+router.get('/update_agents', function(req, res) {
+
+	
+	var where = req.query.where;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!where) {
+		dataOk = false;
+		invalidParam = 'where';
+	}
+
+	if (dataOk){
+
+		var query  = Agents.where(JSON.parse(where));
+
+		query.find(function (err, agent) {
+			if(err){
+				res.statusCode = params.error_response_code
+				res.end("Error: " + err);				
+			}else{
+
+				if (agent == null){
+					res.statusCode = params.error_response_code
+					res.end("No record found: " + err);
+				}else{
+					for (i in agent) {
+						updateAgentData(Agents, agent[i].user_name, agent[i].access_token);	
+					}
+					res.end("Update initiated fro agents, check logs for details ");
+				}
+  			}
+		});
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+});
+
+
 
 router.get('/agent_inter_follow', function(req, res) {
 
@@ -500,7 +306,7 @@ router.get('/agent_inter_follow', function(req, res) {
 									        		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
 									    			logger.error(errmsg);
 									        	}else{
-									        		logger.error("follow requested: status: " + (JSON.parse(body)).data.outgoing_status);
+									        		logger.info("follow requested: status: " + (JSON.parse(body)).data.outgoing_status);
 									        	}
 									        }
 									    }
