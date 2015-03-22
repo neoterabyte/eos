@@ -424,7 +424,7 @@ router.get('/add_like_subscriber', function(req, res) {
 						url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/?access_token=" + params.default_api_access_token
 					};
 
-					request(options1, function (error1, current_like_subscription_groupresponse1, body1) {
+					request(options1, function (error1, response1, body1) {
 
 						if (error1){
 							errmsg = "Instagram API error: " + error1;
