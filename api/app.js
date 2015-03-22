@@ -452,13 +452,13 @@ router.get('/find_agent', function(req, res) {
 
 router.get('/agent_inter_follow', function(req, res) {
 
-	cache.keys("*" + params.cache_prefix + "agent:*", function (err, result) {
+	cache.keys("*" + params.cache_prefix + "agent:*", function (err, keys) {
 		if(err){
 			console.log("Error delete keys for agent queue: " + err);
 		}else{
 			
-			for (k = 0; k < results.length; k++) { 
-				cache.del(results[k]);
+			for (k = 0; k < keys.length; k++) { 
+				cache.del(keys[k]);
 			}
 		}
 	});
@@ -511,7 +511,7 @@ router.get('/agent_inter_follow', function(req, res) {
 	});
 */
 
-	res.end ('Donez');
+	res.end ('Done');
 });
 
 
