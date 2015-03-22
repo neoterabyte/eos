@@ -21,6 +21,10 @@ var router = express.Router();
 
 var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
 
+var activeAgentTokens;
+
+updateActiveAgentTokens();
+
 
 // Retrieve leave context
 db.getModel('agents', function(err, model) {
@@ -30,6 +34,16 @@ db.getModel('agents', function(err, model) {
         Agents = model;
     }   
 });
+
+// Retrieve leave context
+db.getModel('like_subscribers', function(err, model) {
+    if (err) {
+        logger.error('Fatal error: ' + err + '. Cannot retrieve like_subscribers schema');
+    } else {
+        LikeSubscribers = model;
+    }   
+});
+
 
 fs.readFile('./api/html/header.html', 'utf8', function (err,data) {
 	if (!err) {
@@ -112,7 +126,8 @@ router.get('/oauth', function(req, res) {
 					
 					//update agents in mongo
 					Agents.findOneAndUpdate({user_name:user_name}, {user_name:user_name, access_token: access_token, is_active: true}, {upsert: true}, function (err, agent) {});
-					updateAgentData(Agents, user_name, access_token);		
+					updateAgentData(Agents, user_name, access_token);	
+					updateActiveAgentTokens();	
 		        	
 		        	msg = "Congratulations, you have successfully registered for this service. You can now use Promogram.me";
 		        	res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
@@ -272,14 +287,13 @@ router.get('/agent_inter_follow', function(req, res) {
 			var query  = Agents.where({});		
 			query.find(function (err, agent) {
 				if(err){
-					logger.error("Error getting all agents: " + error);		
+					logger.error("Error getting agents: " + error);		
 				}else{
 
 					if (agent == null){
-						logger.error("Error getting all agents: Result returned null");	
+						logger.error("Error getting agents: Result returned null");	
 					}else{
 
-						//populate the queues
 						for (i in agent) {
 							for (j in agent) {
 
@@ -321,7 +335,53 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	res.end ('Done');
+	res.end ('Inter-follow process initiated');
+});
+
+
+router.get('/like_engine', function(req, res) {
+
+	var where = req.query.where;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!where) {
+		dataOk = false;
+		invalidParam = 'where';
+	}
+
+	if (dataOk){
+
+		//get all subscribers
+
+		var query  = LikeSubscribers.where(JSON.parse(where));		
+		query.find(function (err, subscriber) {
+			if(err){
+				logger.error("Error getting Like Subscribers: " + error);		
+			}else{
+
+				if (subscriber == null){
+					logger.error("Error Like Subscribers: Result returned null");	
+				}else{
+
+					for (i in subscriber) {
+
+
+					}
+				}
+			}
+		});
+		
+		res.end ('like engine initiated');
+
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+
+	res.end ('like engine initiated');
 });
 
 
@@ -338,6 +398,30 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
+function updateActiveAgentTokens() {
+
+    console.log("Hellooo  baby");
+    
+	var query  = Agents.where({is_active:true});
+	query.find(function (err, agent) {
+		if(err){
+			logger.error("Error updating active agent tokens: " + err);				
+		}else{
+
+			if (agent == null){
+				logger.error("Error updating active agent tokens: agent is null");	
+			}else{
+				var tokens = new Array();
+				for (i in agent) {
+					tokens[tokens.length] = agent[i].access_token; 
+				}
+
+				activeAgentTokens = tokens;
+			}
+		}
+	});	
+}
+    
 function updateAgentData(Agents, user_name, access_token) {
     
 	// Search for User
