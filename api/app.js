@@ -399,7 +399,7 @@ router.get('/like_engine', function(req, res) {
 							console.log("Subscriber: " + subscriber[i].user_name + ", Agent Token: " + activeAgentTokens[k]);
 
 							var options1 = {
-								url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=1&access_token=" + activeAgentTokens[k]
+								url: "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?COUNT=1&access_token=" + activeAgentTokens[k]
 							};
 
 							request(options1, function (error1, response1, body1) {
