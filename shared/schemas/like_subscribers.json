@@ -11,7 +11,7 @@
   "subscription_end": "Date",
   "is_active": "Boolean",
   "last_error": "String",
-  "last_image_id": "String",
+  "last_media_id": "String",
   "subscription_history" : 
   	{
   		"subscription_type": "String",
