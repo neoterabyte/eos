@@ -465,10 +465,13 @@ router.get('/agent_inter_follow', function(req, res) {
 
 				for (i in agent) {
 
-					/*
+					
 					//load follow queue for each agent (excluse self)
 					var query1  = Agents.where({user_id: {$ne: agent[i].user_id}});		
 					query1.find(function (err1, agent1) {
+
+						console.log(agent[i].user_name);
+						
 						if(err1){
 							logger.error("Error getting all follow agents for agent: " + agent[i].user_name + ", Error: " + err1);				
 						}else{
@@ -481,9 +484,8 @@ router.get('/agent_inter_follow', function(req, res) {
 								}
 							}
 						}
-					});
-					*/
-					console.log(agent[i].user_name);
+					});					
+					
 				}
 				
 				
