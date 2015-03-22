@@ -505,7 +505,7 @@ router.get('/agent_inter_follow', function(req, res) {
 	});
 
 	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (resul == null)){
+		if((err) || (result == null)){
 			console.log("Redis retrieval error");
 		}else{
 			console.log("pop result: " + result);
@@ -513,7 +513,7 @@ router.get('/agent_inter_follow', function(req, res) {
 	});
 
 	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (resul == null)){
+		if((err) || (result == null)){
 			console.log("Redis retrieval error");
 		}else{
 			console.log("pop result: " + result);
@@ -521,7 +521,7 @@ router.get('/agent_inter_follow', function(req, res) {
 	});
 
 	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (resul == null)){
+		if((err) || (result == null)){
 			console.log("Redis retrieval error");
 		}else{
 			console.log("pop result: " + result);
@@ -529,7 +529,7 @@ router.get('/agent_inter_follow', function(req, res) {
 	});
 
 	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (resul == null)){
+		if((err) || (result == null)){
 			console.log("Redis retrieval error");
 		}else{
 			console.log("pop result: " + result);
@@ -537,7 +537,15 @@ router.get('/agent_inter_follow', function(req, res) {
 	});
 
 	cache.rpop("temp_queue", function (err, result) {
-		if((err) || (resul == null)){
+		if((err) || (result == null)){
+			console.log("Redis retrieval error");
+		}else{
+			console.log("pop result: " + result);
+		}
+	});
+
+	cache.rpop("temp_queue", function (err, result) {
+		if((err) || (result == null)){
 			console.log("Redis retrieval error");
 		}else{
 			console.log("pop result: " + result);
