@@ -399,6 +399,7 @@ router.get('/add_like_subscriber', function(req, res) {
 
 	if (dataOk){
 
+		console.log("Hereee  1");
 		// Search for User
 		var options = {
 			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&count=1&access_token=" + params.default_api_access_token
@@ -415,6 +416,8 @@ router.get('/add_like_subscriber', function(req, res) {
 				logger.error(errmsg  + ", ike subscriber: " + user_name);
 
 			}else{
+
+				console.log("Hereee  2");
 				var userdata = (JSON.parse(body)).data;
 
 				if (userdata.length > 0){										
@@ -440,6 +443,8 @@ router.get('/add_like_subscriber', function(req, res) {
 							LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
 
 						}else{
+
+							console.log("Hereee  3");
 
 							var udata = (JSON.parse(body1)).data;
 
