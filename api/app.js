@@ -213,7 +213,7 @@ router.get('/find_agent', function(req, res) {
 	}
 });
 
-router.get('/update_agents', function(req, res) {
+router.get('/update_agent', function(req, res) {
 
 	
 	var where = req.query.where;
