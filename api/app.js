@@ -400,8 +400,6 @@ app.use('/', router);
 
 function updateActiveAgentTokens(Agents) {
 
-    console.log("Hellooo  baby");
-
 	var query  = Agents.where({is_active:true});
 	query.find(function (err, agent) {
 		if(err){
