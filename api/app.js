@@ -507,7 +507,7 @@ router.get('/agent_inter_follow', function(req, res) {
 	Console.log("Queue output " + cache.rpop("temp_queue"));
 
 
-	res.end ('Missing parameter for: ';
+	res.end ('Missing parameter for: ');
 
 });
 
