@@ -427,8 +427,8 @@ router.get('/find_agent', function(req, res) {
 
 	if (dataOk){
 
-		var query  = Agents.where(where);
-
+		var query  = Agents.where(JSON.parse(where));
+		
 		query.find(function (err, agent) {
 			if(err){
 				res.statusCode = params.error_response_code
