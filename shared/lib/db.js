@@ -28,8 +28,8 @@ var getModel = function(obj, callback) {
       var schemaObject = require('../schemas/' + obj + '.json');
       // console.log('Valid schema: ' + JSON.stringify(schemaObject));
     } catch(e){
-      logger.debug(JSON.stringify(e));
-      console.log(e.stack());
+      logger.debug(e.stack);
+      console.log(e.stack);
       logger.error('Invalid Schema: ./schemas/' + obj + '.json');
       var schemaObject = {};
     }
@@ -41,7 +41,7 @@ var getModel = function(obj, callback) {
       callback('', model);
     } catch (e) {
       // Error loading db
-      console.log(e.stack);
+      console.log(e.stac);
       callback('Unable to load collection', e);
     }
     
