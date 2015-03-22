@@ -439,7 +439,7 @@ outer.get('/find_agent', function(req, res) {
 					res.statusCode = params.error_response_code
 					res.end("No record found: " + err);
 				}else{
-					res.end(JSON.stringify(agent);
+					res.end(JSON.stringify(agent));
 				}
   			}
 		});
