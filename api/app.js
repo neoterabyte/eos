@@ -396,7 +396,6 @@ router.get('/like_engine', function(req, res) {
 					for (i in subscriber) {
 
 						for (k = 0; k < activeAgentTokens.length; k++) { 
-							console.log("Subscriber: " + subscriber[i].user_name + ", Agent Token: " + activeAgentTokens[k]);
 
 							var options1 = {
 								url: "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?COUNT=1&access_token=" + activeAgentTokens[k]
@@ -415,11 +414,11 @@ router.get('/like_engine', function(req, res) {
 								}else{
 									var mediadata = (JSON.parse(body1)).data;
 
-									console.log("");
-									console.log("");
+									console.log("Subscriber: " + subscriber[i].user_name + ", Agent Token: " + activeAgentTokens[k]);
+									console.log("--------------------------------------------------------");
 									console.log(mediadata);
-									console.log("");
-									console.log("");
+									console.log("--------------------------------------------------------");
+	
 
 									if(mediadata.length > 0){
 									/*
