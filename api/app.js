@@ -489,6 +489,7 @@ router.get('/add_like_subscriber', function(req, res) {
 								endDate.setDate(endDate.getDate() + 365);
 							}else{
 								//assume trial
+								subscription_type = "TRIAL";
 								endDate.setDate(endDate.getDate() + 3);
 							}
 							
