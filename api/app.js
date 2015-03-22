@@ -409,16 +409,10 @@ router.get('/add_like_subscriber', function(req, res) {
 			if (error){
 				errmsg = "Instagram API error: " + error;
 				logger.error(errmsg + ", like subscriber name: " + user_name);	
-				
-				// update model with last_error
-				LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();	
-			
+							
 			} else if (response && response.statusCode != 200) {
 				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
 				logger.error(errmsg  + ", ike subscriber: " + user_name);
-
-				// update model with last_error
-				LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();	
 
 			}else{
 				var userdata = (JSON.parse(body)).data;
@@ -478,6 +472,10 @@ router.get('/add_like_subscriber', function(req, res) {
 								},
 								{upsert: true}, 
 								function (err, likesubscriber) {
+
+									if(err){
+										console.log("Errorrr  " + err);
+									}
 							});
 						}
 					});
@@ -486,10 +484,6 @@ router.get('/add_like_subscriber', function(req, res) {
 
 					errmsg = "Like subscriber not found: name: " + user_name;	    				
 					logger.error(errmsg);
-
-					// update model with last_error
-					LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
 				}
 			}
 		});
