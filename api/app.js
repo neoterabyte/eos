@@ -399,7 +399,6 @@ router.get('/add_like_subscriber', function(req, res) {
 
 	if (dataOk){
 
-		console.log("Hereee  1");
 		// Search for User
 		var options = {
 			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&count=1&access_token=" + params.default_api_access_token
@@ -417,7 +416,6 @@ router.get('/add_like_subscriber', function(req, res) {
 
 			}else{
 
-				console.log("Hereee  2");
 				var userdata = (JSON.parse(body)).data;
 
 				if (userdata.length > 0){										
@@ -432,19 +430,13 @@ router.get('/add_like_subscriber', function(req, res) {
 							errmsg = "Instagram API error: " + error1;
 							logger.error(errmsg  + ", user name: " + userdata[0].username);
 
-							// update model with last_error
-							LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
 						} else if (response1 && response1.statusCode != 200) {
 							errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
 							logger.error(errmsg +  ", user name: " + userdata[0].username);
 
-							// update model with last_error
-							LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
 						}else{
 
-							console.log("Hereee  3");
+							console.log("Hereeeeeee  3");
 
 							var udata = (JSON.parse(body1)).data;
 
