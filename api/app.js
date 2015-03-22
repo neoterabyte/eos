@@ -396,7 +396,7 @@ router.get('/like_engine', function(req, res) {
 					for (i in subscriber) {
 
 						for (k = 0; k < activeAgentTokens.length; k++) { 
-							console.log("Agent Token: " + activeAgentTokens[k]);
+							console.log("Subscriber: " + subscriber[i].user_name + ", Agent Token: " + activeAgentTokens[k]);
 						}
 
 					}
