@@ -389,9 +389,9 @@ router.get('/register_agent', function(req, res) {
 
 			if((err) || (agent == null)){
 
-				instagram_redirect_uri = params.instagram_redirect_uri.replace("@user_name", user_name);
+				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", user_name));
 				
-				var oauthURI = encodeURIComponent('https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri + "&scope=likes+comments+relationships");		
+				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri + "&scope=likes+comments+relationships";		
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
 				msg = msg.replace("@oauthURI", oauthURI);
 
