@@ -4,6 +4,6 @@
 	"instagram_redirect_uri": "http://api.promogram.me/oauth/?user_name=@user_name",
 	"instagram_max_media_count": "15",
 	"default_api_user": "neoterabyte",
-	"cache_prefix": "api",
+	"cache_prefix": "api:",
 	"error_response_code": "422"
 }
