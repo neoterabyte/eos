@@ -395,65 +395,62 @@ router.get('/like_engine', function(req, res) {
 
 					for (i in subscriber) {
 
-						for (k = 0; k < activeAgentTokens.length; k++) { 
+						var options1 = {
+							url: "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?access_token=" + params.default_api_access_token + "&count=1"
+						};
 
-							var options1 = {
-								url: "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?COUNT=1&access_token=" + activeAgentTokens[k]
-							};
+						request(options1, function (error1, response1, body1) {
 
-							request(options1, function (error1, response1, body1) {
+							if (error1){
+								errmsg = "Instagram API error: " + error1;
+								logger.error(errmsg);
 
-								if (error1){
-									errmsg = "Instagram API error: " + error1;
-									logger.error(errmsg);
+							} else if (response1 && response1.statusCode != 200) {
+								errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+								logger.error(errmsg);
 
-								} else if (response1 && response1.statusCode != 200) {
-									errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
-									logger.error(errmsg);
+							}else{
+								var mediadata = (JSON.parse(body1)).data;
+				
+								if(mediadata.length > 0){
 
-								}else{
-									var mediadata = (JSON.parse(body1)).data;
+									for (k = 0; k < activeAgentTokens.length; k++) { 
 
-									console.log("Subscriber: " + subscriber[i].user_name + ", Agent Token: " + activeAgentTokens[k]);
-									console.log("--------------------------------------------------------");
-									console.log(mediadata);
-									console.log("--------------------------------------------------------");
-	
+										console.log("Subscriber: " + subscriber[i].user_name + ", Image: " + mediadata[0].id + ", Token " + activeAgentTokens[k]);
 
-									if(mediadata.length > 0){
-									/*
+										/*
+
 										request.post(
-										    "https://api.instagram.com/v1/media/" + mediadata[0]. + "/likes",
+										    "https://api.instagram.com/v1/media/" + mediadata[0].id + "/likes",
 										    { form: { 
-										    	access_token: agent[j].access_token, 
-												action: "follow" 
+										    	access_token: activeAgentTokens[k] 
 											} },
-										    function (error, response, body) {									        
-										    	if (error){
-										    		errmsg = "Instagram follow error: " + error;
+										    function (error2, response2, body2) {									        
+										    	if (error2){
+										    		errmsg = "Instagram like error: " + error2;
 										            logger.error(errmsg);
-										    	} else if (response && response.statusCode != 200) {
-										    		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
+										    	} else if (response2 && response2.statusCode != 200) {
+										    		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
 										    		logger.error(errmsg);
 										        }else{
-										        	var code = (JSON.parse(body)).meta.code;
+										        	var code = (JSON.parse(body2)).meta.code;
 										        	if(code != "200"){
-										        		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
+										        		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
 										    			logger.error(errmsg);
 										        	}else{
-										        		logger.info("follow requested: status: " + (JSON.parse(body)).data.outgoing_status);
+										        		logger.info("like done");
 										        	}
 										        }
 										    }
 										);
-									  */	
-
+										*/
+										
 									}
-
+	
 								}
-							});
-						}
 
+							}
+						});
 					}
 				}
 			}
@@ -496,7 +493,7 @@ router.get('/add_like_subscriber', function(req, res) {
 
 		// Search for User
 		var options = {
-			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&count=1&access_token=" + params.default_api_access_token
+			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
 		};
 
 		request(options, function (error, response, body) {
@@ -628,7 +625,7 @@ function updateAgentData(Agents, user_name, access_token) {
     
 	// Search for User
 	var options = {
-		url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&count=1&access_token=" + access_token
+		url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + access_token + "&count=1"
 	};
 
 	request(options, function (error, response, body) {
