@@ -500,7 +500,7 @@ router.get('/agent_inter_follow', function(req, res) {
 									        		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
 									    			logger.error(errmsg);
 									        	}else{
-									        		logger.error("follow requested: status: " + JSON.parse(body)).data.outgoing_status);
+									        		logger.error("follow requested: status: " + (JSON.parse(body)).data.outgoing_status);
 									        	}
 									        }
 									    }
