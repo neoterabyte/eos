@@ -273,67 +273,55 @@ router.get('/update_agent', function(req, res) {
 
 router.get('/agent_inter_follow', function(req, res) {
 
-	cache.keys("*" + params.cache_prefix + "agent:*", function (err, keys) {
+	//get all agents
+	var query  = Agents.where({});		
+	query.find(function (err, agent) {
 		if(err){
-			console.log("Error getting keys from follow queue  ->" + err);
+			logger.error("Error getting agents: " + error);		
 		}else{
-			
-			//delete all follow keys
-			for (k = 0; k < keys.length; k++) { 
-				cache.del(keys[k]);
-			}
 
-			//get all agents
-			var query  = Agents.where({});		
-			query.find(function (err, agent) {
-				if(err){
-					logger.error("Error getting agents: " + error);		
-				}else{
+			if (agent == null){
+				logger.error("Error getting agents: Result returned null");	
+			}else{
 
-					if (agent == null){
-						logger.error("Error getting agents: Result returned null");	
-					}else{
+				for (i in agent) {
+					for (j in agent) {
 
-						for (i in agent) {
-							for (j in agent) {
+						if (i != j){ //do not add self
 
-								if (i != j){ //do not add self
+							logger.info("User: " + agent[i].user_id + " is being followed by: " + agent[j].user_id);
 
-									logger.info("User: " + agent[i].user_id + " is being followed by: " + agent[j].user_id);
-
-									request.post(
-									    "https://api.instagram.com/v1/users/" + agent[i].user_id + "/relationship",
-									    { form: { 
-									    	access_token: agent[j].access_token, 
-											action: "follow" 
-										} },
-									    function (error, response, body) {									        
-									    	if (error){
-									    		errmsg = "Instagram follow error: " + error;
-									            logger.error(errmsg);
-									    	} else if (response && response.statusCode != 200) {
-									    		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
-									    		logger.error(errmsg);
-									        }else{
-									        	var code = (JSON.parse(body)).meta.code;
-									        	if(code != "200"){
-									        		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
-									    			logger.error(errmsg);
-									        	}else{
-									        		logger.info("follow requested: status: " + (JSON.parse(body)).data.outgoing_status);
-									        	}
-									        }
-									    }
-									);
-									//cache.lpush(params.cache_prefix + "agent:" + agent[i].access_token, agent[j].user_id);
-								}
-							}				
+							request.post(
+							    "https://api.instagram.com/v1/users/" + agent[i].user_id + "/relationship",
+							    { form: { 
+							    	access_token: agent[j].access_token, 
+									action: "follow" 
+								} },
+							    function (error, response, body) {									        
+							    	if (error){
+							    		errmsg = "Instagram follow error: " + error;
+							            logger.error(errmsg);
+							    	} else if (response && response.statusCode != 200) {
+							    		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
+							    		logger.error(errmsg);
+							        }else{
+							        	var code = (JSON.parse(body)).meta.code;
+							        	if(code != "200"){
+							        		errmsg = "Instagram follow error: Invalid response: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";
+							    			logger.error(errmsg);
+							        	}else{
+							        		logger.info("follow requested: status: " + (JSON.parse(body)).data.outgoing_status);
+							        	}
+							        }
+							    }
+							);
 						}
-					}
+					}				
 				}
-			});
+			}
 		}
 	});
+		
 
 	res.end ('Inter-follow process initiated');
 });
@@ -367,12 +355,145 @@ router.get('/like_engine', function(req, res) {
 
 					for (i in subscriber) {
 
+						for (k = 0; k < activeAgentTokens.length; k++) { 
+							console.log("Agent Token: " + activeAgentTokens[k]);
+						}
 
 					}
 				}
 			}
 		});
 		
+		res.end ('like engine initiated');
+
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+
+	res.end ('like engine initiated');
+});
+
+
+router.get('/add_like_subscriber', function(req, res) {
+
+	
+	var user_name = req.query.user_name;	
+	var email = req.query.email;
+	var subscription_type = req.query.subscription_type;
+	
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!user_name) {
+		dataOk = false;
+		invalidParam = 'user_name';
+	}else if (!subscription_type) {
+		dataOk = false;
+		invalidParam = 'subscription_type';
+	}
+	if (!email) {
+		email = '';
+	}
+
+	if (dataOk){
+
+		// Search for User
+		var options = {
+			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&count=1&access_token=" + params.default_api_access_token
+		};
+
+		request(options, function (error, response, body) {
+
+			if (error){
+				errmsg = "Instagram API error: " + error;
+				logger.error(errmsg + ", like subscriber name: " + user_name);	
+				
+				// update model with last_error
+				LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();	
+			
+			} else if (response && response.statusCode != 200) {
+				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+				logger.error(errmsg  + ", ike subscriber: " + user_name);
+
+				// update model with last_error
+				LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();	
+
+			}else{
+				var userdata = (JSON.parse(body)).data;
+
+				if (userdata.length > 0){										
+
+					var options1 = {
+						url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/?access_token=" + params.default_api_access_token
+					};
+
+					request(options1, function (error1, current_like_subscription_groupresponse1, body1) {
+
+						if (error1){
+							errmsg = "Instagram API error: " + error1;
+							logger.error(errmsg  + ", user name: " + userdata[0].username);
+
+							// update model with last_error
+							LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+
+						} else if (response1 && response1.statusCode != 200) {
+							errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+							logger.error(errmsg +  ", user name: " + userdata[0].username);
+
+							// update model with last_error
+							LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+
+						}else{
+
+							var udata = (JSON.parse(body1)).data;
+
+							var endDate = new Date();
+							if (subscription_type == "30_DAYS"){
+								endDate.setDate(endDate.getDate() + 30);
+							}else if (subscription_type == "MONTHLY"){
+								endDate.setDate(endDate.getDate() + 30);
+							}else if (subscription_type == "YEAR"){
+								endDate.setDate(endDate.getDate() + 365);
+							}else{
+								//assume trial
+								endDate.setDate(endDate.getDate() + 3);
+							}
+							
+							LikeSubscribers.findOneAndUpdate(
+								{user_id: udata.id}, 
+								{
+									user_id: udata.id, 
+									user_name: udata.username, 
+									follows: udata.counts.follows,
+									followed_by: udata.counts.followed_by,
+									media_count: udata.counts.media,
+									email: email,
+									subscription_type: subscription_type,
+									subscription_group: params.current_like_subscription_group,
+									subscription_start: new Date(),
+									subscription_end: endDate,
+									is_active: true
+								},
+								{upsert: true}, 
+								function (err, likesubscriber) {
+							});
+						}
+					});
+
+				}else{
+
+					errmsg = "Like subscriber not found: name: " + user_name;	    				
+					logger.error(errmsg);
+
+					// update model with last_error
+					LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
+
+				}
+			}
+		});
+	
 		res.end ('like engine initiated');
 
 	}else{
@@ -453,7 +574,7 @@ function updateAgentData(Agents, user_name, access_token) {
 				Agents.update({ user_name: user_name }, { $set: { user_id: userdata[0].id }}).exec();
 
 				
-				//user_id was update other parameters
+				//user_id was found update other parameters
 				var options1 = {
 					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/?access_token=" + access_token
 				};

@@ -21,6 +21,7 @@ var router = express.Router();
 
 var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
 
+var activeAgentTokens;
 
 // Retrieve leave context
 db.getModel('agents', function(err, model) {
@@ -30,6 +31,16 @@ db.getModel('agents', function(err, model) {
         Agents = model;
     }   
 });
+
+// Retrieve leave context
+db.getModel('like_subscribers', function(err, model) {
+    if (err) {
+        logger.error('Fatal error: ' + err + '. Cannot retrieve like_subscribers schema');
+    } else {
+        LikeSubscribers = model;
+    }   
+});
+
 
 fs.readFile('./api/html/header.html', 'utf8', function (err,data) {
 	if (!err) {
@@ -62,6 +73,8 @@ fs.readFile('./api/html/error.html', 'utf8', function (err,data) {
 		responseErrorHTML = '';
 	}
 });
+
+updateActiveAgentTokens(Agents);
 
 router.get('/oauth', function(req, res) {
 	
@@ -112,7 +125,8 @@ router.get('/oauth', function(req, res) {
 					
 					//update agents in mongo
 					Agents.findOneAndUpdate({user_name:user_name}, {user_name:user_name, access_token: access_token, is_active: true}, {upsert: true}, function (err, agent) {});
-					updateAgentData(Agents, user_name, access_token);		
+					updateAgentData(Agents, user_name, access_token);	
+					updateActiveAgentTokens(Agents);	
 		        	
 		        	msg = "Congratulations, you have successfully registered for this service. You can now use Promogram.me";
 		        	res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
@@ -213,7 +227,7 @@ router.get('/find_agent', function(req, res) {
 	}
 });
 
-router.get('/update_agents', function(req, res) {
+router.get('/update_agent', function(req, res) {
 
 	
 	var where = req.query.where;
@@ -243,6 +257,7 @@ router.get('/update_agents', function(req, res) {
 					for (i in agent) {
 						updateAgentData(Agents, agent[i].user_name, agent[i].access_token);	
 					}
+					updateActiveAgentTokens(Agents);
 					res.end("Update initiated for agents, check logs for details ");
 				}
   			}
@@ -272,14 +287,13 @@ router.get('/agent_inter_follow', function(req, res) {
 			var query  = Agents.where({});		
 			query.find(function (err, agent) {
 				if(err){
-					logger.error("Error getting all agents: " + error);		
+					logger.error("Error getting agents: " + error);		
 				}else{
 
 					if (agent == null){
-						logger.error("Error getting all agents: Result returned null");	
+						logger.error("Error getting agents: Result returned null");	
 					}else{
 
-						//populate the queues
 						for (i in agent) {
 							for (j in agent) {
 
@@ -321,7 +335,53 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	res.end ('Done');
+	res.end ('Inter-follow process initiated');
+});
+
+
+router.get('/like_engine', function(req, res) {
+
+	var where = req.query.where;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!where) {
+		dataOk = false;
+		invalidParam = 'where';
+	}
+
+	if (dataOk){
+
+		//get all subscribers
+
+		var query  = LikeSubscribers.where(JSON.parse(where));		
+		query.find(function (err, subscriber) {
+			if(err){
+				logger.error("Error getting Like Subscribers: " + error);		
+			}else{
+
+				if (subscriber == null){
+					logger.error("Error Like Subscribers: Result returned null");	
+				}else{
+
+					for (i in subscriber) {
+
+
+					}
+				}
+			}
+		});
+		
+		res.end ('like engine initiated');
+
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+
+	res.end ('like engine initiated');
 });
 
 
@@ -338,6 +398,28 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
+function updateActiveAgentTokens(Agents) {
+
+	var query  = Agents.where({is_active:true});
+	query.find(function (err, agent) {
+		if(err){
+			logger.error("Error updating active agent tokens: " + err);				
+		}else{
+
+			if (agent == null){
+				logger.error("Error updating active agent tokens: agent is null");	
+			}else{
+				var tokens = new Array();
+				for (i in agent) {
+					tokens[tokens.length] = agent[i].access_token; 
+				}
+
+				activeAgentTokens = tokens;
+			}
+		}
+	});	
+}
+    
 function updateAgentData(Agents, user_name, access_token) {
     
 	// Search for User
@@ -370,9 +452,10 @@ function updateAgentData(Agents, user_name, access_token) {
 				// update model with user_id
 				Agents.update({ user_name: user_name }, { $set: { user_id: userdata[0].id }}).exec();
 
-				//user_id was found, now search for Media
+				
+				//user_id was update other parameters
 				var options1 = {
-					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=" + params.instagram_max_media_count + "&access_token=" + access_token
+					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/?access_token=" + access_token
 				};
 
 				request(options1, function (error1, response1, body1) {
@@ -393,74 +476,13 @@ function updateAgentData(Agents, user_name, access_token) {
 
 					}else{
 
-						var mediadata = (JSON.parse(body1)).data;
+						var udata = (JSON.parse(body1)).data;
 
 						// update model with media count
-						Agents.update({ user_name: user_name }, { $set: { media_count: mediadata.length }}).exec();
+						Agents.update({ user_name: user_name }, { $set: { media_count: udata.counts.media, follows: udata.counts.follows, followed_by: udata.counts.followed_by }}).exec();
 
 					}
 				});
-
-
-				//user_id was found, now search for follows
-				var options2 = {
-					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/follows?access_token=" + access_token
-				};
-
-				request(options2, function (error2, response2, body2) {
-
-					if (error2){
-						errmsg = "Instagram API error: " + error2;
-						logger.error(errmsg  + ", user name: " + userdata[0].username);
-
-						// update model with last_error
-						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
-					} else if (response2 && response2.statusCode != 200) {
-						errmsg = "Instagram API error: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";		    				
-						logger.error(errmsg +  ", user name: " + userdata[0].username);
-
-						// update model with last_error
-						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
-					}else{
-
-						var followsdata = (JSON.parse(body2)).data;
-
-						// update model with media count
-						Agents.update({ user_name: user_name }, { $set: { follows: followsdata.length }}).exec();
-					}
-				});
-
-				//User was found, now search for followed-by
-				var options3 = {
-					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/followed-by?access_token=" + access_token
-				};
-
-				request(options3, function (error3, response3, body3) {
-
-					if (error3){
-						errmsg = "Instagram API error: " + error3;
-						logger.error(errmsg  + ", user name: " + userdata[0].username);
-
-						// update model with last_error
-						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-
-					} else if (response3 && response3.statusCode != 200) {
-						errmsg = "Instagram API error: " + http.STATUS_CODES[response3.statusCode] + " (" + response3.statusCode + ")";		    				
-						logger.error(errmsg +  ", user name: " + userdata[0].username);
-
-						// update model with last_error
-						Agents.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec();
-					}else{
-
-						var followedbydata = (JSON.parse(body3)).data;
-
-						// update model with media count
-						Agents.update({ user_name: user_name }, { $set: { followed_by: followedbydata.length }}).exec();
-					}
-				});
-
 
 			}else{
 				errmsg = "Agent not found: Agent name: " + user_name;	    				

@@ -4,6 +4,10 @@
 	"instagram_redirect_uri": "http://api.promogram.me/oauth/?user_name=@user_name",
 	"instagram_max_media_count": "15",
 	"default_api_user": "neoterabyte",
+	"default_api_access_token": "1519198601.8409d3e.b670c5891b4a4e0c928b00a1fc40f4a7",
 	"cache_prefix": "api:",
-	"error_response_code": "422"
+	"error_response_code": "422",
+	"annual_like_subscription_amount": "1000",
+	"monthly_like_subscription_amount": "25",
+	"current_like_subscription_group": "0"
 }

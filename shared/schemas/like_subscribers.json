@@ -9,7 +9,6 @@
   "subscription_type": "String",
   "subscription_start": "Date",
   "subscription_end": "Date",
-  "subscription_amount": "Number",
   "is_active": "Boolean",
   "last_error": "Boolean",
   "subscription_history" : 
