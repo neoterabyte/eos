@@ -452,6 +452,17 @@ router.get('/find_agent', function(req, res) {
 
 router.get('/agent_inter_follow', function(req, res) {
 
+	cache.keys("*" + params.cache_prefix + "agent:*", function (err, result) {
+		if(err){
+			console.log("Error delete keys for agent queue: " + err);
+		}else{
+			
+			for (k = 0; k < results.length; k++) { 
+				cache.del(results[k]);
+			}
+		}
+	});
+/*
 	//get all agents
 	var query  = Agents.where({});		
 	query.find(function (err, agent) {
@@ -465,7 +476,7 @@ router.get('/agent_inter_follow', function(req, res) {
 
 				for (i in agent) {
 					console.log(agent[i].user_name);
-					
+
 					for (j in agent) {
 						cache.lpush(params.cache_prefix + "agent:" + agent[i].user_name, agent[j].user_name);
 					}				
@@ -473,7 +484,7 @@ router.get('/agent_inter_follow', function(req, res) {
 			}
 		}
 	});
-
+*/
 
 	/*
 
@@ -500,7 +511,7 @@ router.get('/agent_inter_follow', function(req, res) {
 	});
 */
 
-	res.end ('Done');
+	res.end ('Donez');
 });
 
 
