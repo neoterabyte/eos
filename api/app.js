@@ -227,6 +227,46 @@ router.get('/find_agent', function(req, res) {
 	}
 });
 
+router.get('/find_like_subscriber', function(req, res) {
+
+	
+	var where = req.query.where;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!where) {
+		dataOk = false;
+		invalidParam = 'where';
+	}
+
+
+	if (dataOk){
+
+		var query  = LikeSubscribers.where(JSON.parse(where));
+
+		query.find(function (err, likesubscriber) {
+			if(err){
+				res.statusCode = params.error_response_code
+				res.end("Error: " + err);				
+			}else{
+
+				if (likesubscriber == null){
+					res.statusCode = params.error_response_code
+					res.end("No record found: " + err);
+				}else{
+					res.end(JSON.stringify(likesubscriber));
+				}
+  			}
+		});
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+});
+
+
 router.get('/update_agent', function(req, res) {
 
 	
