@@ -29,6 +29,7 @@ var getModel = function(obj, callback) {
       // console.log('Valid schema: ' + JSON.stringify(schemaObject));
     } catch(e){
       logger.debug(JSON.stringify(e));
+      console.log(e.stack());
       logger.error('Invalid Schema: ./schemas/' + obj + '.json');
       var schemaObject = {};
     }
