@@ -497,14 +497,14 @@ router.get('/agent_inter_follow', function(req, res) {
 	cache.lpush("temp_queue","5");
 	cache.lpush("temp_queue","6");
 
-	Console.log("Queue output " + cache.rpop("temp_queue"));
-	Console.log("Queue output " + cache.rpop("temp_queue"));
-	Console.log("Queue output " + cache.rpop("temp_queue"));
-	Console.log("Queue output " + cache.rpop("temp_queue"));
-	Console.log("Queue output " + cache.rpop("temp_queue"));
-	Console.log("Queue output " + cache.rpop("temp_queue"));
-	Console.log("Queue output " + cache.rpop("temp_queue"));
-	Console.log("Queue output " + cache.rpop("temp_queue"));
+	console.log("Queue output " + cache.rpop("temp_queue"));
+	console.log("Queue output " + cache.rpop("temp_queue"));
+	console.log("Queue output " + cache.rpop("temp_queue"));
+	console.log("Queue output " + cache.rpop("temp_queue"));
+	console.log("Queue output " + cache.rpop("temp_queue"));
+	console.log("Queue output " + cache.rpop("temp_queue"));
+	console.log("Queue output " + cache.rpop("temp_queue"));
+	console.log("Queue output " + cache.rpop("temp_queue"));
 
 
 	res.end ('Missing parameter for: ');
