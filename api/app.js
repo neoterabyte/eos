@@ -399,7 +399,8 @@ router.get('/register_agent', function(req, res) {
 					
 			}else{
                 
-				updateAgentData(Agents, user_name, agent.access_token);				
+				updateAgentData(Agents, user_name, agent.access_token);	
+				res.end(responseHeaderHTML + responseContentHTML.replace("@message","User: " + user_name + " successfully registered") + responseFooterHTML);			
 			}
 		});
 
