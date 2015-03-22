@@ -8,7 +8,7 @@ var getModel = function(obj, callback) {
   var logger = new Log(process.env.PIPER_LOG_LEVEL || 'info');
 
   if (!mongoose.models[obj]) {
-    var uristring = 'mongodb://' + mongoConfig.host + '/piper'; 
+    var uristring = 'mongodb://' + mongoConfig.host + '/promogram'; 
     
 
     // Connect to mongodb

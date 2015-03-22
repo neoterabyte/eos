@@ -3,12 +3,9 @@ var db = require('../shared/lib/db');
 var params = require('../shared/config/instaparams.json');
 var express = require('express');
 var Log = require('log');
-var ERROR_RESPONSE_CODE = 422;
 var cache = require('../shared/lib/cache').getRedisClient();
-var CACHE_PREFIX = 'api:';
 var request = require('request');
 var http = require('http');
-var apiUser="neoterabyte";
 
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
@@ -111,7 +108,7 @@ router.get('/oauth', function(req, res) {
 					
 					//Todo: consider also updating Mongo DB with the same information. 
 					//update cache with user's access token
-					//cache.hmset(CACHE_PREFIX + 'user:' + apiUser, 'access_token', access_token);  
+					//cache.hmset(params.cache_prefix + 'user:' + params.default_api_user, 'access_token', access_token);  
 					
 					//update agents in mongo
 					Agents.findOneAndUpdate({user_name:user_name}, {user_name:user_name, access_token: access_token, is_active: true}, {upsert: true}, function (err, agent) {});
@@ -147,12 +144,12 @@ router.get('/bulk_verify', function(req, res) {
 
 	if (dataOk){
 
-		cache.hgetall(CACHE_PREFIX + 'user:' + apiUser, function (err, user) {
+		cache.hgetall(params.cache_prefix + 'user:' + params.default_api_user, function (err, user) {
 
 
 			if((err) || (user == null)){
 
-				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", apiUser));
+				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", params.default_api_user));
 				
 				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
@@ -201,7 +198,7 @@ router.get('/bulk_verify', function(req, res) {
 		});
 
 	}else{
-		res.statusCode = ERROR_RESPONSE_CODE;
+		res.statusCode = params.error_response_code;
 		res.end ('Missing parameter for: ' + invalidParam);
 		logger.error("Missing parameter for: " + invalidParam);
 	}
@@ -224,12 +221,12 @@ router.get('/bulk_load_agents', function(req, res) {
 
 	if (dataOk){
 
-		cache.hgetall(CACHE_PREFIX + 'user:' + apiUser, function (err, user) {
+		cache.hgetall(params.cache_prefix + 'user:' + params.default_api_user, function (err, user) {
 
 
 			if((err) || (user == null)){
 
-				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", apiUser));
+				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", params.default_api_user));
 				
 				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri;		
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
@@ -362,7 +359,7 @@ router.get('/bulk_load_agents', function(req, res) {
 		});
 
 	}else{
-		res.statusCode = ERROR_RESPONSE_CODE;
+		res.statusCode = params.error_response_code;
 		res.end ('Missing parameter for: ' + invalidParam);
 		logger.error("Missing parameter for: " + invalidParam);
 	}
@@ -407,7 +404,7 @@ router.get('/register_agent', function(req, res) {
 		});
 
 	}else{
-		res.statusCode = ERROR_RESPONSE_CODE;
+		res.statusCode = params.error_response_code;
 		res.end ('Missing parameter for: ' + invalidParam);
 		logger.error("Missing parameter for: " + invalidParam);
 	}
@@ -460,7 +457,7 @@ function updateAgentData(Agents, user_name, access_token) {
 
 				//user_id was found, now search for Media
 				var options1 = {
-					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=20&access_token=" + access_token
+					url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/media/recent/?COUNT=" + params.instagram_max_media_count + "&access_token=" + access_token
 				};
 
 				request(options1, function (error1, response1, body1) {
