@@ -10,7 +10,8 @@
   "subscription_start": "Date",
   "subscription_end": "Date",
   "is_active": "Boolean",
-  "last_error": "Boolean",
+  "last_error": "String",
+  "last_image_id": "String",
   "subscription_history" : 
   	{
   		"subscription_type": "String",

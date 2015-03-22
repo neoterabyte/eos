@@ -393,6 +393,7 @@ router.get('/like_engine', function(req, res) {
 					logger.error("Error Like Subscribers: Result returned null");	
 				}else{
 
+					var i; 
 					for (i in subscriber) {
 
 						var options1 = {
@@ -414,38 +415,40 @@ router.get('/like_engine', function(req, res) {
 				
 								if(mediadata.length > 0){
 
-									for (k = 0; k < activeAgentTokens.length; k++) { 
+									//if (mediadata[0].id != last_media_id){ //check that we have not already liked this image
 
-										console.log("Link: " + mediadata[0].link + ", Image: " + mediadata[0].id + ", Token " + activeAgentTokens[k]);
+										//LikeSubscribers.update({ user_name: user_name }, { $set: { last_error: errmsg }}).exec()
 
-										/*
+										for (k = 0; k < activeAgentTokens.length; k++) { 
 
-										request.post(
-										    "https://api.instagram.com/v1/media/" + mediadata[0].id + "/likes",
-										    { form: { 
-										    	access_token: activeAgentTokens[k] 
-											} },
-										    function (error2, response2, body2) {									        
-										    	if (error2){
-										    		errmsg = "Instagram like error: " + error2;
-										            logger.error(errmsg);
-										    	} else if (response2 && response2.statusCode != 200) {
-										    		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
-										    		logger.error(errmsg);
-										        }else{
-										        	var code = (JSON.parse(body2)).meta.code;
-										        	if(code != "200"){
-										        		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
-										    			logger.error(errmsg);
-										        	}else{
-										        		logger.info("like done");
-										        	}
-										        }
-										    }
-										);
-										*/
-										
-									}
+											console.log("Subscriber: " + subscriber[i].user_id + ", Image: " + mediadata[0].id + ", Token " + activeAgentTokens[k]);
+
+											/*request.post(
+											    "https://api.instagram.com/v1/media/" + mediadata[0].id + "/likes",
+											    { form: { 
+											    	access_token: activeAgentTokens[k] 
+												} },
+											    function (error2, response2, body2) {									        
+											    	if (error2){
+											    		errmsg = "Instagram like error: " + error2;
+											            logger.error(errmsg);
+											    	} else if (response2 && response2.statusCode != 200) {
+											    		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
+											    		logger.error(errmsg);
+											        }else{
+											        	var code = (JSON.parse(body2)).meta.code;
+											        	if(code != "200"){
+											        		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
+											    			logger.error(errmsg);
+											        	}else{
+											        		logger.info("like done");
+											        	}
+											        }
+											    }
+											);*/
+											
+										}
+									//}
 	
 								}
 
