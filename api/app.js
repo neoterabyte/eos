@@ -496,7 +496,7 @@ router.get('/agent_inter_follow', function(req, res) {
 	cache.lpush("temp_queue","4");
 	
 
-	cache.rpop(temp_queue, function (err, result) {
+	cache.rpop("temp_queue", function (err, result) {
 		if(err){
 			console.log("Error: " + err);
 		}else{
@@ -504,7 +504,7 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	cache.rpop(temp_queue, function (err, result) {
+	cache.rpop("temp_queue", function (err, result) {
 		if(err){
 			console.log("Error: " + err);
 		}else{
@@ -512,7 +512,7 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	cache.rpop(temp_queue, function (err, result) {
+	cache.rpop("temp_queue", function (err, result) {
 		if(err){
 			console.log("Error: " + err);
 		}else{
@@ -520,7 +520,7 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	cache.rpop(temp_queue, function (err, result) {
+	cache.rpop("temp_queue", function (err, result) {
 		if(err){
 			console.log("Error: " + err);
 		}else{
@@ -528,7 +528,7 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	cache.rpop(temp_queue, function (err, result) {
+	cache.rpop("temp_queue", function (err, result) {
 		if(err){
 			console.log("Error: " + err);
 		}else{
@@ -536,7 +536,7 @@ router.get('/agent_inter_follow', function(req, res) {
 		}
 	});
 
-	cache.rpop(temp_queue, function (err, result) {
+	cache.rpop("temp_queue", function (err, result) {
 		if(err){
 			console.log("Error: " + err);
 		}else{
