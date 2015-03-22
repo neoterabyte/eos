@@ -494,15 +494,13 @@ router.get('/add_like_subscriber', function(req, res) {
 			}
 		});
 	
-		res.end ('like engine initiated');
+		res.end ('Subscriber added?');
 
 	}else{
 		res.statusCode = params.error_response_code;
 		res.end ('Missing parameter for: ' + invalidParam);
 		logger.error("Missing parameter for: " + invalidParam);
 	}
-
-	res.end ('like engine initiated');
 });
 
 
