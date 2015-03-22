@@ -428,6 +428,46 @@ router.get('/find_agent', function(req, res) {
 	if (dataOk){
 
 		var query  = Agents.where(JSON.parse(where));
+
+		query.find(function (err, agent) {
+			if(err){
+				res.statusCode = params.error_response_code
+				res.end("Error: " + err);				
+			}else{
+
+				if (agent == null){
+					res.statusCode = params.error_response_code
+					res.end("No record found: " + err);
+				}else{
+					res.end(JSON.stringify(agent));
+				}
+  			}
+		});
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+});
+
+router.get('/agent_inter_follow', function(req, res) {
+
+/*
+	
+	var where = req.query.where;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!where) {
+		dataOk = false;
+		invalidParam = 'where';
+	}
+
+
+	if (dataOk){
+
+		var query  = Agents.where(JSON.parse(where));
 		
 		query.find(function (err, agent) {
 			if(err){
@@ -448,6 +488,27 @@ router.get('/find_agent', function(req, res) {
 		res.end ('Missing parameter for: ' + invalidParam);
 		logger.error("Missing parameter for: " + invalidParam);
 	}
+	*/
+
+	cache.lpush("temp_queue","1");
+	cache.lpush("temp_queue","2");
+	cache.lpush("temp_queue","3");
+	cache.lpush("temp_queue","4");
+	cache.lpush("temp_queue","5");
+	cache.lpush("temp_queue","6");
+
+	Console.log("Queue output " + cache.rpop("temp_queue"));
+	Console.log("Queue output " + cache.rpop("temp_queue"));
+	Console.log("Queue output " + cache.rpop("temp_queue"));
+	Console.log("Queue output " + cache.rpop("temp_queue"));
+	Console.log("Queue output " + cache.rpop("temp_queue"));
+	Console.log("Queue output " + cache.rpop("temp_queue"));
+	Console.log("Queue output " + cache.rpop("temp_queue"));
+	Console.log("Queue output " + cache.rpop("temp_queue"));
+
+
+	res.end ('Missing parameter for: ';
+
 });
 
 
