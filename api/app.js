@@ -411,7 +411,7 @@ router.get('/register_agent', function(req, res) {
 	}
 });
 
-outer.get('/find_agent', function(req, res) {
+router.get('/find_agent', function(req, res) {
 
 	
 	var where = req.query.where;
