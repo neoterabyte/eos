@@ -23,9 +23,6 @@ var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHT
 
 var activeAgentTokens;
 
-updateActiveAgentTokens();
-
-
 // Retrieve leave context
 db.getModel('agents', function(err, model) {
     if (err) {
@@ -77,6 +74,8 @@ fs.readFile('./api/html/error.html', 'utf8', function (err,data) {
 	}
 });
 
+updateActiveAgentTokens(Agents);
+
 router.get('/oauth', function(req, res) {
 	
 	var error = req.query.error;
@@ -127,7 +126,7 @@ router.get('/oauth', function(req, res) {
 					//update agents in mongo
 					Agents.findOneAndUpdate({user_name:user_name}, {user_name:user_name, access_token: access_token, is_active: true}, {upsert: true}, function (err, agent) {});
 					updateAgentData(Agents, user_name, access_token);	
-					updateActiveAgentTokens();	
+					updateActiveAgentTokens(Agents);	
 		        	
 		        	msg = "Congratulations, you have successfully registered for this service. You can now use Promogram.me";
 		        	res.end(responseHeaderHTML + responseContentHTML.replace("@message",msg) + responseFooterHTML);
@@ -258,6 +257,7 @@ router.get('/update_agent', function(req, res) {
 					for (i in agent) {
 						updateAgentData(Agents, agent[i].user_name, agent[i].access_token);	
 					}
+					updateActiveAgentTokens(Agents);
 					res.end("Update initiated for agents, check logs for details ");
 				}
   			}
@@ -398,10 +398,10 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
-function updateActiveAgentTokens() {
+function updateActiveAgentTokens(Agents) {
 
     console.log("Hellooo  baby");
-    
+
 	var query  = Agents.where({is_active:true});
 	query.find(function (err, agent) {
 		if(err){
