@@ -28,8 +28,7 @@ var getModel = function(obj, callback) {
       var schemaObject = require('../schemas/' + obj + '.json');
       // console.log('Valid schema: ' + JSON.stringify(schemaObject));
     } catch(e){
-      logger.debug(e.stack);
-      console.log(e.stack);
+      logger.error(e.stack);
       logger.error('Invalid Schema: ./schemas/' + obj + '.json');
       var schemaObject = {};
     }
