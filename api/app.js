@@ -422,7 +422,7 @@ router.get('/like_engine', function(req, res) {
 
 										console.log("Image: " + mediadata[0].id + ", Token " + activeAgentTokens[k]);
 
-										/*request.post(
+										request.post(
 										    "https://api.instagram.com/v1/media/" + mediadata[0].id + "/likes",
 										    { form: { 
 										    	access_token: activeAgentTokens[k] 
@@ -444,7 +444,7 @@ router.get('/like_engine', function(req, res) {
 										        	}
 										        }
 										    }
-										);*/
+										);
 										
 									}
 	
