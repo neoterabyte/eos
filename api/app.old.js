@@ -5,9 +5,9 @@ var express = require('express');
 var Log = require('log');
 var cache = require('../shared/lib/cache').getRedisClient();
 var request = require('request');
-var http = require('http');
+var http = require('http');   
 
-// Initialize logger
+// Initialize loggers
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
 
 // Create the Express application
