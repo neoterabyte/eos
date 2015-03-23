@@ -7,6 +7,14 @@
 		{
 			"host" : "apilocal.promogram.me",
 			"path" : "./api"
+		},
+		{
+			"host" : "promogram.me",
+			"path" : "./www"
+		},
+		{
+			"host" : "local.promogram.me",
+			"path" : "./www"
 		}
 	]
 }
