@@ -20,8 +20,8 @@ var port = process.env.PORT || 80;
 var router = express.Router();
 
 
-router.get('/*', function(req, res) {
-	res.sendFile(process.cwd() + '/www' + req.path);	
+router.get('/www/*', function(req, res) {
+	res.sendFile(process.cwd() + req.path);	
 });
 
 // Register all our routes with /

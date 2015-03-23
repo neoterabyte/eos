@@ -588,8 +588,8 @@ router.get('/add_like_subscriber', function(req, res) {
 
 
 
-router.get('/api/*', function(req, res) {
-	res.sendFile(process.cwd() + '/api/html' + req.path);	
+router.get('/api/html/*', function(req, res) {
+	res.sendFile(process.cwd() + req.path);	
 });
 
 
