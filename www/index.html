@@ -1,171 +1,206 @@
-
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-
+<!-- Meta, title, CSS, favicons, etc. -->
 <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Promogram: Get famous on instragram in no time">
+<meta name="keywords" content="Instagram, likes, comments, followers, following, fame">
+<meta name="author" content="Promogram Development Team">
+<title>Promogram &middot; Get famous on instragram in no time!</title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap core CSS -->
 
-<title>Full Width Slider jquery javascript+html code example for website design, website development, web developer, web design, web development, web designer, website, web page</title>
+<link href="/www/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Documentation extras -->
+
+<link href="/www/css/docs.min.css" rel="stylesheet">
+
+<!--[if lt IE 9]><script src="/www/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<script src="/www/js/ie-emulation-modes-warning.js"></script>
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
 <link href="/www/css/jssor.css" rel="stylesheet">
 <script src="/www/js/jssor.js"></script>
 
+<!-- Favicons -->
+<link rel="apple-touch-icon" href="/www/img/apple-touch-icon.png">
+<link rel="icon" href="/www/img/favicon.ico">
 </head>
 
-<body>
+<body class="bs-docs-home">
+<a id="skippy" class="sr-only sr-only-focusable" href="#content">
+<div class="container"><span class="skiplink-text">Skip to main content</span></div>
+</a> 
 
-
+<!-- Docs master nav -->
+<header class="navbar navbar-static-top bs-docs-nav" id="top" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+      <a href="../" class="navbar-brand">Promogam.me</a> </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li> <a href="../getting-started/">How it works</a> </li>
+        <li> <a href="../getting-started/">Pricing</a> </li>
+        <li> <a href="../css/">Faqs</a> </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="http://expo.getbootstrap.com" onclick="ga('send', 'event', 'Navbar', 'Community links', 'Expo');">Support</a></li>
+        <li><a href="http://blog.getbootstrap.com" onclick="ga('send', 'event', 'Navbar', 'Community links', 'Blog');">Sign-in</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
 <div id="slider1_container" style="position:relative;margin:0 auto;top:0px;left:0px;width:1300px;height:500px;overflow:hidden;">
-
-<div u="loading" style="position:absolute;top:0px;left:0px;">
-
-<div style="filter:alpha(opacity=70);opacity:0.7;position:absolute;display:block;top:0px;left:0px;width:100%;height:100%;">
-
-</div>
-
-<div style="position:absolute;display:block;background:url(/www/img/jssor/loading.gif) no-repeat center center;top:0px;left:0px;width:100%;height:100%;">
-
-</div>
-
-</div>
-
-<div u="slides" style="cursor:move;position:absolute;left:0px;top:0px;width:1300px;height:500px;overflow:hidden;">
-
-<div>
-
-<img u="image" src="/www/img/jssor/1920/red.jpg">
-
-<div u="caption" t="NO" t3="RTT|2" r3="137.5%" du3="3000" d3="500" style="position:absolute;width:445px;height:300px;top:100px;left:600px;">
-
-<img src="/www/img/jssor/new-site/c-phone.png" style="position:absolute;width:445px;height:300px;top:0px;left:0px;">
-
-<img u="caption" t="CLIP|LR" du="4000" t2="NO" src="/www/img/jssor/new-site/c-jssor-slider.png" style="position:absolute;width:102px;height:78px;top:70px;left:130px;">
-
-<img u="caption" t="ZMF|10" t2="NO" src="/www/img/jssor/new-site/c-text.png" style="position:absolute;width:80px;height:53px;top:153px;left:163px;">
-
-<img u="caption" t="RTT|10" t2="NO" src="/www/img/jssor/new-site/c-fruit.png" style="position:absolute;width:140px;height:90px;top:60px;left:220px;">
-
-<img u="caption" t="T" du="4000" t2="NO" src="/www/img/jssor/new-site/c-navigator.png" style="position:absolute;width:200px;height:155px;top:57px;left:121px;">
-
-</div>
-
-<div u="caption" t="RTT|2" r="-75%" du="1600" d="2500" t2="NO" style="position:absolute;width:470px;height:220px;top:120px;left:650px;">
-
-<img src="/www/img/jssor/new-site/c-phone-horizontal.png" style="position:absolute;width:470px;height:220px;top:0px;left:0px;">
-
-<img u="caption" t3="MCLIP|L" du3="2000" src="/www/img/jssor/new-site/c-slide-1.jpg" style="position:absolute;width:379px;height:213px;top:4px;left:45px;">
-
-<img u="caption" t="MCLIP|R" du="2000" t2="NO" src="/www/img/jssor/new-site/c-slide-3.jpg" style="position:absolute;width:379px;height:213px;top:4px;left:45px;">
-
-<img u="caption" t="RTTL|BR" x="500%" y="500%" du="1000" d="-3000" r="-30%" t3="L" x3="70%" du3="1600" src="/www/img/jssor/new-site/c-finger-pointing.png" style="position:absolute;width:257px;height:300px;top:80px;left:200px;">
-
-<img src="/www/img/jssor/new-site/c-navigator-horizontal.png" style="position:absolute;width:379px;height:213px;top:4px;left:45px;">
-
-</div>
-
-<div style="position:absolute;width:480px;height:120px;top:30px;left:30px;padding:5px;text-align:left;line-height:60px;text-transform:uppercase;font-size:50px;color:#FFFFFF;">Touch Swipe Slider
-
-</div>
-
-<div style="position:absolute;width:480px;height:120px;top:300px;left:30px;padding:5px;text-align:left;line-height:36px;font-size:30px;color:#FFFFFF;">
-
-Build your slider with anything, includes image, content, text, html, photo, picture
-
-</div>
-
-</div>
-
-<div>
-
-<img u="image" src="/www/img/jssor/1920/purple.jpg">
-
-<div style="position:absolute;width:480px;height:120px;top:30px;left:30px;padding:5px;text-align:left;line-height:60px;text-transform:uppercase;font-size:50px;color:#FFFFFF;">Touch Swipe Slider
-
-</div>
-
-<div style="position:absolute;width:480px;height:120px;top:300px;left:30px;padding:5px;text-align:left;line-height:36px;font-size:30px;color:#FFFFFF;">
-
-Build your slider with anything, includes image, content, text, html, photo, picture
-
-</div>
-
-</div>
-
-<div>
-
-<img u="image" src="/www/img/jssor/1920/blue.jpg">
-
-<div style="position:absolute;width:480px;height:120px;top:30px;left:30px;padding:5px;text-align:left;line-height:60px;text-transform:uppercase;font-size:50px;color:#FFFFFF;">Touch Swipe Slider
-
-</div>
-
-<div style="position:absolute;width:480px;height:120px;top:300px;left:30px;padding:5px;text-align:left;line-height:36px;font-size:30px;color:#FFFFFF;">
-
-Build your slider with anything, includes image, content, text, html, photo, picture
-
-</div>
-
-</div>
-
-<div u="any" style="position:absolute;display:block;top:6px;right:170px;width:280px;height:40px;">
-
-<a class="share-icon share-facebook" target="_blank" href="http://www.facebook.com/sharer.php?u=http://jssor.com" title="Share on Facebook"></a>
-
-<a class="share-icon share-twitter" target="_blank" href="http://twitter.com/share?url=http://jssor.com&text=jQuery%20Image%20Slider/Slideshow/Carousel/Gallery/Banner%20javascript+html%20TOUCH%20SWIPE%20Responsive" title="Share on Twitter"></a>
-
-<a class="share-icon share-googleplus" target="_blank" href="https://plus.google.com/share?url=http://jssor.com" title="Share on Google Plus"></a>
-
-<a class="share-icon share-linkedin" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://jssor.com" title="Share on LinkedIn"></a>
-
-<a class="share-icon share-stumbleupon" target="_blank" href="http://www.stumbleupon.com/submit?url=http://jssor.com&title=jQuery%20Image%20Slider/Slideshow/Carousel/Gallery/Banner%20javascript+html%20TOUCH%20SWIPE%20Responsive" title="Share on StumbleUpon"></a>
-
-<a class="share-icon share-pinterest" target="_blank" href="http://pinterest.com/pin/create/button/?url=http://jssor.com&media=http://jssor.com/img/site/jssor.slider.jpg&description=jQuery%20Image%20Slider/Slideshow/Carousel/Gallery/Banner%20javascript+html%20TOUCH%20SWIPE%20Responsive" title="Share on Pinterst"></a>
-
-<a class="share-icon share-email" target="_blank" href="mailto:?Subject=Jssor%20Slider&Body=Highly%20recommended%20jQuery%20Image%20Slider/Slideshow/Carousel/Gallery/Banner%20javascript+html%20TOUCH%20SWIPE%20Responsive%20http://jssor.com" title="Share by Email"></a>
-
-</div>
-
-</div>
-
-<div u="navigator" class="jssorb21" style="position:absolute;bottom:26px;left:6px;">
-
-<div u="prototype" style="POSITION:absolute;WIDTH:19px;HEIGHT:19px;text-align:center;line-height:19px;color:White;font-size:12px;"></div>
-
-</div>
-
-<span u="arrowleft" class="jssora21l" style="width:55px;height:55px;top:123px;left:8px;">
-
-</span>
-
-<span u="arrowright" class="jssora21r" style="width:55px;height:55px;top:123px;right:8px">
-
-</span>
-
-<a style="display:none" href="http://www.jssor.com">jQuery Slider</a>
-
-</div>
-
+  <div u="loading" style="position:absolute;top:0px;left:0px;">
+    <div style="filter:alpha(opacity=70);opacity:0.7;position:absolute;display:block;top:0px;left:0px;width:100%;height:100%;"> </div>
+    <div style="position:absolute;display:block;background:url(/www/img/jssor/loading.gif) no-repeat center center;top:0px;left:0px;width:100%;height:100%;"> </div>
+  </div>
+  <div u="slides" style="cursor:move;position:absolute;left:0px;top:0px;width:1300px;height:500px;overflow:hidden;">
+    <div> <img u="image" src="/www/img/jssor/1920/red.jpg">
+      <div u="caption" t="NO" t3="RTT|2" r3="137.5%" du3="3000" d3="500" style="position:absolute;width:445px;height:300px;top:100px;left:600px;"> <img src="/www/img/jssor/new-site/c-phone.png" style="position:absolute;width:445px;height:300px;top:0px;left:0px;"> <img u="caption" t="CLIP|LR" du="4000" t2="NO" src="/www/img/jssor/new-site/c-jssor-slider.png" style="position:absolute;width:102px;height:78px;top:70px;left:130px;"> <img u="caption" t="ZMF|10" t2="NO" src="/www/img/jssor/new-site/c-text.png" style="position:absolute;width:80px;height:53px;top:153px;left:163px;"> <img u="caption" t="RTT|10" t2="NO" src="/www/img/jssor/new-site/c-fruit.png" style="position:absolute;width:140px;height:90px;top:60px;left:220px;"> <img u="caption" t="T" du="4000" t2="NO" src="/www/img/jssor/new-site/c-navigator.png" style="position:absolute;width:200px;height:155px;top:57px;left:121px;"> </div>
+      <div u="caption" t="RTT|2" r="-75%" du="1600" d="2500" t2="NO" style="position:absolute;width:470px;height:220px;top:120px;left:650px;"> <img src="/www/img/jssor/new-site/c-phone-horizontal.png" style="position:absolute;width:470px;height:220px;top:0px;left:0px;"> <img u="caption" t3="MCLIP|L" du3="2000" src="/www/img/jssor/new-site/c-slide-1.jpg" style="position:absolute;width:379px;height:213px;top:4px;left:45px;"> <img u="caption" t="MCLIP|R" du="2000" t2="NO" src="/www/img/jssor/new-site/c-slide-3.jpg" style="position:absolute;width:379px;height:213px;top:4px;left:45px;"> <img u="caption" t="RTTL|BR" x="500%" y="500%" du="1000" d="-3000" r="-30%" t3="L" x3="70%" du3="1600" src="/www/img/jssor/new-site/c-finger-pointing.png" style="position:absolute;width:257px;height:300px;top:80px;left:200px;"> <img src="/www/img/jssor/new-site/c-navigator-horizontal.png" style="position:absolute;width:379px;height:213px;top:4px;left:45px;"> </div>
+      <div style="position:absolute;width:480px;height:120px;top:30px;left:30px;padding:5px;text-align:left;line-height:60px;text-transform:uppercase;font-size:50px;color:#FFFFFF;">Touch Swipe Slider </div>
+      <div style="position:absolute;width:480px;height:120px;top:300px;left:30px;padding:5px;text-align:left;line-height:36px;font-size:30px;color:#FFFFFF;"> Build your slider with anything, includes image, content, text, html, photo, picture </div>
+    </div>
+    <div> <img u="image" src="/www/img/jssor/1920/purple.jpg">
+      <div style="position:absolute;width:480px;height:120px;top:30px;left:30px;padding:5px;text-align:left;line-height:60px;text-transform:uppercase;font-size:50px;color:#FFFFFF;">Touch Swipe Slider </div>
+      <div style="position:absolute;width:480px;height:120px;top:300px;left:30px;padding:5px;text-align:left;line-height:36px;font-size:30px;color:#FFFFFF;"> Build your slider with anything, includes image, content, text, html, photo, picture </div>
+    </div>
+    <div> <img u="image" src="/www/img/jssor/1920/blue.jpg">
+      <div style="position:absolute;width:480px;height:120px;top:30px;left:30px;padding:5px;text-align:left;line-height:60px;text-transform:uppercase;font-size:50px;color:#FFFFFF;">Touch Swipe Slider </div>
+      <div style="position:absolute;width:480px;height:120px;top:300px;left:30px;padding:5px;text-align:left;line-height:36px;font-size:30px;color:#FFFFFF;"> Build your slider with anything, includes image, content, text, html, photo, picture </div>
+    </div>
+    <div u="any" style="position:absolute;display:block;top:6px;right:170px;width:280px;height:40px;"> <a class="share-icon share-facebook" target="_blank" href="http://www.facebook.com/sharer.php?u=http://jssor.com" title="Share on Facebook"></a> <a class="share-icon share-twitter" target="_blank" href="http://twitter.com/share?url=http://jssor.com&text=jQuery%20Image%20Slider/Slideshow/Carousel/Gallery/Banner%20javascript+html%20TOUCH%20SWIPE%20Responsive" title="Share on Twitter"></a> <a class="share-icon share-googleplus" target="_blank" href="https://plus.google.com/share?url=http://jssor.com" title="Share on Google Plus"></a> <a class="share-icon share-linkedin" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&url=http://jssor.com" title="Share on LinkedIn"></a> <a class="share-icon share-stumbleupon" target="_blank" href="http://www.stumbleupon.com/submit?url=http://jssor.com&title=jQuery%20Image%20Slider/Slideshow/Carousel/Gallery/Banner%20javascript+html%20TOUCH%20SWIPE%20Responsive" title="Share on StumbleUpon"></a> <a class="share-icon share-pinterest" target="_blank" href="http://pinterest.com/pin/create/button/?url=http://jssor.com&media=http://jssor.com/img/site/jssor.slider.jpg&description=jQuery%20Image%20Slider/Slideshow/Carousel/Gallery/Banner%20javascript+html%20TOUCH%20SWIPE%20Responsive" title="Share on Pinterst"></a> <a class="share-icon share-email" target="_blank" href="mailto:?Subject=Jssor%20Slider&Body=Highly%20recommended%20jQuery%20Image%20Slider/Slideshow/Carousel/Gallery/Banner%20javascript+html%20TOUCH%20SWIPE%20Responsive%20http://jssor.com" title="Share by Email"></a> </div>
+  </div>
+  <div u="navigator" class="jssorb21" style="position:absolute;bottom:26px;left:6px;">
+    <div u="prototype" style="POSITION:absolute;WIDTH:19px;HEIGHT:19px;text-align:center;line-height:19px;color:White;font-size:12px;"></div>
+  </div>
+  <span u="arrowleft" class="jssora21l" style="width:55px;height:55px;top:123px;left:8px;"> </span> <span u="arrowright" class="jssora21r" style="width:55px;height:55px;top:123px;right:8px"> </span> <a style="display:none" href="http://www.jssor.com">jQuery Slider</a> </div>
 <script>
 
 jssor_slider1_starter('slider1_container');
 
 </script>
-
 <div style="height:1px;"></div>
+<div class="bs-docs-featurette">
+  <div class="container">
+    <h2 class="bs-docs-featurette-title">Designed for everyone, everywhere.</h2>
+    <p class="lead">Bootstrap makes front-end web development faster and easier. It's made for folks of all skill levels, devices of all shapes, and projects of all sizes.</p>
+    <hr class="half-rule">
+    <div class="row">
+      <div class="col-sm-4"> <img src="/www/img/sass-less.png" alt="Sass and Less support" class="img-responsive">
+        <h3>Preprocessors</h3>
+        <p>Bootstrap ships with vanilla CSS, but its source code utilizes the two most popular CSS preprocessors, <a href="../css/#less">Less</a> and <a href="../css/#sass">Sass</a>. Quickly get started with precompiled CSS or build on the source.</p>
+      </div>
+      <div class="col-sm-4"> <img src="/www/img/devices.png" alt="Responsive across devices" class="img-responsive">
+        <h3>One framework, every device.</h3>
+        <p>Bootstrap easily and efficiently scales your websites and applications with a single code base, from phones to tablets to desktops with CSS media queries.</p>
+      </div>
+      <div class="col-sm-4"> <img src="/www/img/components.png" alt="Components" class="img-responsive">
+        <h3>Full of features</h3>
+        <p>With Bootstrap, you get extensive and beautiful documentation for common HTML elements, dozens of custom HTML and CSS components, and awesome jQuery plugins.</p>
+      </div>
+    </div>
+    <hr class="half-rule">
+    <p class="lead">Bootstrap is open source. It's hosted, developed, and maintained on GitHub.</p>
+    <a href="https://github.com/twbs/bootstrap" class="btn btn-outline btn-lg">View the GitHub project</a> </div>
+</div>
+<div class="bs-docs-featurette">
+  <div class="container">
+    <h2 class="bs-docs-featurette-title">Built with Bootstrap.</h2>
+    <p class="lead">Millions of amazing sites across the web are being built with Bootstrap. Get started on your own with our growing <a href="../getting-started/#examples">collection of examples</a> or by exploring some of our favorites.</p>
+    <hr class="half-rule">
+    <div class="row bs-docs-featured-sites">
+      <div class="col-xs-6 col-sm-3"> <a href="http://expo.getbootstrap.com/2014/10/29/lyft/" target="_blank" title="Lyft"> <img src="http://expo.getbootstrap.com/thumbs/lyft-thumb.jpg" alt="Lyft" class="img-responsive"> </a> </div>
+      <div class="col-xs-6 col-sm-3"> <a href="http://expo.getbootstrap.com/2014/09/30/vogue/" target="_blank" title="Vogue"> <img src="http://expo.getbootstrap.com/thumbs/vogue-thumb.jpg" alt="Vogue" class="img-responsive"> </a> </div>
+      <div class="col-xs-6 col-sm-3"> <a href="http://expo.getbootstrap.com/2014/03/13/riot-design/" target="_blank" title="Riot Design"> <img src="http://expo.getbootstrap.com/thumbs/riot-thumb.jpg" alt="Riot Design" class="img-responsive"> </a> </div>
+      <div class="col-xs-6 col-sm-3"> <a href="http://expo.getbootstrap.com/2014/02/12/newsweek/" target="_blank" title="Newsweek"> <img src="http://expo.getbootstrap.com/thumbs/newsweek-thumb.jpg" alt="Newsweek" class="img-responsive"> </a> </div>
+    </div>
+    <hr class="half-rule">
+    <p class="lead">We showcase dozens of inspiring projects built with Bootstrap on the Bootstrap Expo.</p>
+    <a href="http://expo.getbootstrap.com" class="btn btn-outline btn-lg">Explore the Expo</a> </div>
+</div>
 
+<!-- Footer
+================================================== -->
+<footer class="bs-docs-footer" role="contentinfo">
+  <div class="container">
+    <div class="bs-docs-social">
+      <ul class="bs-docs-social-buttons">
+        <li>
+          <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=twbs&amp;repo=bootstrap&amp;type=watch&amp;count=true" width="100" height="20" title="Star on GitHub"></iframe>
+        </li>
+        <li>
+          <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=twbs&amp;repo=bootstrap&amp;type=fork&amp;count=true" width="102" height="20" title="Fork on GitHub"></iframe>
+        </li>
+        <li class="follow-btn"> <a href="https://twitter.com/getbootstrap" class="twitter-follow-button" data-link-color="#0069D6" data-show-count="true">Follow @getbootstrap</a> </li>
+        <li class="tweet-btn"> <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://getbootstrap.com/" data-count="horizontal" data-via="getbootstrap" data-related="mdo:Creator of Bootstrap">Tweet</a> </li>
+      </ul>
+    </div>
+    <p>Designed and built with all the love in the world by <a href="https://twitter.com/mdo" target="_blank">@mdo</a> and <a href="https://twitter.com/fat" target="_blank">@fat</a>.</p>
+    <p>Maintained by the <a href="https://github.com/orgs/twbs/people">core team</a> with the help of <a href="https://github.com/twbs/bootstrap/graphs/contributors">our contributors</a>.</p>
+    <p>Code licensed under <a rel="license" href="https://github.com/twbs/bootstrap/blob/master/LICENSE" target="_blank">MIT</a>, documentation under <a rel="license" href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.</p>
+    <ul class="bs-docs-footer-links text-muted">
+      <li>Currently v3.3.4</li>
+      <li>&middot;</li>
+      <li><a href="https://github.com/twbs/bootstrap">GitHub</a></li>
+      <li>&middot;</li>
+      <li><a href="../getting-started/#examples">Examples</a></li>
+      <li>&middot;</li>
+      <li><a href="../2.3.2/">v2.3.2 docs</a></li>
+      <li>&middot;</li>
+      <li><a href="../about/">About</a></li>
+      <li>&middot;</li>
+      <li><a href="http://expo.getbootstrap.com">Expo</a></li>
+      <li>&middot;</li>
+      <li><a href="http://blog.getbootstrap.com">Blog</a></li>
+      <li>&middot;</li>
+      <li><a href="https://github.com/twbs/bootstrap/issues">Issues</a></li>
+      <li>&middot;</li>
+      <li><a href="https://github.com/twbs/bootstrap/releases">Releases</a></li>
+    </ul>
+  </div>
+</footer>
 
+<!-- Bootstrap core JavaScript
+================================================== --> 
+<!-- Placed at the end of the document so the pages load faster --> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
+<script src="/www/js/bootstrap.min.js"></script> 
+<script src="/www/js/docs.min.js"></script> 
 
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug --> 
+<script src="/www/js/ie10-viewport-bug-workaround.js"></script> 
+<script>
+  window.twttr = (function (d,s,id) {
+    var t, js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return; js=d.createElement(s); js.id=id; js.async=1;
+    js.src="https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
+    return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+  }(document, "script", "twitter-wjs"));
+</script> 
 
-
-
-
-
-
-
-
+<!-- Analytics
+================================================== --> 
+<script>
+  var _gauges = _gauges || [];
+  (function() {
+    var t   = document.createElement('script');
+    t.async = true;
+    t.id    = 'gauges-tracker';
+    t.setAttribute('data-site-id', '4f0dc9fef5a1f55508000013');
+    t.src = '//secure.gaug.es/track.js';
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(t, s);
+  })();
+</script>
 </body>
-
 </html>
