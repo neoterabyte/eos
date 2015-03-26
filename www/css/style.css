@@ -34,10 +34,18 @@
 }
 
 .gold1 {
-	background-color: #FF944D;
+	background-color: #FDD017;
 }
 
 .gold2 {
+	background-color: #E4BB15;
+}
+
+.bronze1 {
+	background-color: #FF944D;
+}
+
+.bronze2 {
 	background-color: #E68545;
 }
 
@@ -90,6 +98,18 @@
 	border-color:#FFA366
 }
 .btn-outline-gold:active, .btn-outline-gold:focus, .btn-outline-gold:hover {
+	color:#FFFFFF;
+	background-color:#B84A00;
+	border-color:#FFA366
+}
+
+
+.btn-outline-bronze {
+	color:#FFFFFF;
+	background-color:#FF7519;
+	border-color:#FFA366
+}
+.btn-outline-bronze:active, .btn-outline-bronze:focus, .btn-outline-bronze:hover {
 	color:#FFFFFF;
 	background-color:#B84A00;
 	border-color:#FFA366
