@@ -98,11 +98,11 @@
 
 .btn-outline-green {
 	color:#FFFFFF;
-	background-color:#B0FC23;
-	border-color:#D8FE91
+	background-color:#00FF00;
+	border-color:#99FF99
 }
 .btn-outline-green:active, .btn-outline-green:focus, .btn-outline-green:hover {
 	color:#FFFFFF;
-	background-color:#9EE320;
-	border-color:#D8FE91
+	background-color:#00E600;
+	border-color:#99FF99
 }
