@@ -748,7 +748,7 @@ body {
 }
 
 
-table .green1 {
+.green1 {
 	background-color: #2dd172;
 }
 .green2 {
@@ -776,7 +776,7 @@ table .green1 {
 	background-color: #e3e4e6;
 }
 
-tab-container {
+.tab-container {
 	box-shadow: 0 1px 2px #999;
 	border-radius: 10px;
 }
