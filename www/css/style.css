@@ -97,12 +97,12 @@
 
 
 .btn-outline-green {
-	color:#004C00;
+	color:#006600;
 	background-color:#00E600;
 	border-color:#99FF99
 }
 .btn-outline-green:active, .btn-outline-green:focus, .btn-outline-green:hover {
-	color:#004C00;
+	color:#FFFFFF;
 	background-color:#00B200;
 	border-color:#99FF99
 }
