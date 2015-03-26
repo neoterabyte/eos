@@ -545,8 +545,8 @@ position:static
 }
 }
 .bs-docs-featurette {
-	padding-top:15px;
-	padding-bottom:15px;
+	padding-top:10px;
+	padding-bottom:10px;
 	font-size:16px;
 	line-height:1.5;
 	color:#555;
