@@ -56,9 +56,8 @@
 }
 
 .tab-container1 {
-	border-color:#111111;
-	box-shadow: 0 0px 0px #999;
-	border-radius: 10px;
+	box-shadow: 0 1px 1px #999;
+	border-radius: 7px;
 }
 
 .period {
