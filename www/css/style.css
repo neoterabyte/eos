@@ -51,10 +51,10 @@
 .tab-container1 {
 	padding:6px 12px;
 	margin-bottom:0;
-	border:2px solid transparent;
+	border:1px solid transparent;
 	border-radius:7px;
 	color:#FFFFFF;
-	border-color:#444444;
+	border-color:#555555;
 }
 .period {
 	font-size: 13px;
