@@ -94,7 +94,7 @@
 
 .btn-outline-gold {
 	color:#FFFFFF;
-	background-color:#FFA319;
+	background-color:#E4BB15;
 	border-color:#FFC875
 }
 .btn-outline-gold:active, .btn-outline-gold:focus, .btn-outline-gold:hover {
@@ -106,13 +106,13 @@
 
 .btn-outline-bronze {
 	color:#FFFFFF;
-	background-color:#FF7519;
-	border-color:#FFA366
+	background-color:#E68545;
+	border-color:#E68545
 }
 .btn-outline-bronze:active, .btn-outline-bronze:focus, .btn-outline-bronze:hover {
 	color:#FFFFFF;
-	background-color:#B84A00;
-	border-color:#FFA366
+	background-color:#B86A37;
+	border-color:#E68545
 }
 
 
