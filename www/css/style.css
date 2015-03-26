@@ -94,3 +94,15 @@
 	background-color:#E65C00;
 	border-color:#FFA366
 }
+
+
+.btn-outline-green {
+	color:#FFFFFF;
+	background-color:#45C27A;
+	border-color:#82E4AB
+}
+.btn-outline-green:active, .btn-outline-green:focus, .btn-outline-green:hover {
+	color:#FFFFFF;
+	background-color:#3EAD6C;
+	border-color:#82E4AB
+}
