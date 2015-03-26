@@ -747,7 +747,6 @@ body {
 	background-position:-303px -33px
 }
 
-
 .green1 {
 	background-color: #2dd172;
 }
@@ -787,4 +786,12 @@ body {
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	margin: 5px 0 17px;
+}
+
+.price {
+	color: #ffffff;
+	font-size: 55px;
+	font-family: HelveticaNeueThin;
+	margin: 15px 0 0;
+	line-height: 55px;
 }
