@@ -43,16 +43,17 @@
 	margin: 5px 0 17px;
 }
 
-.price {
-	color: #ffffff;
-	font-size: 55px;
-	margin: 15px 0 0;
-	line-height: 55px;
-}
 
-.price1 {
+.likes {
 	margin-bottom:5px;
 	font-size:55px;
+	font-weight:100;
+	color:##ffffff
+}
+
+.price {
+	margin-bottom:5px;
+	font-size:30px;
 	font-weight:100;
 	color:##ffffff
 }
