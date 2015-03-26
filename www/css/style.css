@@ -32,34 +32,44 @@
 .grey4 {
 	background-color: #CCCDCF;
 }
-
 .gold1 {
 	background-color: #FDD017;
 }
-
 .gold2 {
 	background-color: #E4BB15;
 }
-
 .bronze1 {
 	background-color: #FF944D;
 }
-
 .bronze2 {
 	background-color: #E68545;
 }
-
-
 .tab-container {
 	box-shadow: 0 1px 2px #999;
 	border-radius: 10px;
 }
-
 .tab-container1 {
-	box-shadow: 0 1px 1px #999;
-	border-radius: 7px;
+	display:inline-block;
+	padding:6px 12px;
+	margin-bottom:0;
+	line-height:1.42857143;
+	text-align:center;
+	white-space:nowrap;
+	vertical-align:middle;
+	-ms-touch-action:manipulation;
+	touch-action:manipulation;
+	cursor:pointer;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+	background-image:none;
+	border:1px solid transparent;
+	border-radius:4px;
+	color:#FFFFFF;
+	background-color:#A36810;
+	border-color:#FFEED6
 }
-
 .period {
 	font-size: 13px;
 	line-height: 13px;
@@ -67,13 +77,10 @@
 	letter-spacing: 1px;
 	margin: 8px 0 17px;
 }
-
-
 .likes {
 	font-size:55px;
 	margin-bottom:0px
 }
-
 .price {
 	font-size:20px;
 	margin-bottom:2px;
@@ -84,20 +91,16 @@
 	margin-bottom:2px;
 	margin-top:-8px
 }
-
 .bottomround {
 	-webkit-border-radius: 0 0 10px 10px;
 	-moz-border-radius: 0 0 10px 10px;
 	border-radius: 0 0 10px 10px;
 }
-
 .topround {
 	-webkit-border-radius: 10px 10px 0 0;
 	-moz-border-radius: 10px 10px 0 0;
 	border-radius: 10px 10px 0 0;
 }
-
-
 .btn-outline-gold {
 	color:#FFFFFF;
 	background-color:#CC8214;
@@ -108,8 +111,6 @@
 	background-color:#A36810;
 	border-color:#FFEED6
 }
-
-
 .btn-outline-bronze {
 	color:#FFFFFF;
 	background-color:#E68545;
@@ -120,8 +121,6 @@
 	background-color:#B86A37;
 	border-color:#F8DAC7
 }
-
-
 .btn-outline-green {
 	color:#006600;
 	background-color:#00E600;
