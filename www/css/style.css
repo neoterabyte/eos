@@ -54,7 +54,8 @@
 	border:1px solid transparent;
 	border-radius:7px;
 	color:#FFFFFF;
-	border-color:#FFEED6
+	border-color:#333333;
+	background-color: #555555;
 }
 .period {
 	font-size: 13px;
