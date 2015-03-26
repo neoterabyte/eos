@@ -86,11 +86,11 @@
 
 .btn-outline-gold {
 	color:#FFFFFF;
-	background-color:#E68545;
-	border-color:#B86A37
+	background-color:#FF6600;
+	border-color:#FFA366
 }
 .btn-outline-gold:active, .btn-outline-gold:focus, .btn-outline-gold:hover {
 	color:#FFFFFF;
-	background-color:#CF783E;
-	border-color:#B86A37
+	background-color:#E65C00;
+	border-color:#FFA366
 }
