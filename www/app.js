@@ -24,5 +24,16 @@ router.get('/www/*', function(req, res) {
 	res.sendFile(process.cwd() + req.path);	
 });
 
+router.get('/api/*', function(req, res) {
+	url = String(req.originalUrl).split("/api/");
+	res.redirect("http://api." + req.hostname + "/" + url[1]);
+});
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // Register all our routes with /
 app.use('/', router);

@@ -10,7 +10,7 @@
 		},
 		{
 			"host" : "promogram.me",
-			"path" : "./www"
+			"path" : "./api"
 		},
 		{
 			"host" : "local.promogram.me",

@@ -76,7 +76,7 @@ fs.readFile('./api/html/error.html', 'utf8', function (err,data) {
 
 updateActiveAgentTokens(Agents);
 
-router.get('/oauth', function(req, res) {
+router.get('/api/oauth', function(req, res) {
 	
 	var error = req.query.error;
 		
@@ -142,7 +142,7 @@ router.get('/oauth', function(req, res) {
 
 
 
-router.get('/register_agent', function(req, res) {
+router.get('/api/register_agent', function(req, res) {
 
 	
 	var user_name = req.query.user_name;
@@ -188,7 +188,7 @@ router.get('/register_agent', function(req, res) {
 });
 
 
-router.get('/find_agent', function(req, res) {
+router.get('/api/find_agent', function(req, res) {
 
 	
 	var where = req.query.where;
@@ -227,7 +227,7 @@ router.get('/find_agent', function(req, res) {
 	}
 });
 
-router.get('/find_like_subscriber', function(req, res) {
+router.get('/api/find_like_subscriber', function(req, res) {
 
 	
 	var where = req.query.where;
@@ -267,7 +267,7 @@ router.get('/find_like_subscriber', function(req, res) {
 });
 
 
-router.get('/update_agent', function(req, res) {
+router.get('/api/update_agent', function(req, res) {
 
 	
 	var where = req.query.where;
@@ -311,7 +311,7 @@ router.get('/update_agent', function(req, res) {
 
 
 
-router.get('/agent_inter_follow', function(req, res) {
+router.get('/api/agent_inter_follow', function(req, res) {
 
 	//get all agents
 	var query  = Agents.where({});		
@@ -367,7 +367,7 @@ router.get('/agent_inter_follow', function(req, res) {
 });
 
 
-router.get('/like_engine', function(req, res) {
+router.get('/api/like_engine', function(req, res) {
 
 	var where = req.query.where;
 
@@ -469,7 +469,7 @@ router.get('/like_engine', function(req, res) {
 });
 
 
-router.get('/add_like_subscriber', function(req, res) {
+router.get('/api/add_like_subscriber', function(req, res) {
 
 	
 	var user_name = req.query.user_name;	
@@ -504,14 +504,14 @@ router.get('/add_like_subscriber', function(req, res) {
 				logger.error(errmsg + ", like subscriber name: " + user_name);	
 
 				res.statusCode = params.error_response_code;
-				res.end ('oops! and error occured');
+				res.end ('oops an error occurred, please try again');
 							
 			} else if (response && response.statusCode != 200) {
 				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
 				logger.error(errmsg  + ", ike subscriber: " + user_name);
 
 				res.statusCode = params.error_response_code;
-				res.end ('oops! and error occured');
+				res.end ('oops an error occurred, please try again');
 
 			}else{
 
@@ -530,14 +530,14 @@ router.get('/add_like_subscriber', function(req, res) {
 							logger.error(errmsg  + ", user name: " + userdata[0].username);
 
 							res.statusCode = params.error_response_code;
-							res.end ('oops! and error occured');
+							res.end ('oops an error occurred, please try again');
 
 						} else if (response1 && response1.statusCode != 200) {
 							errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
 							logger.error(errmsg +  ", user name: " + userdata[0].username);
 
 							res.statusCode = params.error_response_code;
-							res.end ('oops! and error occured');
+							res.end ('oops an error occurred, please try again');
 
 						}else{
 
@@ -578,7 +578,7 @@ router.get('/add_like_subscriber', function(req, res) {
 										console.log("Errorrr  " + err);
 
 										res.statusCode = params.error_response_code;
-										res.end ('oops! and error occured');
+										res.end ('oops an error occurred, please try again');
 									}else{
 										res.end ('Success');
 									}
@@ -592,7 +592,7 @@ router.get('/add_like_subscriber', function(req, res) {
 					logger.error(errmsg);
 
 					res.statusCode = params.error_response_code;
-					res.end ('oops! and error occured');
+					res.end ('oops an error occurred, please try again');
 				}
 			}
 		});
@@ -612,6 +612,9 @@ router.get('/api/html/*', function(req, res) {
 	res.sendFile(process.cwd() + req.path);	
 });
 
+router.get('/www/*', function(req, res) {
+	res.sendFile(process.cwd() + req.path);	
+});
 
 // Register all our routes with /
 app.use('/', router);
