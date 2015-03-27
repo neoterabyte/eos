@@ -109,7 +109,7 @@ jssor_slider1_starter('slider1_container');
                 <p class="period" style="color:#FFF">Valid for 24 hours</p></td>
             </tr>
             <tr>
-              <td class="bottomround green2" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline-green btn-lg" style="text-align:center">Try now</p></td>
+              <td class="bottomround green2" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline-green btn-lg" style="text-align:center" onClick="showFreeSubscribe()">Try now</p></td>
             </tr>
           </table>
         </div>
@@ -129,7 +129,7 @@ jssor_slider1_starter('slider1_container');
                 <p class="period" style="color:#FFF">Cancel Anytime</p></td>
             </tr>
             <tr>
-              <td class="bottomround bronze1" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline-bronze btn-lg" style="text-align:center">Buy now</p></td>
+              <td class="bottomround bronze1" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline-bronze btn-lg" style="text-align:center" onClick="showSubscribe('BRONZE')">Buy now</p></td>
             </tr>
           </table>
         </div>
@@ -149,7 +149,7 @@ jssor_slider1_starter('slider1_container');
                 <p class="period" >Cancel Anytime</p></td>
             </tr>
             <tr>
-              <td class="bottomround grey3" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline btn-lg" style="text-align:center">Buy now</p></td>
+              <td class="bottomround grey3" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline btn-lg" style="text-align:center" onClick="showSubscribe('SILVER')">Buy now</p></td>
             </tr>
           </table>
         </div>
@@ -169,7 +169,7 @@ jssor_slider1_starter('slider1_container');
                 <p class="period" >Cancel Anytime</p></td>
             </tr>
             <tr>
-              <td class="bottomround gold1" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline-gold btn-lg" style="text-align:center">Buy now</p></td>
+              <td class="bottomround gold1" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline-gold btn-lg" style="text-align:center" onClick="showSubscribe('GOLD')">Buy now</p></td>
             </tr>
           </table>
         </div>
@@ -178,8 +178,7 @@ jssor_slider1_starter('slider1_container');
         </div>
       </div>
     </div>
-  
-    <div id="subscription_block" class="row center-block" style="padding-bottom:10px">
+    <div id="subscription_block" class="row center-block" style="padding-bottom:10px" style="display:none">
       <div class="col-md-4">&nbsp;</div>
       <div class="col-md-4  tab-container1" >
         <div id="paypal_block" style="display:" class="form-group form-group-lg center-block"> <img src="/www/img/paypal.jpg" alt="paypal" class="img-responsive center-block" height="57" width="150"> </div>
@@ -194,11 +193,11 @@ jssor_slider1_starter('slider1_container');
             <input class="form-control" type="text" id="lg" placeholder="Instagram User Name..." name="user_name">
           </div>
           <div class="form-group form-group-lg">
-            <select name="plan" class="form-control">
-              <option value="free">Free Plan</option>
-              <option value="bronze">Bronze Plan</option>
-              <option value="silver">Silver Plan</option>
-              <option value="gold">Gold Plan</option>
+            <select id="plan" name="plan" class="form-control">
+              <option value="FREE">Free Plan</option>
+              <option value="BRONZE">Bronze Plan</option>
+              <option value="SILVER">Silver Plan</option>
+              <option value="GOLD">Gold Plan</option>
             </select>
           </div>
           <div align="right">
@@ -287,7 +286,17 @@ $( "#subscribeForm" ).submit(function( event ) {
 	
  });
   
+  function showSubscribe(plan){
+	  $("#name").val(plan);
+	  $("#paypall" ).show();
+	  $("#subscription_block" ).show();
+  }
   
+  function showFreeSubscribe(){
+	  $("#name").val("FREE");  
+	  $("#paypall" ).hide();
+	  $("#subscription_block" ).show();
+  }
 });
 </script>
 </body>
