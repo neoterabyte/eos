@@ -296,9 +296,9 @@ $( "#subscribeForm" ).submit(function( event ) {
 // Attach a submit handler to the form
 $( "#plan" ).change(function( event ) {
 	if( $("#plan").val() == "FREE"){
-		$("#paypal_block" ).fadeOut();
+		$("#paypal_block" ).hide();
 	}else{
-		$("#paypal_block" ).fadeIn();
+		$("#paypal_block" ).show();
 	}
 });
 
