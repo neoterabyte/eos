@@ -182,6 +182,10 @@ jssor_slider1_starter('slider1_container');
       <div id="alert_box" style="display:none">
         <p id="alert_info" class="info-alert">Congratulations! you have successfully subscribed</p>
       </div>
+      <div class="container">
+        <h3>Animated button</h3>
+        <button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Loading...</button>
+      </div>
       <div id="paypal" align="center" style="vertical-align:middle;padding-bottom:8px;"> <img src="/www/img/paypal.jpg" alt="paypal" class="img-responsive" height="57" width="150"> </div>
       <div class="row" style="padding-bottom:10px">
         <div class="col-md-4">&nbsp;</div>
@@ -250,7 +254,7 @@ $( "#subscribeForm" ).submit(function( event ) {
   
   $( "#alert_info" ).empty().append( "Subscribing..." );
   $("#alert_info").toggleClass("info-alert");
-  $("#alert_info").css("display", "inherit");
+  $( "#alert_box" ).show();
   
   console.log("hellooo");
  
