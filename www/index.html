@@ -178,7 +178,7 @@ jssor_slider1_starter('slider1_container');
         </div>
       </div>
     </div>
-    <div id="subscription_pane" align="center" class="tab-container1" style="display:none">
+    <div id="subscription_pane" align="center" class="tab-container1" style="display:inherit">
       <div id="alert_box" style="display:none">
         <p id="alert_info" class="info-alert">Congratulations! you have successfully subscribed</p>
       </div>
@@ -250,7 +250,7 @@ $( "#subscribeForm" ).submit(function( event ) {
   
   $( "#alert_info" ).empty().append( "Subscribing..." );
   $("#alert_info").toggleClass("info-alert");
-  $("#alert_info").css("display", "");
+  $("#alert_info").css("display", "inherit");
  
   // Get some values from elements on the page:
   var $form = $( this ),
