@@ -128,3 +128,14 @@
 	background-color:#00B200;
 	border-color:#008E00
 }
+
+.info-alert {
+	font-size: 13px;
+	line-height: 13px;
+	letter-spacing: 1px;
+	margin: 8px 0 17px;
+	border:1px solid transparent;
+	border-radius:4px;
+	color:#555555;
+	border-color:#CCCCCC;
+}
