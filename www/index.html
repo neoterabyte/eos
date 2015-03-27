@@ -287,14 +287,23 @@ $( "#subscribeForm" ).submit(function( event ) {
  });   
 });
 
+// Attach a submit handler to the form
+$( "#plan" ).change(function( event ) {
+	if( $("#plan").val() == "FREE"){
+		$("#paypal_block" ).hide();
+	}else{
+		$("#paypal_block" ).show();
+	}
+});
+
  function showSubscribe(plan){
-	  $("#name").val(plan);
+	  $("#plan").val(plan);
 	  $("#paypal_block" ).show();
 	  $("#subscription_block").show();
   }
   
   function showFreeSubscribe(){
-	  $("#name").val("FREE");  
+	  $("#plan").val("FREE");  
 	  $("#paypal_block").hide();
 	  $("#subscription_block" ).show();
   }
