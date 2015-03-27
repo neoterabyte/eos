@@ -306,6 +306,10 @@ $( "#plan" ).change(function( event ) {
 	  $("#plan").val(plan);
 	  $("#paypal_block" ).fadeIn();
 	  $("#subscription_block").show();
+	  
+	   $('html,body').animate({
+          scrollTop: $("#subscription_block" ).offset().top
+        }, 1000);
   }
   
   function showFreeSubscribe(){
