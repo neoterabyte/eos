@@ -178,26 +178,30 @@ jssor_slider1_starter('slider1_container');
         </div>
       </div>
     </div>
-    <div id="subscription_pane" align="center" class="tab-container1">
-      <div id="alert_box" style="display:">
-        <p id="alert_info" class="success-alert">Congratulations! you have successfully subscribed</p>
+    <div id="subscription_pane" align="center" class="tab-container1" style="display:none">
+      <div id="alert_box" style="display:none">
+        <p id="alert_info" class="info-alert">Congratulations! you have successfully subscribed</p>
       </div>
-      <div align="center" style="vertical-align:middle;padding-bottom:8px;"> <img src="/www/img/paypal.jpg" alt="paypal" class="img-responsive" height="57" width="150"> </div>
+      <div id="paypal" align="center" style="vertical-align:middle;padding-bottom:8px;"> <img src="/www/img/paypal.jpg" alt="paypal" class="img-responsive" height="57" width="150"> </div>
       <div class="row" style="padding-bottom:10px">
         <div class="col-md-4">&nbsp;</div>
         <div class="col-md-4">
-          <div class="form-group form-group-lg">
-            <input class="form-control" type="text" id="lg" placeholder="Instagram User Name...">
-          </div>
-          <div class="form-group form-group-lg">
-            <select name="cars" class="form-control">
-              <option value="free">Free Plan</option>
-              <option value="bronze">Bronze Plan</option>
-              <option value="silver">Silver Plan</option>
-              <option value="gold">Gold Plan</option>
-            </select>
-          </div>
-          <div align="right"> <a href="https://github.com/twbs/bootstrap" class="btn btn-outline-green1 btn-lg">&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;</a> </div>
+          <form action="/" id="subscribeForm">
+            <div class="form-group form-group-lg">
+              <input class="form-control" type="text" id="lg" placeholder="Instagram User Name..." name="user_name">
+            </div>
+            <div class="form-group form-group-lg">
+              <select name="plan" class="form-control">
+                <option value="free">Free Plan</option>
+                <option value="bronze">Bronze Plan</option>
+                <option value="silver">Silver Plan</option>
+                <option value="gold">Gold Plan</option>
+              </select>
+            </div>
+            <div align="right">
+              <input type="submit" value="&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;"  class="btn btn-outline-green1 btn-lg">
+            </div>
+          </form>
         </div>
         <div class="col-md-4">&nbsp;</div>
       </div>
@@ -236,6 +240,33 @@ jssor_slider1_starter('slider1_container');
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(t, s);
   })();
+</script> 
+<script>
+// Attach a submit handler to the form
+$( "#subscribeForm" ).submit(function( event ) {
+ 
+  // Stop form from submitting normally
+  event.preventDefault();
+  
+  $( "#alert_info" ).empty().append( "Subscribing..." );
+  $("#alert_info").toggleClass("info-alert");
+  $("#alert_info").css("display", "");
+ 
+  // Get some values from elements on the page:
+  var $form = $( this ),
+    user_name = $form.find( "input[name='user_name']" ).val(),
+	plan = $form.find( "input[name='plan']" ).val(),
+    url = $form.attr( "action" );
+ 
+  // Send the data using post
+  var posting = $.post( url, { user_name: user_name, plan: plan } );
+ 
+  // Put the results in a div
+  posting.done(function( data ) {
+    //var content = $( data ).find( "#content" );
+    //$( "#result" ).empty().append( content );
+  });
+});
 </script>
 </body>
 </html>
