@@ -502,10 +502,16 @@ router.get('/add_like_subscriber', function(req, res) {
 			if (error){
 				errmsg = "Instagram API error: " + error;
 				logger.error(errmsg + ", like subscriber name: " + user_name);	
+
+				res.statusCode = params.error_response_code;
+				res.end ('oops! and error occured');
 							
 			} else if (response && response.statusCode != 200) {
 				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
 				logger.error(errmsg  + ", ike subscriber: " + user_name);
+
+				res.statusCode = params.error_response_code;
+				res.end ('oops! and error occured');
 
 			}else{
 
@@ -523,9 +529,15 @@ router.get('/add_like_subscriber', function(req, res) {
 							errmsg = "Instagram API error: " + error1;
 							logger.error(errmsg  + ", user name: " + userdata[0].username);
 
+							res.statusCode = params.error_response_code;
+							res.end ('oops! and error occured');
+
 						} else if (response1 && response1.statusCode != 200) {
 							errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
 							logger.error(errmsg +  ", user name: " + userdata[0].username);
+
+							res.statusCode = params.error_response_code;
+							res.end ('oops! and error occured');
 
 						}else{
 
@@ -564,6 +576,11 @@ router.get('/add_like_subscriber', function(req, res) {
 
 									if(err){
 										console.log("Errorrr  " + err);
+
+										res.statusCode = params.error_response_code;
+										res.end ('oops! and error occured');
+									}else{
+										res.end ('Success');
 									}
 							});
 						}
@@ -573,11 +590,14 @@ router.get('/add_like_subscriber', function(req, res) {
 
 					errmsg = "Like subscriber not found: name: " + user_name;	    				
 					logger.error(errmsg);
+
+					res.statusCode = params.error_response_code;
+					res.end ('oops! and error occured');
 				}
 			}
 		});
 	
-		res.end ('Subscriber added?');
+		//res.end ('Subscriber added?');
 
 	}else{
 		res.statusCode = params.error_response_code;

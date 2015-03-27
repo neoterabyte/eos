@@ -178,36 +178,35 @@ jssor_slider1_starter('slider1_container');
         </div>
       </div>
     </div>
-    <div id="subscription_pane" align="center" class="tab-container1" style="display:inherit">
-      <div id="paypal" align="center" style="vertical-align:middle;padding-bottom:8px;"> <img src="/www/img/paypal.jpg" alt="paypal" class="img-responsive" height="57" width="150"> </div>
-      <div class="row" style="padding-bottom:10px">
-        <div class="col-md-4">&nbsp;</div>
-        <div class="col-md-4">
-          <div id="alert_box" style="display:none" class="container" align="center">
-             <button id="alert_info" class="btn btn-lg btn-warning">Congratulations you have successfully registered</button>
-          </div>
-          <div id="subscribing" style="display:none" class="container" align="center">
-            <button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Subscribing...</button>
-          </div>
-          <form action="/" id="subscribeForm">
-            <div class="form-group form-group-lg">
-              <input class="form-control" type="text" id="lg" placeholder="Instagram User Name..." name="user_name">
-            </div>
-            <div class="form-group form-group-lg">
-              <select name="plan" class="form-control">
-                <option value="free">Free Plan</option>
-                <option value="bronze">Bronze Plan</option>
-                <option value="silver">Silver Plan</option>
-                <option value="gold">Gold Plan</option>
-              </select>
-            </div>
-            <div align="right">
-              <input type="submit" value="&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;"  class="btn btn-outline-green1 btn-lg">
-            </div>
-          </form>
+    <p class="lead">Subscribe</p>
+    <div id="subscription_block" class="row center-block" style="padding-bottom:10px">
+      <div class="col-md-4">&nbsp;</div>
+      <div class="col-md-4  tab-container1" >
+        <div id="paypal_block" style="display:" class="form-group form-group-lg center-block"> <img src="/www/img/paypal.jpg" alt="paypal" class="img-responsive center-block" height="57" width="150"> </div>
+        <div id="alert_block" style="display:none" class="center-block">
+          <button id="alert_info" class="alert alert-info" style="width:100%">Congratulations you have successfully registered</button>
         </div>
-        <div class="col-md-4">&nbsp;</div>
+        <div id="subscribing_block" style="display:none" class="form-group form-group-lg center-block">
+          <button class="alert alert-info" style="width:100%"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Subscribing...</button>
+        </div>
+        <form action="/" id="subscribeForm">
+          <div class="form-group form-group-lg">
+            <input class="form-control" type="text" id="lg" placeholder="Instagram User Name..." name="user_name">
+          </div>
+          <div class="form-group form-group-lg">
+            <select name="plan" class="form-control">
+              <option value="free">Free Plan</option>
+              <option value="bronze">Bronze Plan</option>
+              <option value="silver">Silver Plan</option>
+              <option value="gold">Gold Plan</option>
+            </select>
+          </div>
+          <div align="right">
+            <input type="submit" value="&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;"  class="btn btn-outline-green1 btn-lg">
+          </div>
+        </form>
       </div>
+      <div class="col-md-4">&nbsp;</div>
     </div>
   </div>
 </div>
@@ -251,7 +250,7 @@ $( "#subscribeForm" ).submit(function( event ) {
   // Stop form from submitting normally
   event.preventDefault();
   
-  $( "#subscribing" ).show();
+  $( "#subscribing_block" ).show();
   
   console.log("hellooo");
  
