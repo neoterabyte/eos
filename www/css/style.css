@@ -140,6 +140,19 @@
 	border-color:#999999;
 	padding-top:10px;
 	padding-bottom:10px;
-	background-color:#CCC;
-	
+	background-color:#CCC;	
+}
+
+.error-alert {
+	font-size: 13px;
+	line-height: 13px;
+	letter-spacing: 1px;
+	margin: 8px 0 17px;
+	border:1px solid transparent;
+	border-radius:4px;
+	padding-top:10px;
+	padding-bottom:10px;
+	background-color:#FFC2B2;	
+	color:#FF704D;
+	border-color:#FF704D;
 }
