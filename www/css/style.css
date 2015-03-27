@@ -156,3 +156,17 @@
 	color:#801A00;
 	border-color:#FF704D;
 }
+
+.success-alert {
+	font-size: 13px;
+	line-height: 13px;
+	letter-spacing: 1px;
+	margin: 8px 0 17px;
+	border:1px solid transparent;
+	border-radius:4px;
+	padding-top:10px;
+	padding-bottom:10px;
+	background-color:#C2F0C2;	
+	color:#145214;
+	border-color:#2EB82E;
+}
