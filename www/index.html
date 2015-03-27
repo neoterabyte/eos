@@ -288,7 +288,7 @@ $( "#subscribeForm" ).submit(function( event ) {
 	$( "#alert_block" ).show();
 	
 	//hide after 3 seconds
-	setTimeout(function(){ $( "#alert_block" ).hide(); }, 4000);
+	setTimeout(function(){ $( "#alert_block" ).hide("slow",function(){}); }, 6500);
 	
  });   
 });
@@ -296,7 +296,7 @@ $( "#subscribeForm" ).submit(function( event ) {
 // Attach a submit handler to the form
 $( "#plan" ).change(function( event ) {
 	if( $("#plan").val() == "FREE"){
-		$("#paypal_block" ).hide();
+		$("#paypal_block" ).hide("slow",function(){});
 	}else{
 		$("#paypal_block" ).show();
 	}
@@ -304,13 +304,13 @@ $( "#plan" ).change(function( event ) {
 
  function showSubscribe(plan){
 	  $("#plan").val(plan);
-	  $("#paypal_block" ).show();
+	  $("#paypal_block" ).show("slow",function(){});
 	  $("#subscription_block").show();
   }
   
   function showFreeSubscribe(){
 	  $("#plan").val("FREE");  
-	  $("#paypal_block").hide();
+	  $("#paypal_block").hide("slow",function(){});
 	  $("#subscription_block" ).show();
   }
   
