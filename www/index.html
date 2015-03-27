@@ -289,13 +289,13 @@ $( "#subscribeForm" ).submit(function( event ) {
 
  function showSubscribe(plan){
 	  $("#name").val(plan);
-	  $("#paypall" ).show();
-	  $("#subscription_block" ).show();
+	  $("#paypal_block" ).show();
+	  $("#subscription_block").show();
   }
   
   function showFreeSubscribe(){
 	  $("#name").val("FREE");  
-	  $("#paypall" ).hide();
+	  $("#paypal_block").hide();
 	  $("#subscription_block" ).show();
   }
   
