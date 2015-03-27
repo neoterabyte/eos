@@ -184,7 +184,7 @@ jssor_slider1_starter('slider1_container');
         <div class="col-md-4">&nbsp;</div>
         <div class="col-md-4">
           <div id="alert_box" style="display:none" class="container">
-            <p id="alert_info" class="info-success">Congratulations! you have successfully subscribed</p>
+             <button id="alert_info" class="btn btn-lg btn-warning">Congratulations you have successfully registered</button>
           </div>
           <div id="subscribing" style="display:none" class="container">
             <button class="btn btn-lg btn-warning"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Subscribing...</button>
@@ -251,9 +251,7 @@ $( "#subscribeForm" ).submit(function( event ) {
   // Stop form from submitting normally
   event.preventDefault();
   
-  $( "#alert_info" ).empty().append( "Subscribing..." );
-  $("#alert_info").toggleClass("info-alert");
-  $( "#alert_box" ).show();
+  $( "#subscribing" ).show();
   
   console.log("hellooo");
  
