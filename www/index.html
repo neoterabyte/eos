@@ -273,8 +273,11 @@ $( "#subscribeForm" ).submit(function( event ) {
 	$( "#alert_info" ).text("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
 	$( "#alert_block" ).show();
 	
+	//hide after 3 seconds
+	setTimeout(function(){ $( "#alert_block" ).hide(); }, 3000);
 	
-  });
+	
+  })
   
   posting.fail(function(error) {
     $( "#subscribing_block" ).hide();
@@ -283,6 +286,9 @@ $( "#subscribeForm" ).submit(function( event ) {
 	$( "#alert_info" ).toggleClass("alert-danger", true);
 	$( "#alert_info" ).text("oops an error occurred, are you sure your instagram user name is correct?");
 	$( "#alert_block" ).show();
+	
+	//hide after 3 seconds
+	setTimeout(function(){ $( "#alert_block" ).hide(); }, 3000);
 	
  });   
 });
