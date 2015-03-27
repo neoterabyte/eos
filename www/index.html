@@ -284,9 +284,10 @@ $( "#subscribeForm" ).submit(function( event ) {
 	$( "#alert_info" ).text("oops an error occurred, are you sure your instagram user name is correct?");
 	$( "#alert_block" ).show();
 	
- });
-  
-  function showSubscribe(plan){
+ });   
+});
+
+ function showSubscribe(plan){
 	  $("#name").val(plan);
 	  $("#paypall" ).show();
 	  $("#subscription_block" ).show();
@@ -297,7 +298,7 @@ $( "#subscribeForm" ).submit(function( event ) {
 	  $("#paypall" ).hide();
 	  $("#subscription_block" ).show();
   }
-});
+  
 </script>
 </body>
 </html>
