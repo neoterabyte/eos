@@ -136,9 +136,10 @@
 	margin: 8px 0 17px;
 	border:1px solid transparent;
 	border-radius:4px;
-	color:#555555;
-	border-color:#CCCCCC;
+	color:#222222;
+	border-color:#999999;
 	padding-top:10px;
 	padding-bottom:10px;
+	background-color:#CCC;
 	
 }
