@@ -251,6 +251,8 @@ $( "#subscribeForm" ).submit(function( event ) {
   $( "#alert_info" ).empty().append( "Subscribing..." );
   $("#alert_info").toggleClass("info-alert");
   $("#alert_info").css("display", "inherit");
+  
+  console.log("hellooo");
  
   // Get some values from elements on the page:
   var $form = $( this ),
