@@ -512,7 +512,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 				if(error){
 					res.statusCode = params.error_response_code;
-					res.end ("mary had a little");
+					res.end (error);
 				}else{
 					var reply = { "status": "success" };
 					res.end (JSON.stringify(reply));
@@ -660,13 +660,13 @@ function addLikeSubscribers(user_name, subscription_plan, email, callback){
 				errmsg = "Instagram API error: " + error;
 				logger.error(errmsg + ", like subscriber name: " + user_name);	
 
-				callback(true);
+				callback("error connection to Instagram");
 							
 			} else if (response && response.statusCode != 200) {
 				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
 				logger.error(errmsg  + ", ike subscriber: " + user_name);
 
-				callback(true);
+				callback("error connection to Instagram");
 
 			}else{
 
@@ -684,13 +684,13 @@ function addLikeSubscribers(user_name, subscription_plan, email, callback){
 							errmsg = "Instagram API error: " + error1;
 							logger.error(errmsg  + ", user name: " + userdata[0].username);
 
-							callback(true);
+							callback("error connection to Instagram");
 
 						} else if (response1 && response1.statusCode != 200) {
 							errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
 							logger.error(errmsg +  ", user name: " + userdata[0].username);
 
-							callback(true);
+							callback("error connection to Instagram");
 
 						}else{
 
@@ -729,9 +729,10 @@ function addLikeSubscribers(user_name, subscription_plan, email, callback){
 
 									if(err){
 										logger.error("Error updating Like Subscribers in Mongo:  " + err);
-										callback(true);
+
+										callback("internal error updating subscriber details");
 									}else{
-										callback(false); //successs
+										callback(); //successs
 									}
 							});
 						}
@@ -742,7 +743,7 @@ function addLikeSubscribers(user_name, subscription_plan, email, callback){
 					errmsg = "Like subscriber not found: name: " + user_name;	    				
 					logger.error(errmsg);
 
-					callback(true);
+					callback("instagram user name does not exist");
 				}
 			}
 		});

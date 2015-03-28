@@ -271,21 +271,21 @@ url = $form.attr( "action" );
 // Send the data using post
 var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 
-// Put the results in a div
-posting.done(function( data ) {
-	
-	var redirect_uri = JSON.parse(data).redirect_uri;
-	if ( redirect_uri ) {
-		window.location.replace(redirect_uri);
-	}else {
-		alertSuccess("Congratulationss, you have successfully registered, enjoy en masse likes on your new instagram posts!");
-	}
-})
+	// Put the results in a div
+	posting.done(function( data ) {
+		
+		var redirect_uri = JSON.parse(data).redirect_uri;
+		if ( redirect_uri ) {
+			window.location.replace(redirect_uri);
+		}else {
+			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
+		}
+	})
 
-posting.fail(function(error) {
-	alertError("oops an error occurred, are you sure your instagram user name is correct?");
-	console.log("Error " + JSON.stringify(error));
-});   
+	posting.fail(function(error) {
+		alertError("oops! " + JSON.stringify(error).responseText);
+		
+	});   
 });
 
 // Attach a submit handler to the form 
