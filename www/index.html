@@ -273,7 +273,13 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 
 // Put the results in a div
 posting.done(function( data ) {
-	alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
+	
+	var redirect_uri = JSON.parse(data).redirect_uri;
+	if ( redirect_uri ) {
+		window.location.replace(redirect_uri);
+	}else {
+		alertSuccess("Congratulationss, you have successfully registered, enjoy en masse likes on your new instagram posts!");
+	}
 })
 
 posting.fail(function(error) {
