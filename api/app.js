@@ -20,6 +20,9 @@ var port = process.env.PORT || 80;
 // Create our Express router
 var router = express.Router();
 
+//use sessions
+app.use(express.session());
+
 var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
 
 var activeAgentTokens;
@@ -544,6 +547,31 @@ router.get('/api/add_like_subscriber', function(req, res) {
 				  }]
 				};
 
+			paypal.payment.create(payment, function (error, payment) {
+				if (error) {
+
+					res.statusCode = params.error_response_code;
+					res.end ("oops an error occurred, please try again");
+
+			    	errmsg = "Error creating paypal payment: " + error;
+					logger.error(errmsg + ", like subscriber name: " + user_name);
+
+			  	} else {
+			    	if(payment.payer.payment_method === 'paypal') {
+			     		req.session.paymentId = payment.id;
+			     		var redirectUrl;
+			     		for(var i=0; i < payment.links.length; i++) {
+			        		var link = payment.links[i];
+			        		if (link.method === 'REDIRECT') {
+			          			redirectUrl = link.href;
+			        		}
+			      		}
+			      		res.redirect(redirectUrl);
+			    	}
+			  	}
+			});
+
+
 			addLikeSubscribers(user_name, subscription_plan, email, function (error){
 
 				if(error){
@@ -565,6 +593,59 @@ router.get('/api/add_like_subscriber', function(req, res) {
 });
 
 
+router.get('/api/payment_success', function(req, res) {
+
+	var paymentId = req.session.paymentId;
+	var payerId = req.param('PayerID');
+ 
+  	var details = { "payer_id": payerId };
+  	
+  	paypal.payment.execute(paymentId, details, function (error, payment) {
+    	if (error) {
+    		logger.error("Paypal payment not successful: " + error);
+
+      		fs.readFile('./www/index.html', 'utf8', function (err,data) {
+				if (!err) {
+					res.end(String(data).replace('@subscription_result','error'));
+				}else{
+					logger.error("Error reading index.html from file" );
+
+					res.statusCode = params.error_response_code;
+					res.end ("oops an error occurred, please try again");
+				}
+			});
+
+    	} else {
+
+    		logger.error("Paypal payment successful");
+
+      		fs.readFile('./www/index.html', 'utf8', function (err,data) {
+				if (!err) {
+					res.end(String(data).replace('@subscription_result','success'));
+				}else{
+					logger.error("Error reading index.html from file");
+					res.end ("Paypal payment successful"); //communicate success anyway
+				}
+			});
+    	}
+  	});
+
+});
+
+router.get('/api/payment_cancelled', function(req, res) {
+
+	logger.error("Paypal payment not cancelled ");
+
+	fs.readFile('./www/index.html', 'utf8', function (err,data) {
+		if (!err) {
+			res.end(String(data).replace('@subscription_result','error'));
+		}else{
+			logger.error("Error reading index.html from file");
+			res.end ("Paypal payment cancelled by you"); //communicate success anyway
+		}
+	});
+
+});
 
 router.get('/api/html/*', function(req, res) {
 	res.sendFile(process.cwd() + req.path);	
