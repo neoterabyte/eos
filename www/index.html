@@ -283,6 +283,7 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 	})
 
 	posting.fail(function(error) {
+		console.log(JSON.stringify(error));
 		alertError("oops! " + (JSON.stringify(error)).responseText);
 		
 	});   
