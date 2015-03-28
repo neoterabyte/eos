@@ -512,7 +512,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 				if(error){
 					res.statusCode = params.error_response_code;
-					res.end ("oops an error occurred, please try again");
+					res.end ("mary had a little");
 				}else{
 					var reply = { "status": "success" };
 					res.end (JSON.stringify(reply));
