@@ -628,16 +628,8 @@ router.get('/home', function(req, res) {
 
 router.get('/api/payment_cancelled', function(req, res) {
 
-	logger.error("Paypal payment not cancelled ");
-
-	fs.readFile('./www/index.html', 'utf8', function (err,data) {
-		if (!err) {
-			res.end(String(data).replace('@subscription_result','error'));
-		}else{
-			logger.error("Error reading index.html from file");
-			res.end ("Paypal payment cancelled by you"); //communicate success anyway
-		}
-	});
+	logger.error("Paypal payment cancelled by user");
+	res.redirect("/home");
 
 });
 
