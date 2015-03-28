@@ -591,7 +591,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 router.get('/api/payment_success', function(req, res) {
 
 	var paymentId = req.session.paymentId;
-	var payerId = req.param('PayerID');
+	var payerId = req.param.PayerID;
  
   	var details = { "payer_id": payerId };
   	
@@ -612,7 +612,7 @@ router.get('/api/payment_success', function(req, res) {
 
     	} else {
 
-    		logger.error("Paypal payment successful");
+    		logger.info("Paypal payment successful");
 
       		fs.readFile('./www/index.html', 'utf8', function (err,data) {
 				if (!err) {
