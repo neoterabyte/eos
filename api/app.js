@@ -561,7 +561,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 			  	} else {
 
-			  		logger.info("Payment Created " + JSON.stringify(payment));
+			  		//logger.info("Payment Created " + JSON.stringify(payment));
 
 			    	if(payment.payer.payment_method === 'paypal') {
 			     		req.session.paymentId = payment.id;
