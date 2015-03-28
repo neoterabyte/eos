@@ -326,9 +326,11 @@ function showHideCongratulations(){
 	subscription_result = $( "#subscription_result" ).val();
 	
 	if( subscription_result == "error"){	
-		console.log("hellsssooo " + subscription_result);	  
+		console.log("hellsssooo " + subscription_result);
+		$("#subscription_block").show();
 		alertError("oops an error occurred, are you sure your instagram user name is correct?");		
 	}else if( subscription_result == "success"){
+		$("#subscription_block").show();
 		alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
 	}
 }
