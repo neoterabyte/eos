@@ -598,34 +598,31 @@ router.get('/api/payment_success', function(req, res) {
   	paypal.payment.execute(paymentId, details, function (error, payment) {
     	if (error) {
     		logger.error("Paypal payment not successful: " + error);
-
-      		fs.readFile('./www/index.html', 'utf8', function (err,data) {
-				if (!err) {
-					res.end(String(data).replace('@subscription_result','error'));
-				}else{
-					logger.error("Error reading index.html from file" );
-
-					res.statusCode = params.error_response_code;
-					res.end ("oops an error occurred, please try again");
-				}
-			});
-
+      		res.redirectUrl("/api/index?status=error");
     	} else {
-
-    		logger.info("Paypal payment successful");
-
-      		fs.readFile('./www/index.html', 'utf8', function (err,data) {
-				if (!err) {
-					res.end(String(data).replace('@subscription_result','success'));
-				}else{
-					logger.error("Error reading index.html from file");
-					res.end ("Paypal payment successful"); //communicate success anyway
-				}
-			});
+    		logger.error("Paypal payment successful: ");
+			res.redirectUrl("/api/index?status=success");
     	}
   	});
 
   	req.session = null; //Destroy session
+
+});
+
+router.get('/api/index', function(req, res) {
+
+	var status = req.param.status;
+
+	fs.readFile('./www/index.html', 'utf8', function (err,data) {
+		if (!err) {
+			res.end(String(data).replace('@subscription_result',status));
+		}else{
+			logger.error("Error reading index.html from file" );
+
+			res.statusCode = params.error_response_code;
+			res.end ("oops an error occurred, please try again");
+		}
+	});
 
 });
 
