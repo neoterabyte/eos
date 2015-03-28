@@ -6,6 +6,7 @@ var Log = require('log');
 var cache = require('../shared/lib/cache').getRedisClient();
 var request = require('request');
 var http = require('http');
+var paypal = require('paypal-rest-sdk');
 
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
@@ -74,7 +75,9 @@ fs.readFile('./api/html/error.html', 'utf8', function (err,data) {
 	}
 });
 
+paypal.configure(params.paypal_sanbox_api);
 updateActiveAgentTokens(Agents);
+
 
 router.get('/api/oauth', function(req, res) {
 	
@@ -91,14 +94,14 @@ router.get('/api/oauth', function(req, res) {
 		//Get user name from redirected end point
 		var user_name = req.query.user_name;
 		//no need to encode URL because its an http post
-		var instagram_redirect_uri = params.instagram_redirect_uri.replace("@user_name", user_name);
+		var instagram_redirect_uri = params.instagram_api.redirect_uri.replace("@user_name", user_name);
 
 
 		request.post(
 		    'https://api.instagram.com/oauth/access_token',
 		    { form: { 
-		    	client_id: params.instagram_client_id, 
-				client_secret: params.instagram_client_secret, 
+		    	client_id: params.instagram_api.client_id, 
+				client_secret: params.instagram_api.client_secret, 
 				grant_type: "authorization_code", 
 				redirect_uri: instagram_redirect_uri, 
 				code: temporaryCode 
@@ -165,9 +168,9 @@ router.get('/api/register_agent', function(req, res) {
 
 			if((err) || (agent == null)){
 
-				instagram_redirect_uri = encodeURIComponent(params.instagram_redirect_uri.replace("@user_name", user_name));
+				instagram_redirect_uri = encodeURIComponent(params.instagram_api.redirect_uri.replace("@user_name", user_name));
 				
-				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri + "&scope=likes+comments+relationships";		
+				var oauthURI = 'https://api.instagram.com/oauth/authorize/?client_id=' + params.instagram_api.client_id + '&response_type=code&redirect_uri=' + instagram_redirect_uri + "&scope=likes+comments+relationships";		
 				msg = 'You have to permit Promogram.me to access Instagram. Don\'t worry, you only have to do this once. Click <a href=\'@oauthURI\'>this link to do this</a>';
 				msg = msg.replace("@oauthURI", oauthURI);
 

@@ -35,7 +35,7 @@
 <link rel="icon" href="/www/img/favicon.ico">
 </head>
 
-<body class="bs-docs-home">
+<body class="bs-docs-home" onLoad="showHideCongratulations();">
 <a id="skippy" class="sr-only sr-only-focusable" href="#content">
 <div class="container"><span class="skiplink-text">Skip to main content</span></div>
 </a> 
@@ -179,14 +179,15 @@ jssor_slider1_starter('slider1_container');
       <div class="col-md-4  tab-container1" >
         <div id="paypal_block" style="display:" class="form-group form-group-lg center-block"> <img src="/www/img/paypal.jpg" alt="paypal" class="img-responsive center-block" height="57" width="150"> </div>
         <div id="alert_block" style="display:none" class="center-block">
-          <p id="alert_info" class="alert alert-info" style="width:100%">Congratulations you have successfully registered</p>
+          <p id="alert_info" class="alert alert-info" style="width:100%">@congratulations</p>
         </div>
         <div id="subscribing_block" style="display:none" class="form-group form-group-lg center-block">
           <p class="alert alert-info" style="width:100%"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Subscribing...</p>
         </div>
         <form action="http://promogram.me/api/add_like_subscriber" id="subscribeForm">
           <div class="form-group form-group-lg">
-            <input class="form-control" type="text" id="lg" placeholder="Instagram User Name..." name="user_name">
+            <input class="form-control" type="text" id="user_name" placeholder="Instagram User Name..." name="user_name">
+            <input type="hidden" id="subscription_result" name="subscription_result" value="@subscription_result">
           </div>
           <div class="form-group form-group-lg">
             <select id="plan" name="plan" class="form-control">
@@ -253,60 +254,31 @@ jssor_slider1_starter('slider1_container');
 <script>
 // Attach a submit handler to the form
 $( "#subscribeForm" ).submit(function( event ) {
-	
-  // Stop form from submitting normally
-  event.preventDefault();
- 
-  
-   $( "#alert_block" ).hide();
-   $( "#subscribing_block" ).show();
-  
-  // Get some values from elements on the page:
-  var $form = $( this ),
-    user_name = $form.find( "input[name='user_name']" ).val(),
-	plan = $form.find( "select[name='plan']" ).val(),
-    url = $form.attr( "action" );
- 
-  // Send the data using post
-  var posting = $.get( url, { user_name: user_name, subscription_type: plan } );
- 
-  // Put the results in a div
-  posting.done(function( data ) {
-    //var content = $( data ).find( "#content" );
-    //$( "#result" ).empty().append( content );
-	$( "#subscribing_block" ).hide();
-	$( "#alert_info" ).toggleClass("alert-info", false);
-	$( "#alert_info" ).toggleClass("alert-danger", false);
-	$( "#alert_info" ).toggleClass("alert-success", true);
-	$( "#alert_info" ).text("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
-	$( "#alert_block" ).show();
-	
-	$('html,body').animate({
-          scrollTop: $("#subscription_block" ).offset().top
-        }, 1500);
-		
-	//hide after 3 seconds
-	setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, 5000);
-	
-	
-  })
-  
-  posting.fail(function(error) {
-    $( "#subscribing_block" ).hide();
-	$( "#alert_info" ).toggleClass("alert-info", false);
-	$( "#alert_info" ).toggleClass("alert-success", false);
-	$( "#alert_info" ).toggleClass("alert-danger", true);
-	$( "#alert_info" ).text("oops an error occurred, are you sure your instagram user name is correct?");
-	$( "#alert_block" ).show();
-	
-	 $('html,body').animate({
-          scrollTop: $("#subscription_block" ).offset().top
-        }, 1500);
-		
-	//hide after 3 seconds
-	setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, 5000);
-	
- });   
+
+// Stop form from submitting normally
+event.preventDefault();
+
+
+$( "#alert_block" ).hide();
+$( "#subscribing_block" ).show();
+
+// Get some values from elements on the page:
+var $form = $( this ),
+user_name = $form.find( "input[name='user_name']" ).val(),
+plan = $form.find( "select[name='plan']" ).val(),
+url = $form.attr( "action" );
+
+// Send the data using post
+var posting = $.get( url, { user_name: user_name, subscription_type: plan } );
+
+// Put the results in a div
+posting.done(function( data ) {
+	alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
+})
+
+posting.fail(function(error) {
+	alertError("oops an error occurred, are you sure your instagram user name is correct?");
+});   
 });
 
 // Attach a submit handler to the form 
@@ -318,38 +290,84 @@ $( "#plan" ).change(function( event ) {
 	}
 });
 
- function showSubscribe(plan){
-	  $("#plan").val(plan);
-	  $("#paypal_block" ).fadeIn();
-	  $("#subscription_block").show();
-	  
-	   $('html,body').animate({
-          scrollTop: $("#subscription_block" ).offset().top
-        }, 1500);
-  }
-  
-  function showFreeSubscribe(){
-	  $("#plan").val("FREE");  
-	  $("#paypal_block").hide();
-	  $("#subscription_block" ).show();
-	  
-	  $('html,body').animate({
-          scrollTop: $("#subscription_block" ).offset().top
-        }, 1500);
-  }
-  
-  function navigateToPricing(){
-	  $('html,body').animate({
-          scrollTop: $("#Pricing" ).offset().top
-        }, 1500);
-  }
-  
-  function navigateToHowItWorks(){
-	  $('html,body').animate({
-          scrollTop: $("#HowItWorks" ).offset().top
-        }, 1500);
-  }
-  
+function showSubscribe(plan){
+	$("#plan").val(plan);
+	$("#paypal_block" ).fadeIn();
+	$("#subscription_block").show();
+
+	$('html,body').animate({
+		scrollTop: $("#subscription_block" ).offset().top
+	}, 1500);
+}
+
+function showFreeSubscribe(){
+	$("#plan").val("FREE");  
+	$("#paypal_block").hide();
+	$("#subscription_block" ).show();
+
+	$('html,body').animate({
+		scrollTop: $("#subscription_block" ).offset().top
+	}, 1500);
+}
+
+function navigateToPricing(){
+	$('html,body').animate({
+		scrollTop: $("#Pricing" ).offset().top
+	}, 1500);
+}
+
+function navigateToHowItWorks(){
+	$('html,body').animate({
+		scrollTop: $("#HowItWorks" ).offset().top
+	}, 1500);
+}
+
+function showHideCongratulations(){
+
+	subscription_result = $form.find( "input[name='subscription_result']" ).val();
+
+	if( subscription_result == "error"){		  
+		alertError("oops an error occurred, are you sure your instagram user name is correct?");		
+	}else if( subscription_result == "success"){
+		alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
+	}
+
+
+}
+
+function alertError(message){
+	$( "#subscribing_block" ).hide();
+	$( "#alert_info" ).toggleClass("alert-info", false);
+	$( "#alert_info" ).toggleClass("alert-success", false);
+	$( "#alert_info" ).toggleClass("alert-danger", true);
+	$( "#alert_info" ).text(message);
+	$( "#alert_block" ).show();
+
+	$('html,body').animate({
+		scrollTop: $("#subscription_block" ).offset().top
+	}, 1500);
+
+//hide after 3 seconds
+setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, 5000);
+}
+
+function alertSuccess(message){
+
+	$( "#subscribing_block" ).hide();
+	$( "#alert_info" ).toggleClass("alert-info", false);
+	$( "#alert_info" ).toggleClass("alert-danger", false);
+	$( "#alert_info" ).toggleClass("alert-success", true);
+	$( "#alert_info" ).text(message);
+	$( "#alert_block" ).show();
+
+	$('html,body').animate({
+		scrollTop: $("#subscription_block" ).offset().top
+	}, 1500);
+
+//hide after 3 seconds
+setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, 5000);
+}
+
 </script>
 </body>
 </html>

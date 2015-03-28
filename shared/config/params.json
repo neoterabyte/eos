@@ -1,13 +1,27 @@
 {
-	"instagram_client_id": "8409d3e26cc84366b4527d90fb2bfa7d", 
-	"instagram_client_secret": "5c39cec67a0e4cd6993940cc6bf8e942", 
-	"instagram_redirect_uri": "http://promogram.me/api/oauth/?user_name=@user_name",
-	"instagram_max_media_count": "15",
 	"default_api_user": "neoterabyte",
 	"default_api_access_token": "1519198601.8409d3e.b670c5891b4a4e0c928b00a1fc40f4a7",
 	"cache_prefix": "api:",
 	"error_response_code": "422",
 	"annual_like_subscription_amount": "1000",
 	"monthly_like_subscription_amount": "25",
-	"current_like_subscription_group": "0"
+	"current_like_subscription_group": "0",
+	"paypal_prod_api" : {
+    	"host" : "api.sandbox.paypal.com",
+    	"port" : "",            
+    	"client_id" : "YOUR TEST CLIENT ID",
+    	"client_secret" : "YOUR TEST CLIENT SECRET"
+  		},
+  	"paypal_sanbox_api" : {
+    	"host" : "api.sandbox.paypal.com",
+    	"port" : "",            
+    	"client_id" : "AVGalc6X4NaPjw_2E2XS-fcNUgcxgAs84cAJ-sg3F7QLbJ3fVzVhwdKhV0VoQOUV_NG9pmJu-gSqJzOF",
+    	"client_secret" : "EGZy2E82nETpmD0Th5jeLV9Udihm3Us-XRY4jka0M7oAPaBo0yZ1KMj0DOn8q3ZmB1DRTK7ZjYX8O3Ks"
+  		},
+  	"instagram_api" : {
+		"instagram_client_id": "8409d3e26cc84366b4527d90fb2bfa7d", 
+		"instagram_client_secret": "5c39cec67a0e4cd6993940cc6bf8e942", 
+		"instagram_redirect_uri": "http://promogram.me/api/oauth/?user_name=@user_name",
+		"instagram_max_media_count": "15"
+		}
 }
