@@ -6,7 +6,7 @@
   "followed_by": "Number",
   "media_count": "Number",
   "subscription_group": "Number",
-  "subscription_type": "String",
+  "subscription_plan": "String",
   "subscription_start": "Date",
   "subscription_end": "Date",
   "is_active": "Boolean",
@@ -14,7 +14,7 @@
   "last_media_id": "String",
   "subscription_history" : 
   	{
-  		"subscription_type": "String",
+  		"subscription_plan": "String",
   		"subscription_start": "Date",
   		"subscription_end": "Date",
   		"subscription_amount": "Number"

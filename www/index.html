@@ -269,7 +269,7 @@ plan = $form.find( "select[name='plan']" ).val(),
 url = $form.attr( "action" );
 
 // Send the data using post
-var posting = $.get( url, { user_name: user_name, subscription_type: plan } );
+var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 
 // Put the results in a div
 posting.done(function( data ) {

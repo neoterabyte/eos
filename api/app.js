@@ -477,7 +477,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 	
 	var user_name = req.query.user_name;	
 	var email = req.query.email;
-	var subscription_type = req.query.subscription_type;
+	var subscription_plan = req.query.subscription_plan;
 	
 	var dataOk = true,
 	invalidParam = '';
@@ -485,9 +485,9 @@ router.get('/api/add_like_subscriber', function(req, res) {
 	if (!user_name) {
 		dataOk = false;
 		invalidParam = 'user_name';
-	}else if (!subscription_type) {
+	}else if (!subscription_plan) {
 		dataOk = false;
-		invalidParam = 'subscription_type';
+		invalidParam = 'subscription_plan';
 	}
 	if (!email) {
 		email = '';
@@ -547,15 +547,15 @@ router.get('/api/add_like_subscriber', function(req, res) {
 							var udata = (JSON.parse(body1)).data;
 
 							var endDate = new Date();
-							if (subscription_type == "30_DAYS"){
+							if (subscription_plan == "30_DAYS"){
 								endDate.setDate(endDate.getDate() + 30);
-							}else if (subscription_type == "MONTHLY"){
+							}else if (subscription_plan == "MONTHLY"){
 								endDate.setDate(endDate.getDate() + 30);
-							}else if (subscription_type == "YEAR"){
+							}else if (subscription_plan == "YEAR"){
 								endDate.setDate(endDate.getDate() + 365);
 							}else{
 								//assume trial
-								subscription_type = "TRIAL";
+								subscription_plan = "TRIAL";
 								endDate.setDate(endDate.getDate() + 3);
 							}
 							
@@ -568,7 +568,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									followed_by: udata.counts.followed_by,
 									media_count: udata.counts.media,
 									email: email,
-									subscription_type: subscription_type,
+									subscription_plan: subscription_plan,
 									subscription_group: params.current_like_subscription_group,
 									subscription_start: new Date(),
 									subscription_end: endDate,
