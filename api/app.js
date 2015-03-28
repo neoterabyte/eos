@@ -559,6 +559,9 @@ router.get('/api/add_like_subscriber', function(req, res) {
 					logger.error(errmsg + ", like subscriber name: " + user_name);
 
 			  	} else {
+
+			  		logger.info("Payment Created " + JSON.stringify(payment));
+
 			    	if(payment.payer.payment_method === 'paypal') {
 			     		req.session.paymentId = payment.id;
 			     		var redirectUrl;
@@ -746,7 +749,7 @@ function addLikeSubscribers(user_name, subscription_plan, email, callback){
 								function (err, likesubscriber) {
 
 									if(err){
-										console.log("Error updating Like Subscribers in Mongo:  " + err);
+										logger.error("Error updating Like Subscribers in Mongo:  " + err);
 										callback(true);
 									}else{
 										callback(false); //successs
