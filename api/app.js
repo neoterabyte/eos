@@ -7,6 +7,7 @@ var cache = require('../shared/lib/cache').getRedisClient();
 var request = require('request');
 var http = require('http');
 var paypal = require('paypal-rest-sdk');
+var session = require('cookie-session')
 
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
@@ -21,7 +22,8 @@ var port = process.env.PORT || 80;
 var router = express.Router();
 
 //use sessions
-app.use(express.session());
+app.set('trust proxy', 1); // trust first proxy 
+app.use(session({secret: "Drac0Dom1ng0"}));
 
 var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
 
@@ -629,6 +631,8 @@ router.get('/api/payment_success', function(req, res) {
 			});
     	}
   	});
+
+  	req.session = null; //Destroy session
 
 });
 
