@@ -609,7 +609,7 @@ router.get('/api/payment_success', function(req, res) {
 
 });
 
-router.get('/api/index', function(req, res) {
+router.get('/home', function(req, res) {
 
 	var status = req.param.status;
 
