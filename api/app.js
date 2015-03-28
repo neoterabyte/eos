@@ -495,18 +495,34 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 	if (dataOk){
 
-		addLikeSubscribers(user_name, subscription_plan, email, function (error){
+		if (subscription_plan == "FREE"){
 
-			if(error){
-				res.statusCode = params.error_response_code;
-				res.end ("oops an error occurred, please try again");
-			}else{
-				res.end ('Success');
-			}
+			addLikeSubscribers(user_name, subscription_plan, email, function (error){
 
-		});
+				if(error){
+					res.statusCode = params.error_response_code;
+					res.end ("oops an error occurred, please try again");
+				}else{
+					res.end ('Success');
+				}
+
+			});
+
+		}else {
+			//Paypal payment
+			
+			addLikeSubscribers(user_name, subscription_plan, email, function (error){
+
+				if(error){
+					res.statusCode = params.error_response_code;
+					res.end ("oops an error occurred, please try again");
+				}else{
+					res.end ('Success');
+				}
+
+			});
+		}
 	
-		//res.end ('Subscriber added?');
 
 	}else{
 		res.statusCode = params.error_response_code;
@@ -581,16 +597,16 @@ function addLikeSubscribers(user_name, subscription_plan, email, callback){
 							var udata = (JSON.parse(body1)).data;
 
 							var endDate = new Date();
-							if (subscription_plan == "30_DAYS"){
+							if (subscription_plan == "BRONZE"){
 								endDate.setDate(endDate.getDate() + 30);
-							}else if (subscription_plan == "MONTHLY"){
+							}else if (subscription_plan == "SILVER"){
 								endDate.setDate(endDate.getDate() + 30);
-							}else if (subscription_plan == "YEAR"){
-								endDate.setDate(endDate.getDate() + 365);
+							}else if (subscription_plan == "GOLD"){
+								endDate.setDate(endDate.getDate() + 30);
 							}else{
 								//assume trial
-								subscription_plan = "TRIAL";
-								endDate.setDate(endDate.getDate() + 3);
+								subscription_plan = "FREE";
+								endDate.setDate(endDate.getDate() + 1);
 							}
 							
 							LikeSubscribers.findOneAndUpdate(
