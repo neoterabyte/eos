@@ -575,18 +575,6 @@ router.get('/api/add_like_subscriber', function(req, res) {
 			    	}
 			  	}
 			});
-
-
-			addLikeSubscribers(user_name, subscription_plan, email, function (error){
-
-				if(error){
-					res.statusCode = params.error_response_code;
-					res.end ("oops an error occurred, please try again");
-				}else{
-					res.end ('Success');
-				}
-
-			});
 		}
 	
 
