@@ -283,7 +283,7 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 	})
 
 	posting.fail(function(error) {
-		alertError("oops! " + (JSON.parse(error)).responseText);
+		alertError("oops! " + JSON.parse(error).responseText);
 		
 	});   
 });
