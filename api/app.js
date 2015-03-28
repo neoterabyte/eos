@@ -495,7 +495,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 	if (dataOk){
 
-		addLikeSubscribers(user_name, subscription_plan, function (error){
+		addLikeSubscribers(user_name, subscription_plan, email, function (error){
 
 			if(error){
 				res.statusCode = params.error_response_code;
@@ -532,7 +532,7 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
-function addLikeSubscribers(user_name, subscription_plan, callback){
+function addLikeSubscribers(user_name, subscription_plan, email, callback){
 	// Search for User
 		var options = {
 			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
