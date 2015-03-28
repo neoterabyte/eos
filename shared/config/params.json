@@ -6,6 +6,8 @@
 	"annual_like_subscription_amount": "1000",
 	"monthly_like_subscription_amount": "25",
 	"current_like_subscription_group": "0",
+	"paypal_cancel_redirect_uri" : "http://promogram.me/api/payment_cancelled",
+	"paypal_success_redirect_uri" : "http://promogram.me/api/payment_success",
 	"paypal_prod_api" : {
     	"host" : "api.sandbox.paypal.com",
     	"port" : "",            

@@ -489,6 +489,12 @@ router.get('/api/add_like_subscriber', function(req, res) {
 		dataOk = false;
 		invalidParam = 'subscription_plan';
 	}
+
+	if (!((subscription_plan == "FREE") || (subscription_plan == "BRONZE") || (subscription_plan == "SILVER") || (subscription_plan == "GOLD"))){
+		dataOk = false;
+		invalidParam = 'subscription_plan';
+	}
+
 	if (!email) {
 		email = '';
 	}
@@ -510,7 +516,34 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 		}else {
 			//Paypal payment
-			
+			var amount = "0.00";
+
+			if (subscription_plan == "BRONZE"){
+				amount = "19.99";
+			}else if (subscription_plan == "SILVER"){
+				amount = "24.99";
+			}else if (subscription_plan == "GOLD"){
+				amount = "44.99";
+			}
+
+			var payment = {
+				  "intent": "sale",
+				  "payer": {
+				    "payment_method": "paypal"
+				  },
+				  "redirect_urls": {
+				    "return_url": params.paypal_success_redirect_uri,
+				    "cancel_url": params.paypal_cancel_redirect_uri,
+				  },
+				  "transactions": [{
+				    "amount": {
+				      "total": amount,
+				      "currency": "USD"
+				    },
+				    "description": "Promogram Subscription Service"
+				  }]
+				};
+
 			addLikeSubscribers(user_name, subscription_plan, email, function (error){
 
 				if(error){
