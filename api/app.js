@@ -598,10 +598,10 @@ router.get('/api/payment_success', function(req, res) {
   	paypal.payment.execute(paymentId, details, function (error, payment) {
     	if (error) {
     		logger.error("Paypal payment not successful: " + error);
-      		res.redirectUrl("/api/index?status=error");
+      		res.redirect("/api/index?status=error");
     	} else {
     		logger.error("Paypal payment successful: ");
-			res.redirectUrl("/api/index?status=success");
+			res.redirect("/api/index?status=success");
     	}
   	});
 
