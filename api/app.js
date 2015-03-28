@@ -495,7 +495,45 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 	if (dataOk){
 
-		// Search for User
+		addLikeSubscribers(user_name, subscription_plan, function (error){
+
+			if(error){
+				res.statusCode = params.error_response_code;
+				res.end ("oops an error occurred, please try again");
+			}else{
+				res.end ('Success');
+			}
+
+		});
+	
+		//res.end ('Subscriber added?');
+
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+});
+
+
+
+router.get('/api/html/*', function(req, res) {
+	res.sendFile(process.cwd() + req.path);	
+});
+
+router.get('/www/*', function(req, res) {
+	res.sendFile(process.cwd() + req.path);	
+});
+
+// Register all our routes with /
+app.use('/', router);
+
+//---------------------------
+//  FUNCTIONS 
+//---------------------------
+
+function addLikeSubscribers(user_name, subscription_plan, callback){
+	// Search for User
 		var options = {
 			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
 		};
@@ -506,15 +544,13 @@ router.get('/api/add_like_subscriber', function(req, res) {
 				errmsg = "Instagram API error: " + error;
 				logger.error(errmsg + ", like subscriber name: " + user_name);	
 
-				res.statusCode = params.error_response_code;
-				res.end ('oops an error occurred, please try again');
+				callback(true);
 							
 			} else if (response && response.statusCode != 200) {
 				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
 				logger.error(errmsg  + ", ike subscriber: " + user_name);
 
-				res.statusCode = params.error_response_code;
-				res.end ('oops an error occurred, please try again');
+				callback(true);
 
 			}else{
 
@@ -532,15 +568,13 @@ router.get('/api/add_like_subscriber', function(req, res) {
 							errmsg = "Instagram API error: " + error1;
 							logger.error(errmsg  + ", user name: " + userdata[0].username);
 
-							res.statusCode = params.error_response_code;
-							res.end ('oops an error occurred, please try again');
+							callback(true);
 
 						} else if (response1 && response1.statusCode != 200) {
 							errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
 							logger.error(errmsg +  ", user name: " + userdata[0].username);
 
-							res.statusCode = params.error_response_code;
-							res.end ('oops an error occurred, please try again');
+							callback(true);
 
 						}else{
 
@@ -578,12 +612,10 @@ router.get('/api/add_like_subscriber', function(req, res) {
 								function (err, likesubscriber) {
 
 									if(err){
-										console.log("Errorrr  " + err);
-
-										res.statusCode = params.error_response_code;
-										res.end ('oops an error occurred, please try again');
+										console.log("Error updating Like Subscribers in Mongo:  " + err);
+										callback(true);
 									}else{
-										res.end ('Success');
+										callback(false); //successs
 									}
 							});
 						}
@@ -594,38 +626,11 @@ router.get('/api/add_like_subscriber', function(req, res) {
 					errmsg = "Like subscriber not found: name: " + user_name;	    				
 					logger.error(errmsg);
 
-					res.statusCode = params.error_response_code;
-					res.end ('oops an error occurred, please try again');
+					callback(true);
 				}
 			}
 		});
-	
-		//res.end ('Subscriber added?');
-
-	}else{
-		res.statusCode = params.error_response_code;
-		res.end ('Missing parameter for: ' + invalidParam);
-		logger.error("Missing parameter for: " + invalidParam);
-	}
-});
-
-
-
-router.get('/api/html/*', function(req, res) {
-	res.sendFile(process.cwd() + req.path);	
-});
-
-router.get('/www/*', function(req, res) {
-	res.sendFile(process.cwd() + req.path);	
-});
-
-// Register all our routes with /
-app.use('/', router);
-
-//---------------------------
-//  FUNCTIONS 
-//---------------------------
-
+}
 function updateActiveAgentTokens(Agents) {
 
 	var query  = Agents.where({is_active:true});
