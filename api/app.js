@@ -515,7 +515,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 					res.end ("oops an error occurred, please try again");
 				}else{
 					var reply = { "status": "success" };
-					res.end (reply);
+					res.end (JSON.stringify(reply));
 				}
 
 			});
@@ -573,7 +573,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 			        		}
 			      		}
 			      		var reply = { "status": "success", "redirect_uri": redirectUrl };
-						res.end (reply);
+						res.end (JSON.stringify(reply));
 			    	}
 			  	}
 			});
