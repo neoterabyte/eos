@@ -284,6 +284,7 @@ posting.done(function( data ) {
 
 posting.fail(function(error) {
 	alertError("oops an error occurred, are you sure your instagram user name is correct?");
+	console.log("Error " + JSON.stringify(error));
 });   
 });
 
