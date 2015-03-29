@@ -553,7 +553,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									logger.error("User data " + userdata[0].username);
 									logger.error("Subscription plan " + subscription_plan);
 
-									/*addLikeSubscribers(userdata, subscription_plan, email, function (error){
+									addLikeSubscribers(userdata, subscription_plan, email, function (error){
 
 										if(error){
 											res.statusCode = params.error_response_code;
@@ -564,8 +564,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 										}
 
 									});
-									*/
-
+									
 								}else{
 									logger.info("User already subscribed to free service and cannot re-subscribe");
 									
