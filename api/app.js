@@ -741,19 +741,15 @@ router.get('/api/payment_success', function(req, res) {
 
 	var paymentId = req.session.payment_id;
 	var payerId = req.query.PayerID;
-	var user_id = req.session.user_id;
-	var user_name = req.session.user_name;
-	var subscription_plan = req.session.subscription_plan;
-	var email = req.session.email;
- 
+	
   	var details = { "payer_id": payerId };
 
   	//cache.hmset(params.cache_prefix + ":paypal:", JSON.parse(updates), function (err, reply){
 
   	//});
 						    		
-  	logger.error("Hellooox " + user_name);
-  	logger.error("Helloooddx " + paymentId);
+  	logger.error("User ID " + req.session.user_id);
+  	logger.error("Payment ID " + paymentId);
 
 
   	/*
