@@ -590,6 +590,8 @@ router.get('/api/add_like_subscriber', function(req, res) {
 							plan_id = params.paypal_billing_plan_GOLD;
 						}
 
+						console.log("Plannn " + plan_id);
+
 						var billingAgreementAttributes = {
 						    "name": subscription_plan + " Subscription Agreement",
 						    "description": "Agreement for " +  subscription_plan + " Subscription Plan",
