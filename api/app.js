@@ -923,6 +923,20 @@ router.get('/api/create_billing_plan', function(req, res) {
 		                "value": amount
 		            },
 		            "charge_models": [
+				        {
+		                    "amount": {
+		                        "currency": "USD",
+		                        "value": "0"
+		                    },
+		                    "type": "SHIPPING"
+		                },
+		                {
+		                    "amount": {
+		                        "currency": "USD",
+		                        "value": "0"
+		                    },
+		                    "type": "TAX"
+		                }
 		            ],
 		            "cycles": "0",
 		            "frequency": "MONTH",
