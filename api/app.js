@@ -627,6 +627,8 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						    }
 						};
 
+						logger.info(JSON.stringify(billingAgreementAttributes));
+
 						// Use billing plan to create agreement
 		                paypal.billingAgreement.create(billingAgreementAttributes, function (error, billingAgreement) {
 		                    if (error) {
