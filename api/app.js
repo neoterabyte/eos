@@ -551,11 +551,11 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						var amount = "0.00";
 
 						if (subscription_plan == "BRONZE"){
-							amount = "19.99";
+							amount = params.subscription_price_BRONZE;
 						}else if (subscription_plan == "SILVER"){
-							amount = "24.99";
+							amount = params.subscription_price_SILVER;
 						}else if (subscription_plan == "GOLD"){
-							amount = "44.99";
+							amount = params.subscription_price_GOLD;
 						}
 
 						var payment = {
@@ -707,18 +707,23 @@ function addLikeSubscribers(userdata, subscription_plan, email, callback){
 		}else{
 
 			var udata = (JSON.parse(body1)).data;
+			var amount = "0.00";
 
 			var endDate = new Date();
 			if (subscription_plan == "BRONZE"){
 				endDate.setDate(endDate.getDate() + 30);
+				amount = params.subscription_price_BRONZE;
 			}else if (subscription_plan == "SILVER"){
 				endDate.setDate(endDate.getDate() + 30);
+				amount = params.subscription_price_SILVER;
 			}else if (subscription_plan == "GOLD"){
 				endDate.setDate(endDate.getDate() + 30);
+				amount = params.subscription_price_GOLD;
 			}else{
 				//assume trial
 				subscription_plan = "FREE";
 				endDate.setDate(endDate.getDate() + 1);
+				amount = "0.00";
 			}
 			
 			LikeSubscribers.findOneAndUpdate(
@@ -734,6 +739,7 @@ function addLikeSubscribers(userdata, subscription_plan, email, callback){
 					subscription_group: params.current_like_subscription_group,
 					subscription_start: new Date(),
 					subscription_end: endDate,
+					subscription_price: amount,
 					is_active: true
 				},
 				{upsert: true}, 
