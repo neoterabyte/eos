@@ -744,26 +744,14 @@ router.get('/api/payment_success', function(req, res) {
 	
   	var details = { "payer_id": payerId };
 
-  	//cache.hmset(params.cache_prefix + ":paypal:", JSON.parse(updates), function (err, reply){
-
-  	//});
-						    		
-  	logger.error("User ID " + req.session.user_id);
-  	logger.error("User Name " + req.session.user_name);
-  	logger.error("User Plan " + req.session.subscription_plan);
-  	logger.error("User Email " + req.session.email);
-  	logger.error("Payment ID " + paymentId);
   	
-
-
-  	/*
   	paypal.payment.execute(paymentId, details, function (error, payment) {
     	if (error) {
     		logger.error("Paypal payment not successful: " + error);
       		res.redirect("/home?status=error");
     	} else {
 
-    		logger.error("Hellooo " + user_name);
+    		logger.error("Helloooxx " + req.session.user_name);
 
 			addLikeSubscribers(req.session.user_id, req.session.user_name, req.session.subscription_plan, req.session.email, function (error){
 
@@ -778,10 +766,9 @@ router.get('/api/payment_success', function(req, res) {
 			});
     	}
   	});
-*/
+
 
   	req.session = null; //Destroy session
-  	res.end("hello");
 
 });
 
