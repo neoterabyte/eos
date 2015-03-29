@@ -778,6 +778,7 @@ router.get('/api/payment_success', function(req, res) {
 */
 
   	req.session = null; //Destroy session
+  	res.end("hello");
 
 });
 
