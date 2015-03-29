@@ -7,7 +7,8 @@ var cache = require('../shared/lib/cache').getRedisClient();
 var request = require('request');
 var http = require('http');
 var paypal = require('paypal-rest-sdk');
-var session = require('cookie-session')
+var session = require('cookie-session');
+var url = require('url');
 
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
@@ -632,8 +633,6 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						    }
 						};
 
-						console.log(JSON.stringify(billingAgreementAttributes));
-
 						// Use billing plan to create agreement
 		                paypal.billingAgreement.create(billingAgreementAttributes, function (error, billingAgreement) {
 		                    if (error) {
@@ -646,22 +645,23 @@ router.get('/api/add_like_subscriber', function(req, res) {
 		                        
 		                        
 		                        logger.info(JSON.stringify(billingAgreement));
-		                        res.end("success");
-		                        /*
-		                        console.log("Create Billing Agreement Response");
-		                        //console.log(billingAgreement);
+		                        
 		                        for (var index = 0; index < billingAgreement.links.length; index++) {
 		                            if (billingAgreement.links[index].rel === 'approval_url') {
 		                                var approval_url = billingAgreement.links[index].href;
-		                                console.log("For approving subscription via Paypal, first redirect user to");
-		                                console.log(approval_url);
+		                                logger.info("For approving subscription via Paypal, first redirect user to");
+		                                logger.info(approval_url);
 
-		                                console.log("Payment token is");
-		                                console.log(url.parse(approval_url, true).query.token);
+		                                logger.info("Payment token is");
+		                                logger.info(url.parse(approval_url, true).query.token);
+
+		                                var reply = { "status": "success", "redirect_uri": approval_url };
+										res.end (JSON.stringify(reply));
+
 		                                // See billing_agreements/execute.js to see example for executing agreement 
 		                                // after you have payment token
 		                            }
-		                        }*/
+		                        }
 		                    }
 		                });
 
