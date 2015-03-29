@@ -622,10 +622,10 @@ router.get('/api/add_like_subscriber', function(req, res) {
 								logger.error(errmsg);
 		                    } else {
 		                        
-		                        logger.info("hellooooo  \n");
+		                        logger.info("hellooooox  \n");
 		                        logger.info(JSON.stringify(billingAgreement));
 		                        logger.info("\n");
-		                        
+
 		                        res.end("success");
 		                        /*
 		                        console.log("Create Billing Agreement Response");
