@@ -506,7 +506,6 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 	if (dataOk){
 
-
 		var options = {
 			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
 		};
@@ -530,7 +529,13 @@ router.get('/api/add_like_subscriber', function(req, res) {
 			}else{
 
 				var userdata = (JSON.parse(body)).data;
-				if (userdata.length > 0){		
+				if (userdata.length > 0){
+
+					//save session data
+		     		req.session.user_id = userdata[0].id;
+		     		req.session.user_name = userdata[0].user_name;
+		     		req.session.subscription_plan = subscription_plan;
+		     		req.session.email = email;		
 
 
 					if (subscription_plan == "FREE"){
@@ -619,13 +624,9 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 						    	if(payment.payer.payment_method === 'paypal') {
 						     		
-						    		//save session ids
+						    		//save session data
 						     		req.session.payment_id = payment.id;
-						     		req.session.user_id = userdata[0].id;
-						     		req.session.user_name = userdata[0].user_name;
-						     		req.session.subscription_plan = subscription_plan;
-						     		req.session.email = email;
-
+						     		
 						     		var redirectUrl;
 						     		for(var i=0; i < payment.links.length; i++) {
 						        		var link = payment.links[i];
