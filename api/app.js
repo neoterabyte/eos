@@ -584,11 +584,14 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						//Paypal payment
 
 						var plan_id = params.paypal_billing_plan_BRONZE; //default to bronze
+						var plan_price = params.subscription_price_BRONZE;
 						
 						if (subscription_plan == "SILVER"){
 							plan_id = params.paypal_billing_plan_SILVER;
+							plan_price = params.subscription_price_SILVER;
 						}else if (subscription_plan == "GOLD"){
 							plan_id = params.paypal_billing_plan_GOLD;
+							plan_price = params.subscription_price_GOLD;
 						}
 
 						var subscription_date = new Date();
@@ -614,8 +617,8 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						var formatted_date = subscription_date.getUTCFullYear() + "-" + month + "-" + day + "T" + hours + ":" + mins + ":" + secs + "Z";
 						
 						var billingAgreementAttributes = {
-						    "name": subscription_plan + " Subscription Agreement",
-						    "description": "Agreement for " +  subscription_plan + " Subscription Plan",
+						    "name": subscription_plan + " Subscription Agreement ($" + plan_price + "/month)",
+						    "description": subscription_plan + " Subscription Plan ($" + plan_price + "/month)",
 						    "start_date": formatted_date,
 						    "plan": {
 						        "id": plan_id
