@@ -595,13 +595,13 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 						//2015-03-30T00:37:04Z
 						//necessary because for some wierd reason paypal ISO date does not include the milliseconds part
-						String formatted_date = subscription_date.getYear() + "-" + subscription_date.getMonth() + "-" + subscription_date.getDay() + "T" + subscription_date.getHours() + ":" + subscription_date.getMinutes() + ":" + subscription_date.getSeconds() + "Z";
+						var formatted_date = subscription_date.getYear() + "-" + subscription_date.getMonth() + "-" + subscription_date.getDay() + "T" + subscription_date.getHours() + ":" + subscription_date.getMinutes() + ":" + subscription_date.getSeconds() + "Z";
 						console.log("Formatted date: " + formatted_date);
 
 						var billingAgreementAttributes = {
 						    "name": subscription_plan + " Subscription Agreement",
 						    "description": "Agreement for " +  subscription_plan + " Subscription Plan",
-						    "start_date": subscription_date.toISOString(),
+						    "start_date": formatted_date,
 						    "plan": {
 						        "id": plan_id
 						    },
