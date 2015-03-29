@@ -9,6 +9,9 @@
 	"subscription_price_BRONZE":"19.99",
 	"subscription_price_SILVER":"24.99",
 	"subscription_price_GOLD":"44.99",
+	"paypal_billing_plan_BRONZE":"P-5EW41953ML0210420MVMIACY",
+	"paypal_billing_plan_SILVER":"P-3PG32996HA211314YMVMPHOQ",
+	"paypal_billing_plan_GOLD":"P-23523898VM276373AMVMUP6Y",
 	"paypal_prod_api" : {
 		"mode": "live",
     	"host" : "api.sandbox.paypal.com",

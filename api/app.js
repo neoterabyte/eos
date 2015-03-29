@@ -581,6 +581,51 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						
 					}else {
 						//Paypal payment
+
+
+
+
+
+
+						var billingAgreementAttributes = {
+						    "name": "Fast Speed Agreement",
+						    "description": "Agreement for Fast Speed Plan",
+						    "start_date": "2015-02-19T00:37:04Z",
+						    "plan": {
+						        "id": "P-0NJ10521L3680291SOAQIVTQ"
+						    },
+						    "payer": {
+						        "payment_method": "paypal"
+						    },
+						    "shipping_address": {
+						        "line1": "StayBr111idge Suites",
+						        "line2": "Cro12ok Street",
+						        "city": "San Jose",
+						        "state": "CA",
+						        "postal_code": "95112",
+						        "country_code": "US"
+						    }
+						};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 						var amount = "0.00";
 
 						if (subscription_plan == "BRONZE"){
@@ -639,6 +684,18 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						    	}
 						  	}
 						});
+
+
+
+
+
+
+
+
+
+
+
+
 					}
 	
 				}else{
@@ -815,16 +872,16 @@ router.get('/api/create_billing_plan', function(req, res) {
 		    "description": "Promogram Billing Plans: " + subscription_plan,
 		    "merchant_preferences": {
 		        "auto_bill_amount": "yes",
-		        "cancel_url": "http://www.cancel.com",
+		        "cancel_url": params.paypal_cancel_redirect_uri,
 		        "initial_fail_amount_action": "continue",
 		        "max_fail_attempts": "1",
-		        "return_url": "http://www.success.com",
+		        "return_url": params.paypal_success_redirect_uri,
 		        "setup_fee": {
 		            "currency": "USD",
 		            "value": "0"
 		        }
 		    },
-		    "name": "Promogram Billing Plans " + subscription_plan,
+		    "name": "Promogram Billing Plans: " + subscription_plan,
 		    "payment_definitions": [
 		        {
 		            "amount": {
