@@ -52,7 +52,7 @@
         <li> <a onClick="navigateToPricing();">Pricing</a> </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="mailto:support@promogram.me" style="color:#930">Cancel Subscription</a></li>
+        <li><a href="" onClick="showCancel();" style="color:#930">Cancel Subscription</a></li>
       </ul>
     </nav>
   </div>
@@ -407,6 +407,15 @@ function alertSuccess(message){
 
 //hide after 3 seconds
 setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, 10000);
+}
+
+function showCancel(){
+	
+	$("#cancel_block").show();
+
+	$('html,body').animate({
+		scrollTop: $("#cancel_block" ).offset().top
+	}, 1500);
 }
 
 </script>
