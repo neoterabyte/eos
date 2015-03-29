@@ -533,7 +533,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 					//save session data
 		     		req.session.user_id = userdata[0].id;
-		     		req.session.user_name = userdata[0].user_name;
+		     		req.session.user_name = userdata[0].username;
 		     		req.session.subscription_plan = subscription_plan;
 		     		req.session.email = email;		
 
