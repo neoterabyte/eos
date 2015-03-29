@@ -828,7 +828,7 @@ router.get('/api/create_billing_plan', function(req, res) {
 	        {
 	            "amount": {
 	                "currency": "USD",
-	                "value": params.GOLD
+	                "value": params.subscription_price_GOLD
 	            },
 	            "charge_models": [
 	            ],
