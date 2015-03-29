@@ -559,7 +559,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									logger.error("User data " + userdata[0].username);
 									logger.error("Subscription plan " + subscription_plan);
 
-									addLikeSubscribers(userdata[0].id, userdata[0].username, subscription_plan, email, function (error){
+									addLikeSubscribers(userdata[0].id, userdata[0].username, subscription_plan, email, '', function (error){
 
 										if(error){
 											res.statusCode = params.error_response_code;
@@ -581,181 +581,115 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 						
 					}else {
-						//Paypal payment
 
-						var plan_id = params.paypal_billing_plan_BRONZE; //default to bronze
-						var plan_price = params.subscription_price_BRONZE;
-						
-						if (subscription_plan == "SILVER"){
-							plan_id = params.paypal_billing_plan_SILVER;
-							plan_price = params.subscription_price_SILVER;
-						}else if (subscription_plan == "GOLD"){
-							plan_id = params.paypal_billing_plan_GOLD;
-							plan_price = params.subscription_price_GOLD;
-						}
+						LikeSubscribers.findOne(
+							{user_id: userdata[0].id, is_active: true},  
+							function (err, likesubscriber) {
 
-						var subscription_date = new Date();
-						subscription_date.setDate(subscription_date.getDate() + 1);
+								if(err) {
+									logger.error("Error search for Like Subscriber in Mongo:  " + err);
+									
+									res.statusCode = params.error_response_code;
+									res.end ("error connection to promogram data");
 
-						// all this date formatting necessary because for some wierd reason paypal ISO date does not include the milliseconds part						
-						var month = subscription_date.getUTCMonth() + 1;
-						month = (month < 10)? "0" + month: month;
+								}else if ((likesubscriber == null) || (likesubscriber.paypal_agreement_id == '')){
 
-						var day = subscription_date.getUTCDate();
-						day = (day < 10)? "0" + day: day;
+									//Paypal payment
 
-						var hours = subscription_date.getUTCHours();
-						hours = (hours < 10)? "0" + hours: hours;
+									var plan_id = params.paypal_billing_plan_BRONZE; //default to bronze
+									var plan_price = params.subscription_price_BRONZE;
+									
+									if (subscription_plan == "SILVER"){
+										plan_id = params.paypal_billing_plan_SILVER;
+										plan_price = params.subscription_price_SILVER;
+									}else if (subscription_plan == "GOLD"){
+										plan_id = params.paypal_billing_plan_GOLD;
+										plan_price = params.subscription_price_GOLD;
+									}
 
-						var mins = subscription_date.getUTCMinutes();
-						mins = (mins < 10)? "0" + mins: mins;
+									var subscription_date = new Date();
+									//subscription_date.setDate(subscription_date.getDate() + 1);
 
-						var secs = subscription_date.getUTCSeconds();
-						secs = (secs < 10)? "0" + secs: secs;
+									// all this date formatting necessary because for some wierd reason paypal ISO date does not include the milliseconds part						
+									var month = subscription_date.getUTCMonth() + 1;
+									month = (month < 10)? "0" + month: month;
 
+									var day = subscription_date.getUTCDate();
+									day = (day < 10)? "0" + day: day;
 
-						var formatted_date = subscription_date.getUTCFullYear() + "-" + month + "-" + day + "T" + hours + ":" + mins + ":" + secs + "Z";
-						
-						var billingAgreementAttributes = {
-						    "name": subscription_plan + " Subscription Agreement ($" + plan_price + "/month)",
-						    "description": req.session.user_name + "'s " + subscription_plan + " promogram subscription ($" + plan_price + "/month)",
-						    "start_date": formatted_date,
-						    "plan": {
-						        "id": plan_id
-						    },
-						    "payer": {
-						        "payment_method": "paypal"
-						    },
-						    "shipping_address": {
-						    	"line1": "N/A",
-						        "line2": "N/A",
-						        "city": "Hartford",
-						        "state": "CT",
-						        "postal_code": "06114",
-						        "country_code": "US"
-						    }
-						};
+									var hours = subscription_date.getUTCHours();
+									hours = (hours < 10)? "0" + hours: hours;
 
-						logger.info(JSON.stringify(billingAgreementAttributes));
+									var mins = subscription_date.getUTCMinutes();
+									mins = (mins < 10)? "0" + mins: mins;
 
-						// Use billing plan to create agreement
-		                paypal.billingAgreement.create(billingAgreementAttributes, function (error, billingAgreement) {
-		                    if (error) {
-		                        res.statusCode = params.error_response_code;
-								res.end ("error creating billing agreement, please try again");
+									var secs = subscription_date.getUTCSeconds();
+									secs = (secs < 10)? "0" + secs: secs;
 
-						    	errmsg = "Error creating paypal subscription agreement: " + error;
-								logger.error(errmsg);
-		                    } else {
-		                        
-		                        
-		                        logger.info(JSON.stringify(billingAgreement));
-		                        
-		                        for (var index = 0; index < billingAgreement.links.length; index++) {
-		                            if (billingAgreement.links[index].rel === 'approval_url') {
-		                                var approval_url = billingAgreement.links[index].href;
-		                                logger.info("For approving subscription via Paypal, first redirect user to");
-		                                logger.info(approval_url);
+									var formatted_date = subscription_date.getUTCFullYear() + "-" + month + "-" + day + "T" + hours + ":" + mins + ":" + secs + "Z";
+									
+									var billingAgreementAttributes = {
+									    "name": subscription_plan + " Subscription Agreement ($" + plan_price + "/month)",
+									    "description": req.session.user_name + "'s " + subscription_plan + " promogram subscription ($" + plan_price + "/month)",
+									    "start_date": formatted_date,
+									    "plan": {
+									        "id": plan_id
+									    },
+									    "payer": {
+									        "payment_method": "paypal"
+									    },
+									    "shipping_address": {
+									    	"line1": "N/A",
+									        "line2": "N/A",
+									        "city": "Hartford",
+									        "state": "CT",
+									        "postal_code": "06114",
+									        "country_code": "US"
+									    }
+									};
 
-		                                logger.info("Payment token is");
-		                                logger.info(url.parse(approval_url, true).query.token);
+									logger.info(JSON.stringify(billingAgreementAttributes));
 
-		                                var reply = { "status": "success", "redirect_uri": approval_url };
-										res.end (JSON.stringify(reply));
+									// Use billing plan to create agreement
+					                paypal.billingAgreement.create(billingAgreementAttributes, function (error, billingAgreement) {
+					                    if (error) {
+					                        res.statusCode = params.error_response_code;
+											res.end ("error creating billing agreement, please try again");
 
-		                                // See billing_agreements/execute.js to see example for executing agreement 
-		                                // after you have payment token
-		                            }
-		                        }
-		                    }
-		                });
+									    	errmsg = "Error creating paypal subscription agreement: " + error;
+											logger.error(errmsg);
+					                    } else {
+					                        
+					                        
+					                        logger.info(JSON.stringify(billingAgreement));
+					                        
+					                        for (var index = 0; index < billingAgreement.links.length; index++) {
+					                            if (billingAgreement.links[index].rel === 'approval_url') {
+					                                var approval_url = billingAgreement.links[index].href;
+					                                logger.info("For approving subscription via Paypal, first redirect user to");
+					                                logger.info(approval_url);
 
+					                                logger.info("Payment token is");
+					                                logger.info(url.parse(approval_url, true).query.token);
 
+					                                var reply = { "status": "success", "redirect_uri": approval_url };
+													res.end (JSON.stringify(reply));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-						var amount = "0.00";
-
-						if (subscription_plan == "BRONZE"){
-							amount = params.subscription_price_BRONZE;
-						}else if (subscription_plan == "SILVER"){
-							amount = params.subscription_price_SILVER;
-						}else if (subscription_plan == "GOLD"){
-							amount = params.subscription_price_GOLD;
-						}
-
-						var payment = {
-							  "intent": "sale",
-							  "payer": {
-							    "payment_method": "paypal"
-							  },
-							  "redirect_urls": {
-							    "return_url": params.paypal_success_redirect_uri,
-							    "cancel_url": params.paypal_cancel_redirect_uri,
-							  },
-							  "transactions": [{
-							    "amount": {
-							      "total": amount,
-							      "currency": "USD"
-							    },
-							    "description": "Promogram Subscription Service"
-							  }]
-							};
-
-						paypal.payment.create(payment, function (error, payment) {
-							if (error) {
-
-								res.statusCode = params.error_response_code;
-								res.end ("oops an error occurred, please try again");
-
-						    	errmsg = "Error creating paypal payment: " + error;
-								logger.error(errmsg + ", like subscriber name: " + user_name);
-
-						  	} else {
-
-						  		//logger.info("Payment Created " + JSON.stringify(payment));
-
-						    	if(payment.payer.payment_method === 'paypal') {
-						     		
-						    		//save session data
-						     		req.session.payment_id = payment.id;
-						     		
-						     		var redirectUrl;
-						     		for(var i=0; i < payment.links.length; i++) {
-						        		var link = payment.links[i];
-						        		if (link.method === 'REDIRECT') {
-						          			redirectUrl = link.href;
-						        		}
-						      		}
-						      		var reply = { "status": "success", "redirect_uri": redirectUrl };
-									res.end (JSON.stringify(reply));
-						    	}
-						  	}
+					                                // See billing_agreements/execute.js to see example for executing agreement 
+					                                // after you have payment token
+					                            }
+					                        }
+					                    }
+					                });
+									
+									
+								}else{
+									logger.info("User is already subscribed to another plan, please cancel the plan first");
+									
+									res.statusCode = params.error_response_code;
+									res.end (userdata[0].username + " is already subscribed to a " + likesubscriber.subscription_plan + " plan, please cancel that plan and try again");
+								}
 						});
-						*/
-
-
-
-
-
-
-
-
-
-
 
 
 					}
@@ -858,23 +792,21 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 
 router.get('/api/payment_success', function(req, res) {
 
-  	var paymentToken = req.query.paymentToken;
+  	var paymentToken = req.query.token;
   	var uid = req.session.user_id;
 	var uname = req.session.user_name;
 	var plan = req.session.subscription_plan;
 	var mail = req.session.email;
 
-  	console.log("Payment Token is!!!!!: " + paymentToken);
-
 	paypal.billingAgreement.execute(paymentToken, {}, function (error, billingAgreement) {
 	    if (error) {
 	        logger.error("Paypal payment not successful: " + error);
-      		//res.redirect("/home?status=error");
+      		res.redirect("/home?status=error");
 	    } else {
 	        console.log("Billing Agreement Execute Response");
 	        console.log(JSON.stringify(billingAgreement));
 
-	        addLikeSubscribers(uid, uname, plan, mail, function (error){
+	        addLikeSubscribers(uid, uname, plan, mail, billingAgreement.id, function (error){
 
 				if(error){
 					logger.error("Add subscriber was not successul but paypal payment was successful: " + error);
@@ -1065,7 +997,7 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
-function addLikeSubscribers(user_id, user_name, subscription_plan, email, callback){
+function addLikeSubscribers(user_id, user_name, subscription_plan, email, paypal_agreement_id, callback){
 	
 	var options1 = {
 		url: "https://api.instagram.com/v1/users/" + user_id + "/?access_token=" + params.default_api_access_token
@@ -1121,6 +1053,7 @@ function addLikeSubscribers(user_id, user_name, subscription_plan, email, callba
 					subscription_start: new Date(),
 					subscription_end: endDate,
 					subscription_price: amount,
+					paypal_agreement_id: paypal_agreement_id,
 					is_active: true
 				},
 				{upsert: true}, 

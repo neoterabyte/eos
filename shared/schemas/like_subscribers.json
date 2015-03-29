@@ -10,6 +10,7 @@
   "subscription_start": "Date",
   "subscription_end": "Date",
   "subscription_price": "Number",
+  "paypal_agreement_id": "String",
   "is_active": "Boolean",
   "last_error": "String",
   "last_media_id": "String",
