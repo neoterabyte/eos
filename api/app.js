@@ -590,8 +590,6 @@ router.get('/api/add_like_subscriber', function(req, res) {
 							plan_id = params.paypal_billing_plan_GOLD;
 						}
 
-						console.log("Plannn " + plan_id);
-
 						var billingAgreementAttributes = {
 						    "name": subscription_plan + " Subscription Agreement",
 						    "description": "Agreement for " +  subscription_plan + " Subscription Plan",
@@ -611,6 +609,8 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						        "country_code": "US"
 						    }
 						};
+
+						console.log(JSON.stringify(billingAgreementAttributes));
 
 						// Use billing plan to create agreement
 		                paypal.billingAgreement.create(billingAgreementAttributes, function (error, billingAgreement) {
