@@ -548,6 +548,8 @@ router.get('/api/add_like_subscriber', function(req, res) {
 								}else if (likesubscriber == null){
 
 
+									logger.error("New User!");
+
 									logger.error("User data " + userdata);
 									logger.error("Subscription plan " + subscription_plan);
 
