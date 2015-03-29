@@ -582,31 +582,57 @@ router.get('/api/add_like_subscriber', function(req, res) {
 					}else {
 						//Paypal payment
 
-
-
-
-
+						var plan_id = params.paypal_billing_plan_BRONZE; //default to bronze
+						
+						if (subscription_plan == "SILVER"){
+							plan_id = params.paypal_billing_plan_SILVER;
+						}else if (subscription_plan == "GOLD"){
+							plan_id = params.paypal_billing_plan_GOLD;
+						}
 
 						var billingAgreementAttributes = {
-						    "name": "Fast Speed Agreement",
-						    "description": "Agreement for Fast Speed Plan",
-						    "start_date": "2015-02-19T00:37:04Z",
+						    "name": subscription_plan + " Subscription Agreement",
+						    "description": "Agreement for " +  subscription_plan + " Subscription Plan",
+						    "start_date": new Date(),
 						    "plan": {
-						        "id": "P-0NJ10521L3680291SOAQIVTQ"
+						        "id": plan_id
 						    },
 						    "payer": {
 						        "payment_method": "paypal"
 						    },
 						    "shipping_address": {
-						        "line1": "StayBr111idge Suites",
-						        "line2": "Cro12ok Street",
-						        "city": "San Jose",
-						        "state": "CA",
-						        "postal_code": "95112",
-						        "country_code": "US"
 						    }
 						};
 
+						// Use billing plan to create agreement
+		                paypal.billingAgreement.create(billingAgreementAttributes, function (error, billingAgreement) {
+		                    if (error) {
+		                        res.statusCode = params.error_response_code;
+								res.end ("oops an error occurred, please try again");
+
+						    	errmsg = "Error creating paypal subscription agreement: " + error;
+								logger.error(errmsg);
+		                    } else {
+		                        
+		                        logger.info(JSON.stringify(billingAgreement));
+		                        res.end("success");
+		                        /*
+		                        console.log("Create Billing Agreement Response");
+		                        //console.log(billingAgreement);
+		                        for (var index = 0; index < billingAgreement.links.length; index++) {
+		                            if (billingAgreement.links[index].rel === 'approval_url') {
+		                                var approval_url = billingAgreement.links[index].href;
+		                                console.log("For approving subscription via Paypal, first redirect user to");
+		                                console.log(approval_url);
+
+		                                console.log("Payment token is");
+		                                console.log(url.parse(approval_url, true).query.token);
+		                                // See billing_agreements/execute.js to see example for executing agreement 
+		                                // after you have payment token
+		                            }
+		                        }*/
+		                    }
+		                });
 
 
 
@@ -624,8 +650,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 
 
-
-
+/*
 						var amount = "0.00";
 
 						if (subscription_plan == "BRONZE"){
@@ -684,6 +709,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						    	}
 						  	}
 						});
+						*/
 
 
 
