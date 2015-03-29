@@ -574,7 +574,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									logger.info("User already subscribed to free service and cannot re-subscribe");
 									
 									res.statusCode = params.error_response_code;
-									res.end ("You have already subscribed to the free plan. Please purchase the BRONZE, SILVER or GOLD plan");
+									res.end (userdata[0].username + " is already subscribed to a " + likesubscriber.subscription_plan + " plan");
 								}
 						});
 
