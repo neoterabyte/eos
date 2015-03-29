@@ -774,6 +774,44 @@ router.get('/api/payment_success', function(req, res) {
 
 });
 
+router.get('/api/payment_cancelled', function(req, res) {
+
+	logger.error("Paypal payment cancelled by user");
+	res.redirect("/home");
+
+});
+
+
+router.get('/api/create_billing_plan', function(req, res) {
+	
+	var subscription_plan = req.query.subscription_plan;
+	
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!subscription_plan) {
+		dataOk = false;
+		invalidParam = 'subscription_plan';
+	}
+
+	if (!((subscription_plan == "FREE") || (subscription_plan == "BRONZE") || (subscription_plan == "SILVER") || (subscription_plan == "GOLD"))){
+		dataOk = false;
+		invalidParam = 'subscription_plan';
+	}
+
+	
+	if (dataOk){
+
+		res.end ('Done ');
+
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+
+});
+
 router.get('/home', function(req, res) {
 
 	var status = req.query.status;
@@ -791,12 +829,6 @@ router.get('/home', function(req, res) {
 
 });
 
-router.get('/api/payment_cancelled', function(req, res) {
-
-	logger.error("Paypal payment cancelled by user");
-	res.redirect("/home");
-
-});
 
 router.get('/api/html/*', function(req, res) {
 	res.sendFile(process.cwd() + req.path);	
