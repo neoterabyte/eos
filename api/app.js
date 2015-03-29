@@ -784,31 +784,79 @@ router.get('/api/payment_cancelled', function(req, res) {
 
 router.get('/api/create_billing_plan', function(req, res) {
 	
-	var subscription_plan = req.query.subscription_plan;
-	
-	var dataOk = true,
-	invalidParam = '';
-		
-	if (!subscription_plan) {
-		dataOk = false;
-		invalidParam = 'subscription_plan';
-	}
+	var billingPlanAttributes = {
+	    "description": "Promogram Billing Plans",
+	    "merchant_preferences": {
+	        "auto_bill_amount": "yes",
+	        "cancel_url": "http://www.cancel.com",
+	        "initial_fail_amount_action": "continue",
+	        "max_fail_attempts": "1",
+	        "return_url": "http://www.success.com",
+	        "setup_fee": {
+	            "currency": "USD",
+	            "value": "0"
+	        }
+	    },
+	    "name": "Promogram Billing Plans",
+	    "payment_definitions": [
+	        {
+	            "amount": {
+	                "currency": "USD",
+	                "value": params.subscription_price_BRONZE
+	            },
+	            "charge_models": [
+	            ],
+	            "cycles": "0",
+	            "frequency": "MONTH",
+	            "frequency_interval": "1",
+	            "name": "BRONZE",
+	            "type": "REGULAR"
+	        },
+	        {
+	            "amount": {
+	                "currency": "USD",
+	                "value": params.subscription_price_SILVER
+	            },
+	            "charge_models": [
+	            ],
+	            "cycles": "0",
+	            "frequency": "MONTH",
+	            "frequency_interval": "1",
+	            "name": "SILVER",
+	            "type": "REGULAR"
+	        },
+	        {
+	            "amount": {
+	                "currency": "USD",
+	                "value": params.GOLD
+	            },
+	            "charge_models": [
+	            ],
+	            "cycles": "0",
+	            "frequency": "MONTH",
+	            "frequency_interval": "1",
+	            "name": "GOLD",
+	            "type": "REGULAR"
+	        }
 
-	if (!((subscription_plan == "FREE") || (subscription_plan == "BRONZE") || (subscription_plan == "SILVER") || (subscription_plan == "GOLD"))){
-		dataOk = false;
-		invalidParam = 'subscription_plan';
-	}
+	    ],
+	    "type": "INFINITE"
+	};
 
-	
-	if (dataOk){
+	paypal.billingPlan.create(billingPlanAttributes, function (error, billingPlan) {
+	    if (error) {
+	        errmsg = "Error while creating billing plans: " + error;	    				
+			logger.error(errmsg);
 
-		res.end ('Done ');
+			res.statusCode = params.error_response_code;
+			res.end (errmsg);
+	    } else {
+	        errmsg = "Billing plan createds "	    				
+			logger.error(errmsg);
 
-	}else{
-		res.statusCode = params.error_response_code;
-		res.end ('Missing parameter for: ' + invalidParam);
-		logger.error("Missing parameter for: " + invalidParam);
-	}
+			res.end (billingPlan);
+	    }
+	});
 
 });
 
