@@ -845,16 +845,63 @@ router.get('/api/create_billing_plan', function(req, res) {
 
 		paypal.billingPlan.create(billingPlanAttributes, function (error, billingPlan) {
 		    if (error) {
-		        errmsg = "Error while creating billing plans: " + error;	    				
+		        errmsg = "Error while creating billing plan: " + error;	    				
 				logger.error(errmsg);
 
 				res.statusCode = params.error_response_code;
 				res.end (errmsg);
 		    } else {
-		        errmsg = "Billing plan created "	    				
-				logger.error(errmsg);
+		        errmsg = "Billing plan created, will attempt to activate it... ";	    				
+				logger.info(errmsg);
 
-				res.end (JSON.stringify(billingPlan));
+				var billingPlanId = billingPlan.id;
+
+				var billing_plan_update_attributes = [
+				    {
+				        "op": "replace",
+				        "path": "/",
+				        "value": {
+				            "state": "ACTIVE"
+				        }
+				    }
+				];
+
+				paypal.billingPlan.get(billingPlanId, function (error, billingPlan) {
+				    if (error) {
+				        errmsg = "Error while creating billing plan: " + error;	    				
+						logger.error(errmsg);
+
+						res.statusCode = params.error_response_code;
+						res.end (errmsg);
+				    } else {
+				        
+				        paypal.billingPlan.update(billingPlanId, billing_plan_update_attributes, function (error, response) {
+				            if (error) {
+				                errmsg = "Error while creating billing plan: " + error;	    				
+								logger.error(errmsg);
+
+								res.statusCode = params.error_response_code;
+								res.end (errmsg);
+				            } else {
+				                paypal.billingPlan.get(billingPlanId, function (error, billingPlan) {
+				                    if (error) {
+				                        errmsg = "Error while creating billing plan: " + error;	    				
+										logger.error(errmsg);
+
+										res.statusCode = params.error_response_code;
+										res.end (errmsg);
+				                    } else {
+
+				                    	errmsg = "Billing plan created, and Activated ";	    				
+										logger.info(errmsg);
+				                        
+				                        res.end (JSON.stringify(billingPlan));
+				                    }
+				                });
+				            }
+				        });
+				    }
+				});
 		    }
 		});
 
