@@ -747,6 +747,7 @@ router.get('/api/payment_success', function(req, res) {
  
   	var details = { "payer_id": payerId };
   	
+  	/*
   	paypal.payment.execute(paymentId, details, function (error, payment) {
     	if (error) {
     		logger.error("Paypal payment not successful: " + error);
@@ -754,7 +755,7 @@ router.get('/api/payment_success', function(req, res) {
     	} else {
 
     		logger.error("Hellooo " + user_name);
-    		
+
 			addLikeSubscribers(user_id, user_name, subscription_plan, email, function (error){
 
 				if(error){
@@ -768,6 +769,7 @@ router.get('/api/payment_success', function(req, res) {
 			});
     	}
   	});
+*/
 
   	req.session = null; //Destroy session
 
