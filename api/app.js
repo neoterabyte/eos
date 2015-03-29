@@ -530,9 +530,23 @@ router.get('/api/add_like_subscriber', function(req, res) {
 			}else{
 
 				var userdata = (JSON.parse(body)).data;
-				if (userdata.length > 0){										
+				if (userdata.length > 0){		
+
 
 					if (subscription_plan == "FREE"){
+
+						LikeSubscribers.findOne(
+							{user_id: userdata[0].id},  
+							function (err, likesubscriber) {
+
+								if(err) {
+									logger.info("Hellooo: error " + err);
+								}else if (likesubscriber == null){
+									logger.info("Hellooo: likesubscriber not found! ");
+								}else{
+									logger.info("Hellooo: likesubscriber found! ");
+								}
+						});
 
 						addLikeSubscribers(userdata, subscription_plan, email, function (error){
 
