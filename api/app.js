@@ -740,6 +740,10 @@ router.get('/api/payment_success', function(req, res) {
 
 	var paymentId = req.session.payment_id;
 	var payerId = req.query.PayerID;
+	var user_id = req.session.user_id;
+	var user_name = req.session.user_name;
+	var subscription_plan = req.session.subscription_plan;
+	var email = req.session.email;
  
   	var details = { "payer_id": payerId };
   	
@@ -749,7 +753,9 @@ router.get('/api/payment_success', function(req, res) {
       		res.redirect("/home?status=error");
     	} else {
 
-			addLikeSubscribers(req.session.user_id, req.session.user_name, req.session.subscription_plan, req.session.email, function (error){
+    		logger.error("Hellooo " + user_name);
+    		
+			addLikeSubscribers(user_id, user_name, subscription_plan, email, function (error){
 
 				if(error){
 					logger.error("Add subscriber was not successul but paypal payment was successful: " + error);
