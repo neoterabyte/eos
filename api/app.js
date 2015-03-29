@@ -618,7 +618,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						
 						var billingAgreementAttributes = {
 						    "name": subscription_plan + " Subscription Agreement ($" + plan_price + "/month)",
-						    "description": subscription_plan + " Subscription Plan ($" + plan_price + "/month)",
+						    "description": req.session.user_name + "'s " subscription_plan + " promogram subscription ($" + plan_price + "/month)",
 						    "start_date": formatted_date,
 						    "plan": {
 						        "id": plan_id
