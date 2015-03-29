@@ -286,6 +286,7 @@ jssor_slider1_starter('slider1_container');
   })();
 </script> 
 <script>
+
 // Attach a submit handler to the form
 $( "#subscribeForm" ).submit(function( event ) {
 
@@ -295,7 +296,7 @@ event.preventDefault();
 
 $( "#alert_block" ).hide();
 $( "#subscribing_block" ).show();
-$("#cancel_block").hide();
+
 
 // Get some values from elements on the page:
 var $form = $( this ),
@@ -370,7 +371,6 @@ function showHideCongratulations(){
 	subscription_result = $( "#subscription_result" ).val();
 	
 	if( subscription_result == "error"){	
-		console.log("hellsssooo " + subscription_result);
 		$("#subscription_block").show();
 		alertError("oops an error occurred, is your user name is correct? pls try again...");		
 	}else if( subscription_result == "success"){
@@ -421,6 +421,63 @@ function showCancel(){
 		scrollTop: $("#cancel_block" ).offset().top
 	}, 1500);
 }
+
+// Attach a submit handler to the form
+$( "#cancelForm" ).submit(function( event ) {
+
+// Stop form from submitting normally
+event.preventDefault();
+
+
+$( "#cancel_div" ).hide();
+$( "#canceling_block" ).show();
+
+// Get some values from elements on the page:
+var $form = $( this ),
+cancel_user_name = $form.find( "input[name='cancel_user_name']" ).val(),
+cancel_plan = $form.find( "select[name='cancel_plan']" ).val(),
+url = $form.attr( "action" );
+
+// Send the data using post
+var posting = $.get( url, { user_name: cancel_user_name, subscription_plan: cancel_plan } );
+
+	// Put the results in a div
+	posting.done(function( data ) {
+		
+		$( "#canceling_block" ).hide();
+		$( "#cancel_info" ).toggleClass("alert-info", false);
+		$( "#cancel_info" ).toggleClass("alert-danger", false);
+		$( "#cancel_info" ).toggleClass("alert-success", true);
+		$( "#cancel_info" ).text("You have been successfully unsubscribed from the promogram service");
+		$( "#cancel_div" ).show();
+
+		$('html,body').animate({
+			scrollTop: $("#subscription_block" ).offset().top
+		}, 1500);
+		
+		//hide after 3 seconds
+		setTimeout(function(){ $( "#cancel_div" ).hide();  $( "#cancel_block" ).fadeOut("slow"); }, 10000);
+	})
+
+	posting.fail(function(error) {
+		
+		$( "#canceling_block" ).hide();
+		$( "#cancel_info" ).toggleClass("alert-info", false);
+		$( "#cancel_info" ).toggleClass("alert-danger", true);
+		$( "#cancel_info" ).toggleClass("alert-success", false);
+		$( "#cancel_info" ).text("oops! " + error.responseText);
+		$( "#cancel_div" ).show();
+
+		$('html,body').animate({
+			scrollTop: $("#subscription_block" ).offset().top
+		}, 1500);
+		
+		//hide after 3 seconds
+		setTimeout(function(){ $( "#cancel_div" ).hide();  $( "#cancel_block" ).fadeOut("slow"); }, 10000);
+		
+	});   
+});
+
 
 </script>
 </body>
