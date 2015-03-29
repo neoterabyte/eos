@@ -613,7 +613,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						var secs = subscription_date.getUTCSeconds();
 						secs = (secs < 10)? "0" + secs: secs;
 
-						//2015-03-30T00:37:04Z
+
 						var formatted_date = subscription_date.getUTCFullYear() + "-" + month + "-" + day + "T" + hours + ":" + mins + ":" + secs + "Z";
 						
 						var billingAgreementAttributes = {
@@ -858,23 +858,23 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 
 router.get('/api/payment_success', function(req, res) {
 
-	var paymentId = req.session.payment_id;
-	var payerId = req.query.PayerID;
-	
-	var uid = req.session.user_id;
+  	var paymentToken = req.query.paymentToken;
+  	var uid = req.session.user_id;
 	var uname = req.session.user_name;
 	var plan = req.session.subscription_plan;
 	var mail = req.session.email;
 
-	var details = { "payer_id": payerId };
-  	
-  	paypal.payment.execute(paymentId, details, function (error, payment) {
-    	if (error) {
-    		logger.error("Paypal payment not successful: " + error);
-      		res.redirect("/home?status=error");
-    	} else {
+  	console.log("Payment Token is!!!!!: " + paymentToken);
 
-			addLikeSubscribers(uid, uname, plan, mail, function (error){
+	paypal.billingAgreement.execute(paymentToken, {}, function (error, billingAgreement) {
+	    if (error) {
+	        logger.error("Paypal payment not successful: " + error);
+      		res.redirect("/home?status=error");
+	    } else {
+	        console.log("Billing Agreement Execute Response");
+	        console.log(JSON.stringify(billingAgreement));
+
+	        addLikeSubscribers(uid, uname, plan, mail, function (error){
 
 				if(error){
 					logger.error("Add subscriber was not successul but paypal payment was successful: " + error);
@@ -885,8 +885,8 @@ router.get('/api/payment_success', function(req, res) {
 				}
 
 			});
-    	}
-  	});
+	    }
+	});
 
 
   	req.session = null; //Destroy session
@@ -935,7 +935,7 @@ router.get('/api/create_billing_plan', function(req, res) {
 		    "merchant_preferences": {
 		        "auto_bill_amount": "yes",
 		        "cancel_url": params.paypal_cancel_redirect_uri,
-		        "initial_fail_amount_action": "continue",
+		        "initial_fail_amount_action": "cancel",
 		        "max_fail_attempts": "1",
 		        "return_url": params.paypal_success_redirect_uri,
 		        "setup_fee": {
