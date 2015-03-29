@@ -742,6 +742,9 @@ router.get('/api/payment_success', function(req, res) {
 	var paymentId = req.session.payment_id;
 	var payerId = req.query.PayerID;
 	
+	var uname = req.session.user_name;
+	logger.error("User name here is " + uname);
+
   	var details = { "payer_id": payerId };
 
   	
@@ -751,7 +754,7 @@ router.get('/api/payment_success', function(req, res) {
       		res.redirect("/home?status=error");
     	} else {
 
-    		logger.error("Helloooxx " + req.session.user_name);
+    		logger.error("User name Inside is " + uname);
 
 			addLikeSubscribers(req.session.user_id, req.session.user_name, req.session.subscription_plan, req.session.email, function (error){
 
