@@ -838,10 +838,10 @@ router.get('/api/create_billing_plan', function(req, res) {
 			res.statusCode = params.error_response_code;
 			res.end (errmsg);
 	    } else {
-	        errmsg = "Billing plan createds "	    				
+	        errmsg = "Billing plan created "	    				
 			logger.error(errmsg);
 
-			res.end (billingPlan);
+			res.end (JSON.stringify(billingPlan));
 	    }
 	});
 
