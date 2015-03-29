@@ -869,7 +869,7 @@ router.get('/api/payment_success', function(req, res) {
 	paypal.billingAgreement.execute(paymentToken, {}, function (error, billingAgreement) {
 	    if (error) {
 	        logger.error("Paypal payment not successful: " + error);
-      		res.redirect("/home?status=error");
+      		//res.redirect("/home?status=error");
 	    } else {
 	        console.log("Billing Agreement Execute Response");
 	        console.log(JSON.stringify(billingAgreement));
