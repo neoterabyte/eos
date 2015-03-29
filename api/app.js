@@ -624,12 +624,6 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						        "payment_method": "paypal"
 						    },
 						    "shipping_address": {
-						        "line1": "Promogram Inc",
-						        "line2": "Main Street",
-						        "city": "Hartford",
-						        "state": "CT",
-						        "postal_code": "06114",
-						        "country_code": "US"
 						    }
 						};
 
@@ -946,20 +940,6 @@ router.get('/api/create_billing_plan', function(req, res) {
 		                "value": amount
 		            },
 		            "charge_models": [
-				        {
-		                    "amount": {
-		                        "currency": "USD",
-		                        "value": "0"
-		                    },
-		                    "type": "SHIPPING"
-		                },
-		                {
-		                    "amount": {
-		                        "currency": "USD",
-		                        "value": "0"
-		                    },
-		                    "type": "TAX"
-		                }
 		            ],
 		            "cycles": "0",
 		            "frequency": "MONTH",
