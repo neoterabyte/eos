@@ -624,6 +624,83 @@ router.get('/api/add_like_subscriber', function(req, res) {
 });
 
 
+router.get('/api/cancel_like_subscriber', function(req, res) {
+
+	
+	var user_name = req.query.user_name;	
+	var subscription_plan = req.query.subscription_plan;
+	
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!user_name) {
+		dataOk = false;
+		invalidParam = 'user_name';
+	}else if (!subscription_plan) {
+		dataOk = false;
+		invalidParam = 'subscription_plan';
+	}
+
+	if (!((subscription_plan == "FREE") || (subscription_plan == "BRONZE") || (subscription_plan == "SILVER") || (subscription_plan == "GOLD"))){
+		dataOk = false;
+		invalidParam = 'subscription_plan';
+	}
+
+	
+	if (dataOk){
+
+		var options = {
+			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
+		};
+
+		request(options, function (error, response, body) {
+
+			if (error){
+				errmsg = "Instagram API error: " + error;
+				logger.error(errmsg + ", like subscriber name: " + user_name);	
+
+				res.statusCode = params.error_response_code;
+				res.end ("error connection to Instagram");
+							
+			} else if (response && response.statusCode != 200) {
+				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+				logger.error(errmsg  + ", ike subscriber: " + user_name);
+
+				res.statusCode = params.error_response_code;
+				res.end ("error connection to Instagram");
+
+			}else{
+
+				var userdata = (JSON.parse(body)).data;
+				if (userdata.length > 0){										
+
+					//no need to get any feedback from mongo write
+					LikeSubscribers.update({ user_id: userdata[0].id }, { $set: { is_active: false }}).exec();
+
+					var reply = { "status": "success" };
+					res.end (JSON.stringify(reply));
+					
+				}else{
+
+					errmsg = "Like subscriber not found: name: " + user_name;	    				
+					logger.error(errmsg);
+
+					res.statusCode = params.error_response_code;
+					res.end ("instagram user name does not exist");
+				}
+			}
+		});
+
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+});
+
+
+
+
 router.get('/api/payment_success', function(req, res) {
 
 	var paymentId = req.session.paymentId;
