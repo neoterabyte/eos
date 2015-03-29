@@ -593,6 +593,11 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						var subscription_date = new Date();
 						subscription_date.setDate(subscription_date.getDate() + 1);
 
+						//2015-03-30T00:37:04Z
+						//necessary because for some wierd reason paypal ISO date does not include the milliseconds part
+						String formatted_date = subscription_date.getYear() + "-" + subscription_date.getMonth() + "-" + subscription_date.getDay() + "T" + subscription_date.getHours() + ":" + subscription_date.getMinutes() + ":" + subscription_date.getSeconds() + "Z";
+						console.log("Formatted date: " + formatted_date);
+
 						var billingAgreementAttributes = {
 						    "name": subscription_plan + " Subscription Agreement",
 						    "description": "Agreement for " +  subscription_plan + " Subscription Plan",
@@ -613,7 +618,6 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						    }
 						};
 
-						logger.info("hellooooox  \n");
 						console.log(JSON.stringify(billingAgreementAttributes));
 
 						// Use billing plan to create agreement
