@@ -752,6 +752,8 @@ router.get('/api/payment_success', function(req, res) {
   	//});
 						    		
   	logger.error("Hellooox " + user_name);
+  	logger.error("Helloooddx " + paymentId);
+
 
   	/*
   	paypal.payment.execute(paymentId, details, function (error, payment) {
