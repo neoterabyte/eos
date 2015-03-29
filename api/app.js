@@ -619,7 +619,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 						    	if(payment.payer.payment_method === 'paypal') {
 						     		
-						    		//save sesstion ids
+						    		//save session ids
 						     		req.session.payment_id = payment.id;
 						     		req.session.user_id = userdata[0].id;
 						     		req.session.user_name = userdata[0].user_name;
@@ -746,7 +746,13 @@ router.get('/api/payment_success', function(req, res) {
 	var email = req.session.email;
  
   	var details = { "payer_id": payerId };
-  	
+
+  	//cache.hmset(params.cache_prefix + ":paypal:", JSON.parse(updates), function (err, reply){
+
+  	//});
+						    		}
+  	logger.error("Hellooox " + user_name);
+
   	/*
   	paypal.payment.execute(paymentId, details, function (error, payment) {
     	if (error) {
