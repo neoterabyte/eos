@@ -10,7 +10,7 @@
 	"subscription_price_SILVER":"24.99",
 	"subscription_price_GOLD":"44.99",
 	"paypal_prod_api" : {
-		"mode": "production",
+		"mode": "live",
     	"host" : "api.sandbox.paypal.com",
     	"port" : "",            
     	"client_id" : "YOUR TEST CLIENT ID",
