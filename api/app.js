@@ -624,6 +624,12 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						        "payment_method": "paypal"
 						    },
 						    "shipping_address": {
+						    	"line1": "N/A",
+						        "line2": "N/A",
+						        "city": "Hartford",
+						        "state": "CT",
+						        "postal_code": "06114",
+						        "country_code": "US"
 						    }
 						};
 
