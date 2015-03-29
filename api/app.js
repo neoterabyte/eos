@@ -506,79 +506,115 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 	if (dataOk){
 
-		if (subscription_plan == "FREE"){
 
-			addLikeSubscribers(user_name, subscription_plan, email, function (error){
+		var options = {
+			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
+		};
 
-				if(error){
-					res.statusCode = params.error_response_code;
-					res.end (error);
-				}else{
-					var reply = { "status": "success" };
-					res.end (JSON.stringify(reply));
-				}
+		request(options, function (error, response, body) {
 
-			});
+			if (error){
+				errmsg = "Instagram API error: " + error;
+				logger.error(errmsg + ", like subscriber name: " + user_name);	
 
-		}else {
-			//Paypal payment
-			var amount = "0.00";
+				res.statusCode = params.error_response_code;
+				res.end ("error connection to Instagram");
+							
+			} else if (response && response.statusCode != 200) {
+				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
+				logger.error(errmsg  + ", ike subscriber: " + user_name);
 
-			if (subscription_plan == "BRONZE"){
-				amount = "19.99";
-			}else if (subscription_plan == "SILVER"){
-				amount = "24.99";
-			}else if (subscription_plan == "GOLD"){
-				amount = "44.99";
-			}
+				res.statusCode = params.error_response_code;
+				res.end ("error connection to Instagram");
 
-			var payment = {
-				  "intent": "sale",
-				  "payer": {
-				    "payment_method": "paypal"
-				  },
-				  "redirect_urls": {
-				    "return_url": params.paypal_success_redirect_uri,
-				    "cancel_url": params.paypal_cancel_redirect_uri,
-				  },
-				  "transactions": [{
-				    "amount": {
-				      "total": amount,
-				      "currency": "USD"
-				    },
-				    "description": "Promogram Subscription Service"
-				  }]
-				};
+			}else{
 
-			paypal.payment.create(payment, function (error, payment) {
-				if (error) {
+				var userdata = (JSON.parse(body)).data;
+				if (userdata.length > 0){										
 
-					res.statusCode = params.error_response_code;
-					res.end ("oops an error occurred, please try again");
+					if (subscription_plan == "FREE"){
 
-			    	errmsg = "Error creating paypal payment: " + error;
-					logger.error(errmsg + ", like subscriber name: " + user_name);
+						addLikeSubscribers(userdata, subscription_plan, email, function (error){
 
-			  	} else {
+							if(error){
+								res.statusCode = params.error_response_code;
+								res.end (error);
+							}else{
+								var reply = { "status": "success" };
+								res.end (JSON.stringify(reply));
+							}
 
-			  		//logger.info("Payment Created " + JSON.stringify(payment));
+						});
 
-			    	if(payment.payer.payment_method === 'paypal') {
-			     		req.session.paymentId = payment.id;
-			     		var redirectUrl;
-			     		for(var i=0; i < payment.links.length; i++) {
-			        		var link = payment.links[i];
-			        		if (link.method === 'REDIRECT') {
-			          			redirectUrl = link.href;
-			        		}
-			      		}
-			      		var reply = { "status": "success", "redirect_uri": redirectUrl };
-						res.end (JSON.stringify(reply));
-			    	}
-			  	}
-			});
-		}
+					}else {
+						//Paypal payment
+						var amount = "0.00";
+
+						if (subscription_plan == "BRONZE"){
+							amount = "19.99";
+						}else if (subscription_plan == "SILVER"){
+							amount = "24.99";
+						}else if (subscription_plan == "GOLD"){
+							amount = "44.99";
+						}
+
+						var payment = {
+							  "intent": "sale",
+							  "payer": {
+							    "payment_method": "paypal"
+							  },
+							  "redirect_urls": {
+							    "return_url": params.paypal_success_redirect_uri,
+							    "cancel_url": params.paypal_cancel_redirect_uri,
+							  },
+							  "transactions": [{
+							    "amount": {
+							      "total": amount,
+							      "currency": "USD"
+							    },
+							    "description": "Promogram Subscription Service"
+							  }]
+							};
+
+						paypal.payment.create(payment, function (error, payment) {
+							if (error) {
+
+								res.statusCode = params.error_response_code;
+								res.end ("oops an error occurred, please try again");
+
+						    	errmsg = "Error creating paypal payment: " + error;
+								logger.error(errmsg + ", like subscriber name: " + user_name);
+
+						  	} else {
+
+						  		//logger.info("Payment Created " + JSON.stringify(payment));
+
+						    	if(payment.payer.payment_method === 'paypal') {
+						     		req.session.paymentId = payment.id;
+						     		var redirectUrl;
+						     		for(var i=0; i < payment.links.length; i++) {
+						        		var link = payment.links[i];
+						        		if (link.method === 'REDIRECT') {
+						          			redirectUrl = link.href;
+						        		}
+						      		}
+						      		var reply = { "status": "success", "redirect_uri": redirectUrl };
+									res.end (JSON.stringify(reply));
+						    	}
+						  	}
+						});
+					}
 	
+				}else{
+
+					errmsg = "Like subscriber not found: name: " + user_name;	    				
+					logger.error(errmsg);
+
+					res.statusCode = params.error_response_code;
+					res.end ("instagram user name does not exist");
+				}
+			}
+		});
 
 	}else{
 		res.statusCode = params.error_response_code;
@@ -648,106 +684,73 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
-function addLikeSubscribers(user_name, subscription_plan, email, callback){
-	// Search for User
-		var options = {
-			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
-		};
+function addLikeSubscribers(userdata, subscription_plan, email, callback){
+	
+	var options1 = {
+		url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/?access_token=" + params.default_api_access_token
+	};
 
-		request(options, function (error, response, body) {
+	request(options1, function (error1, response1, body1) {
 
-			if (error){
-				errmsg = "Instagram API error: " + error;
-				logger.error(errmsg + ", like subscriber name: " + user_name);	
+		if (error1){
+			errmsg = "Instagram API error: " + error1;
+			logger.error(errmsg  + ", user name: " + userdata[0].username);
 
-				callback("error connection to Instagram");
-							
-			} else if (response && response.statusCode != 200) {
-				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-				logger.error(errmsg  + ", ike subscriber: " + user_name);
+			callback("error connection to Instagram");
 
-				callback("error connection to Instagram");
+		} else if (response1 && response1.statusCode != 200) {
+			errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+			logger.error(errmsg +  ", user name: " + userdata[0].username);
 
+			callback("error connection to Instagram");
+
+		}else{
+
+			var udata = (JSON.parse(body1)).data;
+
+			var endDate = new Date();
+			if (subscription_plan == "BRONZE"){
+				endDate.setDate(endDate.getDate() + 30);
+			}else if (subscription_plan == "SILVER"){
+				endDate.setDate(endDate.getDate() + 30);
+			}else if (subscription_plan == "GOLD"){
+				endDate.setDate(endDate.getDate() + 30);
 			}else{
-
-				var userdata = (JSON.parse(body)).data;
-
-				if (userdata.length > 0){										
-
-					var options1 = {
-						url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/?access_token=" + params.default_api_access_token
-					};
-
-					request(options1, function (error1, response1, body1) {
-
-						if (error1){
-							errmsg = "Instagram API error: " + error1;
-							logger.error(errmsg  + ", user name: " + userdata[0].username);
-
-							callback("error connection to Instagram");
-
-						} else if (response1 && response1.statusCode != 200) {
-							errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
-							logger.error(errmsg +  ", user name: " + userdata[0].username);
-
-							callback("error connection to Instagram");
-
-						}else{
-
-							var udata = (JSON.parse(body1)).data;
-
-							var endDate = new Date();
-							if (subscription_plan == "BRONZE"){
-								endDate.setDate(endDate.getDate() + 30);
-							}else if (subscription_plan == "SILVER"){
-								endDate.setDate(endDate.getDate() + 30);
-							}else if (subscription_plan == "GOLD"){
-								endDate.setDate(endDate.getDate() + 30);
-							}else{
-								//assume trial
-								subscription_plan = "FREE";
-								endDate.setDate(endDate.getDate() + 1);
-							}
-							
-							LikeSubscribers.findOneAndUpdate(
-								{user_id: udata.id}, 
-								{
-									user_id: udata.id, 
-									user_name: udata.username, 
-									follows: udata.counts.follows,
-									followed_by: udata.counts.followed_by,
-									media_count: udata.counts.media,
-									email: email,
-									subscription_plan: subscription_plan,
-									subscription_group: params.current_like_subscription_group,
-									subscription_start: new Date(),
-									subscription_end: endDate,
-									is_active: true
-								},
-								{upsert: true}, 
-								function (err, likesubscriber) {
-
-									if(err){
-										logger.error("Error updating Like Subscribers in Mongo:  " + err);
-
-										callback("internal error updating subscriber details");
-									}else{
-										callback(); //successs
-									}
-							});
-						}
-					});
-
-				}else{
-
-					errmsg = "Like subscriber not found: name: " + user_name;	    				
-					logger.error(errmsg);
-
-					callback("instagram user name does not exist");
-				}
+				//assume trial
+				subscription_plan = "FREE";
+				endDate.setDate(endDate.getDate() + 1);
 			}
-		});
+			
+			LikeSubscribers.findOneAndUpdate(
+				{user_id: udata.id}, 
+				{
+					user_id: udata.id, 
+					user_name: udata.username, 
+					follows: udata.counts.follows,
+					followed_by: udata.counts.followed_by,
+					media_count: udata.counts.media,
+					email: email,
+					subscription_plan: subscription_plan,
+					subscription_group: params.current_like_subscription_group,
+					subscription_start: new Date(),
+					subscription_end: endDate,
+					is_active: true
+				},
+				{upsert: true}, 
+				function (err, likesubscriber) {
+
+					if(err){
+						logger.error("Error updating Like Subscribers in Mongo:  " + err);
+
+						callback("internal error updating subscriber details");
+					}else{
+						callback(); //successs
+					}
+			});
+		}
+	});				
 }
+
 function updateActiveAgentTokens(Agents) {
 
 	var query  = Agents.where({is_active:true});
