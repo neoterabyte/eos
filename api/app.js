@@ -540,26 +540,39 @@ router.get('/api/add_like_subscriber', function(req, res) {
 							function (err, likesubscriber) {
 
 								if(err) {
-									logger.info("Hellooo: error " + err);
+									logger.error("Error search for Like Subscriber in Mongo:  " + err);
+									
+									res.statusCode = params.error_response_code;
+									res.end ("error connection to promogram data");
+
 								}else if (likesubscriber == null){
-									logger.info("Hellooo: likesubscriber not found! ");
+
+
+									logger.error("User data " + userdata);
+									logger.error("Subscription plan " + subscription_plan);
+
+									/*addLikeSubscribers(userdata, subscription_plan, email, function (error){
+
+										if(error){
+											res.statusCode = params.error_response_code;
+											res.end (error);
+										}else{
+											var reply = { "status": "success" };
+											res.end (JSON.stringify(reply));
+										}
+
+									});
+									*/
+
 								}else{
-									logger.info("Hellooo: likesubscriber found! ");
+									logger.info("User already subscribed to free service and cannot re-subscribe");
+									
+									res.statusCode = params.error_response_code;
+									res.end ("You have already subscribed to the free plan. Please purchase the BRONZE, SILVER or GOLD plan");
 								}
 						});
 
-						addLikeSubscribers(userdata, subscription_plan, email, function (error){
-
-							if(error){
-								res.statusCode = params.error_response_code;
-								res.end (error);
-							}else{
-								var reply = { "status": "success" };
-								res.end (JSON.stringify(reply));
-							}
-
-						});
-
+						
 					}else {
 						//Paypal payment
 						var amount = "0.00";
