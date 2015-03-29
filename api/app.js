@@ -553,7 +553,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									logger.error("User data " + userdata[0].username);
 									logger.error("Subscription plan " + subscription_plan);
 
-									addLikeSubscribers(userdata, subscription_plan, email, function (error){
+									addLikeSubscribers(userdata[0].id, userdata[0].username, subscription_plan, email, function (error){
 
 										if(error){
 											res.statusCode = params.error_response_code;
@@ -618,7 +618,14 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						  		//logger.info("Payment Created " + JSON.stringify(payment));
 
 						    	if(payment.payer.payment_method === 'paypal') {
-						     		req.session.paymentId = payment.id;
+						     		
+						    		//save sesstion ids
+						     		req.session.payment_id = payment.id;
+						     		req.session.user_id = userdata[0].id;
+						     		req.session.user_name = userdata[0].user_name;
+						     		req.session.subscription_plan = subscription_plan;
+						     		req.session.email = email;
+
 						     		var redirectUrl;
 						     		for(var i=0; i < payment.links.length; i++) {
 						        		var link = payment.links[i];
@@ -731,7 +738,7 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 
 router.get('/api/payment_success', function(req, res) {
 
-	var paymentId = req.session.paymentId;
+	var paymentId = req.session.payment_id;
 	var payerId = req.query.PayerID;
  
   	var details = { "payer_id": payerId };
@@ -741,8 +748,18 @@ router.get('/api/payment_success', function(req, res) {
     		logger.error("Paypal payment not successful: " + error);
       		res.redirect("/home?status=error");
     	} else {
-    		logger.error("Paypal payment successful: ");
-			res.redirect("/home?status=success");
+
+			addLikeSubscribers(req.session.user_id, req.session.user_name, req.session.subscription_plan, req.session.email, function (error){
+
+				if(error){
+					logger.error("Add subscriber was not successul but paypal payment was successful: " + error);
+      				res.redirect("/home?status=error");
+				}else{
+					logger.error("Paypal payment successful: ");
+					res.redirect("/home?status=success");
+				}
+
+			});
     	}
   	});
 
@@ -789,23 +806,23 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
-function addLikeSubscribers(userdata, subscription_plan, email, callback){
+function addLikeSubscribers(user_id, user_name, subscription_plan, email, callback){
 	
 	var options1 = {
-		url: "https://api.instagram.com/v1/users/" + userdata[0].id + "/?access_token=" + params.default_api_access_token
+		url: "https://api.instagram.com/v1/users/" + user_id + "/?access_token=" + params.default_api_access_token
 	};
 
 	request(options1, function (error1, response1, body1) {
 
 		if (error1){
 			errmsg = "Instagram API error: " + error1;
-			logger.error(errmsg  + ", user name: " + userdata[0].username);
+			logger.error(errmsg  + ", user name: " + user_name);
 
 			callback("error connection to Instagram");
 
 		} else if (response1 && response1.statusCode != 200) {
 			errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
-			logger.error(errmsg +  ", user name: " + userdata[0].username);
+			logger.error(errmsg +  ", user name: " + user_name);
 
 			callback("error connection to Instagram");
 
