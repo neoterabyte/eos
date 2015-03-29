@@ -825,62 +825,7 @@ router.get('/api/create_billing_plan', function(req, res) {
 	            "frequency_interval": "1",
 	            "name": "BRONZE",
 	            "type": "REGULAR"
-	        },
-	        {
-	            "amount": {
-	                "currency": "USD",
-	                "value": params.subscription_price_SILVER
-	            },
-	            "charge_models": [
-	            	{
-	                    "amount": {
-	                        "currency": "USD",
-	                        "value": "0"
-	                    },
-	                    "type": "SHIPPING"
-	                },
-	                {
-	                    "amount": {
-	                        "currency": "USD",
-	                        "value": "0"
-	                    },
-	                    "type": "TAX"
-	                }
-	            ],
-	            "cycles": "0",
-	            "frequency": "MONTH",
-	            "frequency_interval": "1",
-	            "name": "SILVER",
-	            "type": "REGULAR"
-	        },
-	        {
-	            "amount": {
-	                "currency": "USD",
-	                "value": params.subscription_price_GOLD
-	            },
-	            "charge_models": [
-	            	{
-	                    "amount": {
-	                        "currency": "USD",
-	                        "value": "0"
-	                    },
-	                    "type": "SHIPPING"
-	                },
-	                {
-	                    "amount": {
-	                        "currency": "USD",
-	                        "value": "0"
-	                    },
-	                    "type": "TAX"
-	                }
-	            ],
-	            "cycles": "0",
-	            "frequency": "MONTH",
-	            "frequency_interval": "1",
-	            "name": "GOLD",
-	            "type": "REGULAR"
 	        }
-
 	    ],
 	    "type": "INFINITE"
 	};
