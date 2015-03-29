@@ -590,10 +590,13 @@ router.get('/api/add_like_subscriber', function(req, res) {
 							plan_id = params.paypal_billing_plan_GOLD;
 						}
 
+						var subscription_date = new Date();
+						subscription_date.setDate(subscription_date.getDate() + 1);
+
 						var billingAgreementAttributes = {
 						    "name": subscription_plan + " Subscription Agreement",
 						    "description": "Agreement for " +  subscription_plan + " Subscription Plan",
-						    "start_date": (new Date()).toISOString(),
+						    "start_date": subscription_date.toISOString(),
 						    "plan": {
 						        "id": plan_id
 						    },
@@ -610,6 +613,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						    }
 						};
 
+						logger.info("hellooooox  \n");
 						console.log(JSON.stringify(billingAgreementAttributes));
 
 						// Use billing plan to create agreement
@@ -622,10 +626,8 @@ router.get('/api/add_like_subscriber', function(req, res) {
 								logger.error(errmsg);
 		                    } else {
 		                        
-		                        logger.info("hellooooox  \n");
+		                        
 		                        logger.info(JSON.stringify(billingAgreement));
-		                        logger.info("\n");
-
 		                        res.end("success");
 		                        /*
 		                        console.log("Create Billing Agreement Response");
