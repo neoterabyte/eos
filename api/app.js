@@ -593,7 +593,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 						var billingAgreementAttributes = {
 						    "name": subscription_plan + " Subscription Agreement",
 						    "description": "Agreement for " +  subscription_plan + " Subscription Plan",
-						    "start_date": new Date(),
+						    "start_date": (new Date()).toISOString(),
 						    "plan": {
 						        "id": plan_id
 						    },
