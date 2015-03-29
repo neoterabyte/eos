@@ -295,6 +295,7 @@ event.preventDefault();
 
 $( "#alert_block" ).hide();
 $( "#subscribing_block" ).show();
+$("#cancel_block").hide();
 
 // Get some values from elements on the page:
 var $form = $( this ),
@@ -335,6 +336,7 @@ function showSubscribe(plan){
 	$("#plan").val(plan);
 	$("#paypal_block" ).fadeIn();
 	$("#subscription_block").show();
+	$("#cancel_block").hide();
 
 	$('html,body').animate({
 		scrollTop: $("#subscription_block" ).offset().top
@@ -345,6 +347,7 @@ function showFreeSubscribe(){
 	$("#plan").val("FREE");  
 	$("#paypal_block").hide();
 	$("#subscription_block" ).show();
+	$("#cancel_block").hide();
 
 	$('html,body').animate({
 		scrollTop: $("#subscription_block" ).offset().top
