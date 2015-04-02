@@ -703,7 +703,7 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 });
 
 
-router.get('/api/charge', function(req, res) {
+router.post('/api/charge', function(req, res) {
 
   	var stripeToken = req.query.stripeToken;
   	var stripeEmail = req.query.stripeEmail;
