@@ -104,7 +104,35 @@ jssor_slider1_starter('slider1_container');
   </script>
 </form>
 
+<script src="https://checkout.stripe.com/checkout.js"></script>
 
+<button id="customButton">Purchase</button>
+
+<script>
+  var handler = StripeCheckout.configure({
+    key: 'pk_test_AwC7s62OIdwp1lhO8hiZYDt6',
+    image: '/img/documentation/checkout/marketplace.png',
+    token: function(token) {
+      // Use the token to create the charge with a server-side script.
+      // You can access the token ID with `token.id`
+    }
+  });
+
+  $('#customButton').on('click', function(e) {
+    // Open Checkout with further options
+    handler.open({
+      name: 'Promogram',
+      description: '2 widgets',
+      amount: 2000
+    });
+    e.preventDefault();
+  });
+
+  // Close Checkout on page navigation
+  $(window).on('popstate', function() {
+    handler.close();
+  });
+</script>
     </p>
     <div class="row">
       <div class="col-sm-3">
