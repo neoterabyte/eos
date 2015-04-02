@@ -388,7 +388,7 @@ function alertError(message, timeout){
 	var secs = timeout || 10000;
 	
 //hide after 3 seconds
-setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, timeout);
+setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, secs);
 }
 
 function alertSuccess(message, timeout){
@@ -407,7 +407,7 @@ function alertSuccess(message, timeout){
 	var secs = timeout || 10000;
 
 //hide after 3 seconds
-setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, timeout);
+setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, secs);
 }
 
 function showCancel(){
