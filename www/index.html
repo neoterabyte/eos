@@ -206,10 +206,10 @@ jssor_slider1_starter('slider1_container');
             <input type="submit" value="&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;"  class="btn btn-outline-green1 btn-lg">
           </div>
         </form>
-        <div id="pay" align="right" style="width:100%;display:none">
+        <div id="stripe_bronze" align="right" style="width:100%;display:none">
           <form action="http://promogram.me/api/charge" method="POST">
-            <input type="hidden" name="stripe_form_plan" value="BRONZE">
-            <input type="hidden" name="stripe_form_user_name" value="@user_name">
+            <input type="hidden" id="bronze_form_user_name" name="stripe_form_user_name" value="BRONZE">
+            <input type="hidden" id="bronze_form_plan" name="stripe_form_plan" value="@user_name">
             <script 
                 id="stripe_form_script"
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -217,7 +217,37 @@ jssor_slider1_starter('slider1_container');
                 data-image="/www/img/checkout.png"
                 data-name="Bronze Plan"
                 data-description="Powered by Stripe"
-                data-amount="2000">
+                data-amount="19.99">
+              </script>
+          </form>
+        </div>
+        <div id="stripe_silver" align="right" style="width:100%;display:none">
+          <form action="http://promogram.me/api/charge" method="POST">
+            <input type="hidden" id="silver_form_user_name" name="stripe_form_user_name" value="SILVER">
+            <input type="hidden" id="silver_form_user_name" name="stripe_form_plan" value="@user_name">
+            <script 
+                id="stripe_form_script"
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_AwC7s62OIdwp1lhO8hiZYDt6"
+                data-image="/www/img/checkout.png"
+                data-name="Silver Plan"
+                data-description="Powered by Stripe"
+                data-amount="24.99">
+              </script>
+          </form>
+        </div>
+        <div id="stripe_gold" align="right" style="width:100%;display:none">
+          <form action="http://promogram.me/api/charge" method="POST">
+            <input type="hidden" id="gold_form_user_name" name="stripe_form_user_name" value="GOLD">
+            <input type="hidden" id="gold_form_user_name" name="stripe_form_plan" value="@user_name">
+            <script 
+                id="stripe_form_script"
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_AwC7s62OIdwp1lhO8hiZYDt6"
+                data-image="/www/img/checkout.png"
+                data-name="Gold Plan"
+                data-description="Powered by Stripe"
+                data-amount="44.99">
               </script>
           </form>
         </div>
@@ -329,24 +359,31 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		
 		var result = JSON.parse(data).result;
 		if ((result) && (result == "stripe")){
+									
+			$("#go").hide();			
+			$( "#subscribing_block" ).hide();
+			$("#alert_stripe").show();
 			
 			$("#stripe_form_plan").val(plan);
 			$("#stripe_form_user_name").val(user_name);
 			
 			if (plan == "BRONZE"){
-				document.getElementById("stripe_form_script").setAttribute("data-amount", "19.99");
+				$("#bronze_form_user_name").val(user_name);	
+				$("#stripe_bronze").show();
+				$("#stripe_silver").hide();
+				$("#stripe_gold").hide();					
 			}else if (plan == "SILVER"){
-				document.getElementById("stripe_form_script").setAttribute("data-amount", "24.99");
+				$("#silver_form_user_name").val(user_name);	
+				$("#stripe_bronze").hide();
+				$("#stripe_silver").show();
+				$("#stripe_gold").hide();
 			}else if (plan == "GOLD"){
-				document.getElementById("stripe_form_script").setAttribute("data-amount", "44.99");
+				$("#gold_form_user_name").val(user_name);	
+				$("#stripe_bronze").hide();
+				$("#stripe_silver").hide();
+				$("#stripe_gold").show();
 			}
-			
-			document.getElementById("stripe_form_script").setAttribute("data-name", plan + " PLAN");
-			
-			$("#go").hide();			
-			$( "#subscribing_block" ).hide();
-			$("#alert_stripe").show();
-			$("#pay").show();
+	
    		}else {
 			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
 		}
@@ -362,11 +399,13 @@ function showSubscribe(plan){
 	$("#plan").val(plan);  
 	$("#subscription_block" ).show();
 	$("#go").show();
-	$("#pay").hide();
 	$("#cancel_block").hide();
 	$("#alert_stripe").hide();
 	
-
+	$("#stripe_bronze").hide();
+	$("#stripe_silver").hide();
+	$("#stripe_gold").hide();
+	
 	$('html,body').animate({
 		scrollTop: $("#subscription_block" ).offset().top
 	}, 1500);

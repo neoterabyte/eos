@@ -709,6 +709,7 @@ router.post('/api/charge', function(req, res) {
   	console.log("stripeEmail: " + stripeEmail);
   	console.log("plan: " + plan);
   	console.log("user_name: " + user_name);
+  	console.log("\n: ");
 
 	res.redirect("/home?status=success"); 
 
