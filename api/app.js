@@ -703,181 +703,24 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 });
 
 
+router.get('/api/charge', function(req, res) {
+
+  	var stripeToken = req.query.stripeToken;
+  	var stripeEmail = req.query.stripeEmail;
+  	var plan = req.query.plan;
+  	var user_name = req.query.user_name;
+
+  	console.log("stripeToken: " + stripeToken);
+  	console.log("stripeEmail: " + stripeEmail);
+  	console.log("plan: " + plan);
+  	console.log("user_name: " + user_name);
 
 
-router.get('/api/payment_success', function(req, res) {
-
-  	var paymentToken = req.query.token;
-  	var uid = req.session.user_id;
-	var uname = req.session.user_name;
-	var plan = req.session.subscription_plan;
-	var mail = req.session.email;
-
-	paypal.billingAgreement.execute(paymentToken, {}, function (error, billingAgreement) {
-	    if (error) {
-	        logger.error("Paypal payment not successful: " + error);
-      		res.redirect("/home?status=error");
-	    } else {
-	        console.log("Billing Agreement Execute Response");
-	        console.log(JSON.stringify(billingAgreement));
-
-	        addLikeSubscribers(uid, uname, plan, mail, billingAgreement.id, function (error){
-
-				if(error){
-					logger.error("Add subscriber was not successul but paypal payment was successful: " + error);
-      				res.redirect("/home?status=error");
-				}else{
-					logger.error("Paypal payment successful: ");
-					res.redirect("/home?status=success");
-				}
-
-			});
-	    }
-	});
-
-
-  	req.session = null; //Destroy session
-
-});
-
-router.get('/api/payment_cancelled', function(req, res) {
-
-	logger.error("Paypal payment cancelled by user");
-	res.redirect("/home");
+	res.redirect("/home?status=success"); 
 
 });
 
 
-router.get('/api/create_billing_plan', function(req, res) {
-	
-	var subscription_plan = req.query.subscription_plan;
-	
-	var dataOk = true,
-	invalidParam = '';
-		
-	if (!subscription_plan) {
-		dataOk = false;
-		invalidParam = 'subscription_plan';
-	}
-
-	if (!((subscription_plan == "FREE") || (subscription_plan == "BRONZE") || (subscription_plan == "SILVER") || (subscription_plan == "GOLD"))){
-		dataOk = false;
-		invalidParam = 'subscription_plan';
-	}
-	
-	if (dataOk){
-		
-		var amount = "0.00";
-
-		if (subscription_plan == "BRONZE"){
-			amount = params.subscription_price_BRONZE;
-		}else if (subscription_plan == "SILVER"){
-			amount = params.subscription_price_SILVER;
-		}else if (subscription_plan == "GOLD"){
-			amount = params.subscription_price_GOLD;
-		}
-
-		var billingPlanAttributes = {
-		    "description": "Promogram Billing Plans: " + subscription_plan,
-		    "merchant_preferences": {
-		        "auto_bill_amount": "yes",
-		        "cancel_url": params.paypal_cancel_redirect_uri,
-		        "initial_fail_amount_action": "cancel",
-		        "max_fail_attempts": "1",
-		        "return_url": params.paypal_success_redirect_uri,
-		        "setup_fee": {
-		            "currency": "USD",
-		            "value": "0"
-		        }
-		    },
-		    "name": "Promogram Billing Plans: " + subscription_plan,
-		    "payment_definitions": [
-		        {
-		            "amount": {
-		                "currency": "USD",
-		                "value": amount
-		            },
-		            "charge_models": [
-		            ],
-		            "cycles": "0",
-		            "frequency": "MONTH",
-		            "frequency_interval": "1",
-		            "name": subscription_plan,
-		            "type": "REGULAR"
-		        }
-		    ],
-		    "type": "INFINITE"
-		};
-
-		paypal.billingPlan.create(billingPlanAttributes, function (error, billingPlan) {
-		    if (error) {
-		        errmsg = "Error while creating billing plan: " + error;	    				
-				logger.error(errmsg);
-
-				res.statusCode = params.error_response_code;
-				res.end (errmsg);
-		    } else {
-		        errmsg = "Billing plan created, will attempt to activate it... ";	    				
-				logger.info(errmsg);
-
-				var billingPlanId = billingPlan.id;
-
-				var billing_plan_update_attributes = [
-				    {
-				        "op": "replace",
-				        "path": "/",
-				        "value": {
-				            "state": "ACTIVE"
-				        }
-				    }
-				];
-
-				paypal.billingPlan.get(billingPlanId, function (error, billingPlan) {
-				    if (error) {
-				        errmsg = "Error while creating billing plan: " + error;	    				
-						logger.error(errmsg);
-
-						res.statusCode = params.error_response_code;
-						res.end (errmsg);
-				    } else {
-				        
-				        paypal.billingPlan.update(billingPlanId, billing_plan_update_attributes, function (error, response) {
-				            if (error) {
-				                errmsg = "Error while creating billing plan: " + error;	    				
-								logger.error(errmsg);
-
-								res.statusCode = params.error_response_code;
-								res.end (errmsg);
-				            } else {
-				                paypal.billingPlan.get(billingPlanId, function (error, billingPlan) {
-				                    if (error) {
-				                        errmsg = "Error while creating billing plan: " + error;	    				
-										logger.error(errmsg);
-
-										res.statusCode = params.error_response_code;
-										res.end (errmsg);
-				                    } else {
-
-				                    	errmsg = "Billing plan created, and Activated ";	    				
-										logger.info(errmsg);
-				                        
-				                        res.end (JSON.stringify(billingPlan));
-				                    }
-				                });
-				            }
-				        });
-				    }
-				});
-		    }
-		});
-
-	}else{
-		res.statusCode = params.error_response_code;
-		res.end ('Missing parameter for: ' + invalidParam);
-		logger.error("Missing parameter for: " + invalidParam);
-	}
-
-});
 
 router.get('/home', function(req, res) {
 
@@ -907,6 +750,7 @@ router.get('/www/*', function(req, res) {
 
 // Register all our routes with /
 app.use('/', router);
+
 
 //---------------------------
 //  FUNCTIONS 
