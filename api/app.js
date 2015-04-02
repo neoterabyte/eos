@@ -83,7 +83,6 @@ fs.readFile('./api/html/error.html', 'utf8', function (err,data) {
 	}
 });
 
-paypal.configure(params.paypal_sanbox_api);
 updateActiveAgentTokens(Agents);
 
 
