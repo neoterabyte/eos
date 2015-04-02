@@ -189,23 +189,25 @@ jssor_slider1_starter('slider1_container');
         <div id="alert_stripe" style="display:none" class="form-group form-group-lg center-block">
           <p class="alert alert-success" style="width:100%"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>&nbsp; user name validated, click below to checkout.&nbsp;<span class="glyphicon glyphicon-circle-arrow-down"></span>&nbsp;</p>
         </div>
-        <form action="http://promogram.me/api/add_like_subscriber" id="subscribeForm">
-          <div class="form-group form-group-lg">
-            <input class="form-control" type="text" id="user_name" placeholder="Instagram User Name..." name="user_name">
-            <input type="hidden" id="subscription_result" name="subscription_result" value="@subscription_result">
-          </div>
-          <div class="form-group form-group-lg">
-            <select id="plan" name="plan" class="form-control">
-              <option value="FREE">Free Plan</option>
-              <option value="BRONZE">Bronze Plan</option>
-              <option value="SILVER">Silver Plan</option>
-              <option value="GOLD">Gold Plan</option>
-            </select>
-          </div>
-          <div id="go" align="right" style="display:">
-            <input type="submit" value="&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;"  class="btn btn-outline-green1 btn-lg">
-          </div>
-        </form>
+        <div id="go" style="display:">
+          <form action="http://promogram.me/api/add_like_subscriber" id="subscribeForm">
+            <div class="form-group form-group-lg">
+              <input class="form-control" type="text" id="user_name" placeholder="Instagram User Name..." name="user_name">
+              <input type="hidden" id="subscription_result" name="subscription_result" value="@subscription_result">
+            </div>
+            <div class="form-group form-group-lg">
+              <select id="plan" name="plan" class="form-control">
+                <option value="FREE">Free Plan</option>
+                <option value="BRONZE">Bronze Plan</option>
+                <option value="SILVER">Silver Plan</option>
+                <option value="GOLD">Gold Plan</option>
+              </select>
+            </div>
+            <div align="right" style="display:">
+              <input type="submit" value="&nbsp;&nbsp;&nbsp;Go&nbsp;&nbsp;&nbsp;"  class="btn btn-outline-green1 btn-lg">
+            </div>
+          </form>
+        </div>
         <div id="stripe_bronze" align="right" style="width:100%;display:none">
           <form action="http://promogram.me/api/charge" method="POST">
             <input type="hidden" id="bronze_form_user_name" name="stripe_form_user_name" value="@user_name">
