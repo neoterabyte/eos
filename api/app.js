@@ -7,6 +7,7 @@ var cache = require('../shared/lib/cache').getRedisClient();
 var request = require('request');
 var http = require('http');
 var url = require('url');
+var bodyParser = require('body-parser');
 
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
@@ -20,14 +21,11 @@ var port = process.env.PORT || 80;
 // Create our Express router
 var router = express.Router();
 
-var bodyParser = require('body-parser')
+
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
 })); 
-
-app.use(express.json());       // to support JSON-encoded bodies
-app.use(express.urlencoded()); // to support URL-encoded bodies
 
 
 var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
