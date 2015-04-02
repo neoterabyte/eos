@@ -386,8 +386,10 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 				$("#stripe_gold").show();
 			}
 	
-   		}else {
+   		}else if ((result) && (result == "free")){
 			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
+		}else{
+			alertError("oops! something went wrong...");
 		}
 	})
 

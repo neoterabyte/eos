@@ -560,7 +560,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 											res.statusCode = params.error_response_code;
 											res.end (error);
 										}else{
-											var result = { "result": "done" };
+											var result = { "result": "free" };
 											res.end (JSON.stringify(result));
 										}
 
