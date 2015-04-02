@@ -294,7 +294,6 @@ event.preventDefault();
 
 
 $( "#alert_block" ).hide();
-$( "#subscribing_block" ).text("<span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span>Subscribing...");
 $( "#subscribing_block" ).show();
 
 
@@ -312,10 +311,8 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		
 		var result = JSON.parse(data).result;
 		if ((result) && (result == "stripe")){
-			//alertSuccess("User validated, proceed to pay payment...");
-			$( "#subscribing_block" ).show();
-			$( "#subscribing_block" ).text("<span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span>User validated, proceed to pay payment...");
-		}else {
+			alertSuccess("User validated, proceed to pay payment...");
+   		}else {
 			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
 		}
 	})
