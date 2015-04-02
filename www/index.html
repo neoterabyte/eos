@@ -105,7 +105,7 @@ jssor_slider1_starter('slider1_container');
                 <p class="period" style="color:#FFF">Valid for 24 hours</p></td>
             </tr>
             <tr>
-              <td class="bottomround green2" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline-green btn-lg" style="text-align:center" onClick="showSubscribe()">Try now</p></td>
+              <td class="bottomround green2" style="vertical-align:middle;padding-bottom:15px;padding-top:15px;"><p class = "btn btn-outline-green btn-lg" style="text-align:center" onClick="showSubscribe('FREE')">Try now</p></td>
             </tr>
           </table>
         </div>
@@ -323,6 +323,8 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		
 		var result = JSON.parse(data).result;
 		if ((result) && (result == "stripe")){
+			$("#go").hide();
+			$("#pay").show();
 			alertSuccess("User validated, proceed to pay payment...");
    		}else {
 			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
@@ -335,8 +337,8 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 	});   
 });
 
-function showSubscribe(){
-	$("#plan").val("FREE");  
+function showSubscribe(plan){
+	$("#plan").val(plan);  
 	$("#subscription_block" ).show();
 	$("#go").show();
 	$("#cancel_block").hide();
@@ -363,8 +365,6 @@ function showHideCongratulations(){
 	
 	if( subscription_result == "error"){	
 		$("#subscription_block").show();
-		$("#go").hide();
-		$("#pay").show();
 		alertError("oops an error occurred, is your user name is correct? pls try again...");		
 	}else if( subscription_result == "success"){
 		$("#subscription_block").show();
