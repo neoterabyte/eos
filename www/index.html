@@ -208,10 +208,10 @@ jssor_slider1_starter('slider1_container');
         </form>
         <div id="pay" align="right" style="width:100%;display:none">
           <form action="http://promogram.me/api/charge" method="POST">
-          	<input type="hidden" name="plan" value="BRONZE">
-            <input type="hidden" name="user_name" value="@user_name">
+          	<input type="hidden" name="stripe_form_plan" value="BRONZE">
+            <input type="hidden" name="stripe_form_user_name" value="@user_name">
             <script 
-                id="heloo"
+                id="stripe_form_script"
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_AwC7s62OIdwp1lhO8hiZYDt6"
                 data-image="/www/img/checkout.png"
@@ -330,6 +330,28 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		
 		var result = JSON.parse(data).result;
 		if ((result) && (result == "stripe")){
+			
+			/*
+			<form action="http://promogram.me/api/charge" method="POST">
+          	<input type="hidden" name="stripe_form_plan" value="BRONZE">
+            <input type="hidden" name="stripe_form_user_name" value="@user_name">
+            <script 
+                id="stripe_form"
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="pk_test_AwC7s62OIdwp1lhO8hiZYDt6"
+                data-image="/www/img/checkout.png"
+                data-name="Bronze Plan"
+                data-description="Powered by Stripe"
+                data-amount="2000">
+              </script>
+              
+          </form>
+			
+            document.getElementById("stripe_form_script").setAttribute("data-name","BRONZE");
+			*/
+			
+			console.log("Helloooo: " + user_name);
+			
 			$("#go").hide();			
 			$( "#subscribing_block" ).hide();
 			$("#alert_stripe").show();

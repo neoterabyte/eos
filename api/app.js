@@ -702,8 +702,8 @@ router.post('/api/charge', function(req, res) {
 
   	var stripeToken = req.body.stripeToken;
   	var stripeEmail = req.body.stripeEmail;
-  	var plan = req.body.plan;
-  	var user_name = req.body.user_name;
+  	var plan = req.body.stripe_form_plan;
+  	var user_name = req.body.stripe_form_user_name;
 
   	console.log("stripeToken: " + stripeToken);
   	console.log("stripeEmail: " + stripeEmail);
