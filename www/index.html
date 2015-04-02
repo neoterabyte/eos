@@ -35,7 +35,7 @@
 <link rel="icon" href="/www/img/favicon.ico">
 </head>
 
-<body class="bs-docs-home" onLoad="showHideCongratulations();">
+<body class="bs-docs-home" onLoad="showHideCongratulations(); alert($("#heloo" ).data-amount);">
 <a id="skippy" class="sr-only sr-only-focusable" href="#content">
 <div class="container"><span class="skiplink-text">Skip to main content</span></div>
 </a> 
@@ -210,7 +210,8 @@ jssor_slider1_starter('slider1_container');
           <form action="http://promogram.me/api/charge" method="POST">
           	<input type="hidden" name="plan" value="BRONZE">
             <input type="hidden" name="user_name" value="@user_name">
-            <script
+            <script 
+                id="heloo"
                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                 data-key="pk_test_AwC7s62OIdwp1lhO8hiZYDt6"
                 data-image="/www/img/checkout.png"
@@ -218,6 +219,7 @@ jssor_slider1_starter('slider1_container');
                 data-description="Powered by Stripe"
                 data-amount="2000">
               </script>
+              
           </form>
         </div>
       </div>
