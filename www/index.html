@@ -326,9 +326,10 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		
 		var result = JSON.parse(data).result;
 		if ((result) && (result == "stripe")){
-			$("#go").hide();
+			$("#go").hide();			
+			$( "#subscribing_block" ).hide();
+			$("#alert_stripe").show();
 			$("#pay").show();
-			$("#alert_stripe").hide();
    		}else {
 			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
 		}
