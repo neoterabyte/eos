@@ -93,6 +93,8 @@ jssor_slider1_starter('slider1_container');
     <hr class="half-rule">
     <p class="lead" id="Pricing">Choose your preferred plan</p>
     <p>
+    
+    <!--
  <form action="" method="POST">
   <script
     src="https://checkout.stripe.com/checkout.js" class="stripe-button"
@@ -103,10 +105,10 @@ jssor_slider1_starter('slider1_container');
     data-image="/www/img/checkout.png">
   </script>
 </form>
-
+-->
 <script src="https://checkout.stripe.com/checkout.js"></script>
 
-<button id="customButton">Purchase</button>
+<button id="stripe-button">Purchase</button>
 
 <script>
   var handler = StripeCheckout.configure({
