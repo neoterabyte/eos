@@ -330,25 +330,18 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		var result = JSON.parse(data).result;
 		if ((result) && (result == "stripe")){
 			
-			/*
-			<!--<form action="http://promogram.me/api/charge" method="POST">
-          	<input type="hidden" name="stripe_form_plan" value="BRONZE">
-            <input type="hidden" name="stripe_form_user_name" value="@user_name">
-            <script 
-                id="stripe_form"
-                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                data-key="pk_test_AwC7s62OIdwp1lhO8hiZYDt6"
-                data-image="/www/img/checkout.png"
-                data-name="Bronze Plan"
-                data-description="Powered by Stripe"
-                data-amount="2000">
-              </script>
-</form>
--->
-            document.getElementById("stripe_form_script").setAttribute("data-name","BRONZE");
-			*/
+			$("#stripe_form_plan").val(plan);
+			$("#stripe_form_user_name").val(user_name);
 			
-			console.log("Helloooo: " + user_name);
+			if (plan == "BRONZE"){
+				document.getElementById("stripe_form_script").setAttribute("data-amount", "19.99");
+			}else if (plan == "SILVER"){
+				document.getElementById("stripe_form_script").setAttribute("data-amount", "24.99");
+			}else if (plan == "GOLD"){
+				document.getElementById("stripe_form_script").setAttribute("data-amount", "44.99");
+			}
+			
+			document.getElementById("stripe_form_script").setAttribute("data-name", plan + " PLAN");
 			
 			$("#go").hide();			
 			$( "#subscribing_block" ).hide();
