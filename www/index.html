@@ -208,7 +208,7 @@ jssor_slider1_starter('slider1_container');
         </form>
         <div id="pay" align="right" style="width:100%;display:none">
           <form action="http://promogram.me/api/charge" method="POST">
-          	<input type="hidden" name="stripe_form_plan" value="BRONZE">
+            <input type="hidden" name="stripe_form_plan" value="BRONZE">
             <input type="hidden" name="stripe_form_user_name" value="@user_name">
             <script 
                 id="stripe_form_script"
@@ -219,7 +219,6 @@ jssor_slider1_starter('slider1_container');
                 data-description="Powered by Stripe"
                 data-amount="2000">
               </script>
-              
           </form>
         </div>
       </div>
@@ -332,7 +331,7 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		if ((result) && (result == "stripe")){
 			
 			/*
-			<form action="http://promogram.me/api/charge" method="POST">
+			<!--<form action="http://promogram.me/api/charge" method="POST">
           	<input type="hidden" name="stripe_form_plan" value="BRONZE">
             <input type="hidden" name="stripe_form_user_name" value="@user_name">
             <script 
@@ -344,9 +343,8 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
                 data-description="Powered by Stripe"
                 data-amount="2000">
               </script>
-              
-          </form>
-			
+</form>
+-->
             document.getElementById("stripe_form_script").setAttribute("data-name","BRONZE");
 			*/
 			
@@ -506,9 +504,7 @@ var posting = $.get( url, { user_name: cancel_user_name, subscription_plan: canc
 		setTimeout(function(){ $( "#cancel_div" ).hide();  $( "#cancel_block" ).fadeOut("slow"); }, 25000);
 		
 	});   
-});
-
-
-</script>
+}); 
+		</script>
 </body>
 </html>
