@@ -325,7 +325,7 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		if ((result) && (result == "stripe")){
 			$("#go").hide();
 			$("#pay").show();
-			alertSuccess($form.find( "input[name='user_name']" ).val() + " is valid, click below to make payment");
+			alertSuccess("Data validated, click below to checkout.");
    		}else {
 			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
 		}
