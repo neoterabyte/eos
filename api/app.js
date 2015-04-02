@@ -6,8 +6,6 @@ var Log = require('log');
 var cache = require('../shared/lib/cache').getRedisClient();
 var request = require('request');
 var http = require('http');
-var paypal = require('paypal-rest-sdk');
-var session = require('cookie-session');
 var url = require('url');
 
 // Initialize logger
@@ -22,9 +20,15 @@ var port = process.env.PORT || 80;
 // Create our Express router
 var router = express.Router();
 
-//use sessions
-app.set('trust proxy', 1); // trust first proxy 
-app.use(session({secret: "Drac0Dom1ng0"}));
+var bodyParser = require('body-parser')
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+  extended: true
+})); 
+
+app.use(express.json());       // to support JSON-encoded bodies
+app.use(express.urlencoded()); // to support URL-encoded bodies
+
 
 var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
 
@@ -532,12 +536,6 @@ router.get('/api/add_like_subscriber', function(req, res) {
 				var userdata = (JSON.parse(body)).data;
 				if (userdata.length > 0){
 
-					//save session data
-		     		req.session.user_id = userdata[0].id;
-		     		req.session.user_name = userdata[0].username;
-		     		req.session.subscription_plan = subscription_plan;
-		     		req.session.email = email;		
-
 
 					if (subscription_plan == "FREE"){
 
@@ -705,16 +703,15 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 
 router.post('/api/charge', function(req, res) {
 
-  	var stripeToken = req.query.stripeToken;
-  	var stripeEmail = req.query.stripeEmail;
-  	var plan = req.query.plan;
-  	var user_name = req.query.user_name;
+  	var stripeToken = req.body.stripeToken;
+  	var stripeEmail = req.body.stripeEmail;
+  	var plan = req.body.plan;
+  	var user_name = req.body.user_name;
 
   	console.log("stripeToken: " + stripeToken);
   	console.log("stripeEmail: " + stripeEmail);
   	console.log("plan: " + plan);
   	console.log("user_name: " + user_name);
-
 
 	res.redirect("/home?status=success"); 
 

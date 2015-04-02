@@ -23,7 +23,7 @@
     "jarvis"
   ],
   "dependencies": {
-    "body-parser": "^1.x.x",
+    "body-parser": "^1.12.2",
     "cookie-session": "^1.1.0",
     "express": "^4.x.x",
     "fast-csv": "0.6.0",
