@@ -325,7 +325,7 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		if ((result) && (result == "stripe")){
 			$("#go").hide();
 			$("#pay").show();
-			alertSuccess("Data validated, click below to checkout.");
+			alertSuccess("Data validated, click below to checkout.", 1000);
    		}else {
 			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
 		}
@@ -373,7 +373,7 @@ function showHideCongratulations(){
 	}
 }
 
-function alertError(message){
+function alertError(message, timeout){
 	$( "#subscribing_block" ).hide();
 	$( "#alert_info" ).toggleClass("alert-info", false);
 	$( "#alert_info" ).toggleClass("alert-success", false);
@@ -385,11 +385,13 @@ function alertError(message){
 		scrollTop: $("#subscription_block" ).offset().top
 	}, 1500);
 
+	var secs = timeout || 10000;
+	
 //hide after 3 seconds
-setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, 10000);
+setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, timeout);
 }
 
-function alertSuccess(message){
+function alertSuccess(message, timeout){
 
 	$( "#subscribing_block" ).hide();
 	$( "#alert_info" ).toggleClass("alert-info", false);
@@ -401,9 +403,11 @@ function alertSuccess(message){
 	$('html,body').animate({
 		scrollTop: $("#subscription_block" ).offset().top
 	}, 1500);
+	
+	var secs = timeout || 10000;
 
 //hide after 3 seconds
-setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, 10000);
+setTimeout(function(){ $( "#alert_block" ).fadeOut("slow"); }, timeout);
 }
 
 function showCancel(){
