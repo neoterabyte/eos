@@ -565,8 +565,8 @@ router.get('/api/add_like_subscriber', function(req, res) {
 											res.statusCode = params.error_response_code;
 											res.end (error);
 										}else{
-											var reply = { "status": "success" };
-											res.end (JSON.stringify(reply));
+											var result = { "result": "done" };
+											res.end (JSON.stringify(result));
 										}
 
 									});
@@ -593,94 +593,9 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									res.end ("error connection to promogram data");
 
 								}else if ((likesubscriber == null) || (likesubscriber.paypal_agreement_id == '')){
-
-									//Paypal payment
-
-									var plan_id = params.paypal_billing_plan_BRONZE; //default to bronze
-									var plan_price = params.subscription_price_BRONZE;
 									
-									if (subscription_plan == "SILVER"){
-										plan_id = params.paypal_billing_plan_SILVER;
-										plan_price = params.subscription_price_SILVER;
-									}else if (subscription_plan == "GOLD"){
-										plan_id = params.paypal_billing_plan_GOLD;
-										plan_price = params.subscription_price_GOLD;
-									}
-
-									var subscription_date = new Date();
-									//subscription_date.setDate(subscription_date.getDate() + 1);
-
-									// all this date formatting necessary because for some wierd reason paypal ISO date does not include the milliseconds part						
-									var month = subscription_date.getUTCMonth() + 1;
-									month = (month < 10)? "0" + month: month;
-
-									var day = subscription_date.getUTCDate();
-									day = (day < 10)? "0" + day: day;
-
-									var hours = subscription_date.getUTCHours();
-									hours = (hours < 10)? "0" + hours: hours;
-
-									var mins = subscription_date.getUTCMinutes();
-									mins = (mins < 10)? "0" + mins: mins;
-
-									var secs = subscription_date.getUTCSeconds();
-									secs = (secs < 10)? "0" + secs: secs;
-
-									var formatted_date = subscription_date.getUTCFullYear() + "-" + month + "-" + day + "T" + hours + ":" + mins + ":" + secs + "Z";
-									
-									var billingAgreementAttributes = {
-									    "name": subscription_plan + " Subscription Agreement ($" + plan_price + "/month)",
-									    "description": req.session.user_name + "'s " + subscription_plan + " promogram subscription ($" + plan_price + "/month)",
-									    "start_date": formatted_date,
-									    "plan": {
-									        "id": plan_id
-									    },
-									    "payer": {
-									        "payment_method": "paypal"
-									    },
-									    "shipping_address": {
-									    	"line1": "N/A",
-									        "line2": "N/A",
-									        "city": "Hartford",
-									        "state": "CT",
-									        "postal_code": "06114",
-									        "country_code": "US"
-									    }
-									};
-
-									logger.info(JSON.stringify(billingAgreementAttributes));
-
-									// Use billing plan to create agreement
-					                paypal.billingAgreement.create(billingAgreementAttributes, function (error, billingAgreement) {
-					                    if (error) {
-					                        res.statusCode = params.error_response_code;
-											res.end ("error creating billing agreement, please try again");
-
-									    	errmsg = "Error creating paypal subscription agreement: " + error;
-											logger.error(errmsg);
-					                    } else {
-					                        
-					                        
-					                        logger.info(JSON.stringify(billingAgreement));
-					                        
-					                        for (var index = 0; index < billingAgreement.links.length; index++) {
-					                            if (billingAgreement.links[index].rel === 'approval_url') {
-					                                var approval_url = billingAgreement.links[index].href;
-					                                logger.info("For approving subscription via Paypal, first redirect user to");
-					                                logger.info(approval_url);
-
-					                                logger.info("Payment token is");
-					                                logger.info(url.parse(approval_url, true).query.token);
-
-					                                var reply = { "status": "success", "redirect_uri": approval_url };
-													res.end (JSON.stringify(reply));
-
-					                                // See billing_agreements/execute.js to see example for executing agreement 
-					                                // after you have payment token
-					                            }
-					                        }
-					                    }
-					                });
+									var result = { "result": "stripe" };
+									res.end (JSON.stringify(result));
 									
 									
 								}else{
