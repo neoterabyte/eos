@@ -184,7 +184,7 @@ jssor_slider1_starter('slider1_container');
           <p id="alert_info" class="alert alert-info" style="width:100%">@congratulations</p>
         </div>
         <div id="subscribing_block" style="display:none" class="form-group form-group-lg center-block">
-          <p class="alert alert-info" style="width:100%"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span> Subscribing...</p>
+          <p class="alert alert-info" style="width:100%"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>Subscribing...</p>
         </div>
         <form action="http://promogram.me/api/add_like_subscriber" id="subscribeForm">
           <div class="form-group form-group-lg">
@@ -294,6 +294,7 @@ event.preventDefault();
 
 
 $( "#alert_block" ).hide();
+$( "#subscribing_block" ).text("<span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span>Subscribing...");
 $( "#subscribing_block" ).show();
 
 
@@ -311,7 +312,9 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 		
 		var result = JSON.parse(data).result;
 		if ((result) && (result == "stripe")){
-			alertSuccess("Proceeding to stripe...");
+			//alertSuccess("User validated, proceed to pay payment...");
+			$( "#subscribing_block" ).show();
+			$( "#subscribing_block" ).text("<span class='glyphicon glyphicon-refresh glyphicon-refresh-animate'></span>User validated, proceed to pay payment...");
 		}else {
 			alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
 		}
