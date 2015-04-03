@@ -452,7 +452,9 @@ router.get('/api/like_engine', function(req, res) {
 
 										for (k = 0; k < activeAgentTokens.length; k++) { 
 
-											console.log("Image: " + mediadata[x].id + ", Token " + activeAgentTokens[k]);
+											console.log("X isss!! " + x);
+
+											//console.log("Image: " + mediadata[x].id + ", Token " + activeAgentTokens[k]);
 
 											/*
 											request.post(
