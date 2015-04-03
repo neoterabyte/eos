@@ -872,21 +872,21 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 
 						var date_diff = Math.floor((expiration_date_utc - today_utc) / _MS_PER_DAY);
 
-						logger.info("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subcription day(s) left" );
+						logger.info("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subscription day(s) left" );
 						logger.info("-----------------------" );
 
 						if(date_diff <= 0){
 							//cancelation zone
 
 							if (!subscriber[i].cancel_email_sent){
-								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel email has never been sent, lets send it");
+								logger.info("Subscriber: " + subscriber[i].user_name + ": subscrition cancelled and email notification sent");
 
 								//no need to get any feedback from mongo write
 								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { is_active: false , payment_id: '', cancel_email_sent: true}}).exec();
 
 
 							}else{
-								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel email has already been sent");
+								logger.info("Subscriber: " + subscriber[i].user_name + ": subscrition already cancelled");
 							}
 
 						}else if((date_diff > 0) && (date_diff <= 3) && (subscriber[i].subscription_plan != "FREE")){
