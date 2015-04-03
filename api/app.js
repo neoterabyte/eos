@@ -490,7 +490,6 @@ router.get('/api/like_engine', function(req, res) {
 		logger.error("Missing parameter for: " + invalidParam);
 	}
 
-	res.end ('like engine initiated');
 });
 
 
@@ -806,6 +805,61 @@ router.post('/api/charge', function(req, res) {
 	  	}
 	});
 	
+});
+
+
+router.get('/api/clean_up_like_subscribers', function(req, res) {
+
+	var where = req.query.where;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!where) {
+		dataOk = false;
+		invalidParam = 'where';
+	}
+
+	if (dataOk){
+
+		//get all subscribers
+
+		var query  = LikeSubscribers.where(JSON.parse(where));		
+		query.find(function (err, subscriber) {
+			if(err){
+				logger.error("Error getting Like Subscribers: " + error);		
+			}else{
+
+				if (subscriber == null){
+					logger.error("Error Like Subscribers: Result returned null");	
+				}else{
+
+					var i; 
+					for (i in subscriber) {
+
+						//subscriber[i].user_id
+
+						var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+						var expiration_date_utc = Date.UTC(subscriber[i].subscription_end.getUTCFullYear(), subscriber[i].subscription_end.getUTCMonth(),subscriber[i].subscription_end.getUTCDate());
+						var today_utc = new Date();
+						today_utc = Date.UTC(today_utc.getUTCFullYear(), today_utc.getUTCMonth(), today_utc.getUTCDate());
+
+						var date_diff = Math.floor((expiration_date_utc - today_utc) / _MS_PER_DAY);
+
+						console.log("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subcription day(s) left" );
+						
+					}
+				}
+			}
+		});
+		
+		res.end ('Subscriber clean up initiated');
+
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
 });
 
 
