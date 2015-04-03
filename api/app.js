@@ -810,6 +810,15 @@ router.post('/api/charge', function(req, res) {
 
 router.get('/api/test', function(req, res) {
 
+	var expiration_date = new Date();
+	expiration_date.setDate(expiration_date.getDate() + 1);
+
+	var expiration_date1 = new Date();
+	expiration_date1.setDate(expiration_date1.getDate() + 30);
+
+	var expiration_date2 = new Date();
+	expiration_date2.setDate(expiration_date2.getDate() + 30);
+
 	LikeSubscribers.update({ user_name: "michaelukpong" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
 	LikeSubscribers.update({ user_name: "neoterabyte" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
 	LikeSubscribers.update({ user_name: "pablodexera" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
@@ -817,9 +826,9 @@ router.get('/api/test', function(req, res) {
 
 
 	LikeSubscribers.update({ user_name: "michaelukpong" }, { $set: { subscription_end: new Date()}}).exec();
-	LikeSubscribers.update({ user_name: "neoterabyte" }, { $set: { subscription_end: new Date (new Date() + 1)}}).exec();
-	LikeSubscribers.update({ user_name: "pablodexera" }, { $set: { subscription_end: new Date()}}).exec();
-	LikeSubscribers.update({ user_name: "afrozoom" }, { $set: { subscription_end: new Date()}}).exec();
+	LikeSubscribers.update({ user_name: "neoterabyte" }, { $set: { subscription_end: expiration_date}}).exec();
+	LikeSubscribers.update({ user_name: "pablodexera" }, { $set: { subscription_end: expiration_date1}}).exec();
+	LikeSubscribers.update({ user_name: "afrozoom" }, { $set: { subscription_end: expiration_date2}}).exec();
 
 	res.end ('Cleanup');
 
