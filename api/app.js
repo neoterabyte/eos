@@ -685,7 +685,7 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 				if (userdata.length > 0){										
 
 					//no need to get any feedback from mongo write
-					LikeSubscribers.update({ user_id: userdata[0].id }, { $set: { is_active: false , payment_id: ''}}).exec();
+					LikeSubscribers.update({ user_id: userdata[0].id }, { $set: { is_active: false , payment_id: '', cancel_email_sent: false, cancel_reminder_sent: false}}).exec();
 
 					var reply = { "status": "success" };
 					res.end (JSON.stringify(reply));
@@ -846,25 +846,32 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 
 						var date_diff = Math.floor((expiration_date_utc - today_utc) / _MS_PER_DAY);
 
-						//console.log("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subcription day(s) left" );
+						console.log("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subcription day(s) left" );
+						console.log("-----------------------" );
 
-
-							if (!subscriber[i].cancel_email_sent){
-								console.log("Subscriber: " + subscriber[i].user_name + " cancel email has never been sent");
-							}else {
-								console.log("Subscriber: " + subscriber[i].user_name + " cancel email has been sent");
-							}
-
-						/*
 						if(date_diff <= 0){
 							//cancelation zone
 
 							if (!subscriber[i].cancel_email_sent){
+								console.log("Subscriber: " + subscriber[i].user_name + " cancel email has never been sent, lets send it");
+
+								//no need to get any feedback from mongo write
+								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { is_active: false , payment_id: '', cancel_email_sent: true}}).exec();
+
 
 							}
 
 						}else if((date_diff > 0) && (date_diff <= 3)){
 							//reminder zone
+
+							if (!subscriber[i].cancel_reminder_sent){
+								console.log("Subscriber: " + subscriber[i].user_name + " cancel reminder email has never been sent, lets send it");
+
+								//no need to get any feedback from mongo write
+								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { cancel_reminder_sent: true}}).exec();
+
+
+							}
 
 						}*/
 						
@@ -990,6 +997,8 @@ function addLikeSubscribers(user_id, user_name, subscription_plan, email, paymen
 					subscription_end: endDate,
 					subscription_price: amount,
 					payment_id: payment_id,
+					cancel_email_sent: false,
+					cancel_reminder_sent: false,
 					is_active: true
 				},
 				{upsert: true}, 
