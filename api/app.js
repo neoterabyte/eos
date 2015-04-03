@@ -422,6 +422,8 @@ router.get('/api/like_engine', function(req, res) {
 					var i; 
 					for (i in subscriber) {
 
+						console.log("Subscriber!!!!!!!!!!: " + subscriber[i].user_name);
+
 						//use random access_token
 						var randomIndex = Math.floor((Math.random() * activeAgentTokens.length) + 1);
 
@@ -444,7 +446,7 @@ router.get('/api/like_engine', function(req, res) {
 				
 								if(mediadata.length > 0){
 
-									console.log("Media Length: " + mediadata.length);
+									console.log("Media Length!!!!!!!!: " + mediadata.length);
 
 									for (x = 0; x < mediadata.length; x++) { 
 
