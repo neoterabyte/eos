@@ -822,7 +822,8 @@ router.get('/test', function(req, res) {
 		{
     		to: 'mukpong@c2gconsulting.com', 
     		subject: 'Promogram subscription successfull', 
-    		otherProperty: { user_name: 'Don Pablo', date: new Date() } 
+    		user_name: 'Don Pablo', 
+    		date: new Date() 
   		}, function (err) {
 	    	if (err) {
 	      		logger.error("Error while sending confirmation email " + err);
