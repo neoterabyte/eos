@@ -873,7 +873,7 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { cancel_reminder_sent: true}}).exec();
 
 
-							else{
+							}else{
 								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel reminder email already been sent");
 
 							}
