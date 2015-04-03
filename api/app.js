@@ -846,33 +846,37 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 
 						var date_diff = Math.floor((expiration_date_utc - today_utc) / _MS_PER_DAY);
 
-						console.log("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subcription day(s) left" );
-						console.log("-----------------------" );
+						logger.info("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subcription day(s) left" );
+						logger.info("-----------------------" );
 
 						if(date_diff <= 0){
 							//cancelation zone
 
 							if (!subscriber[i].cancel_email_sent){
-								console.log("Subscriber: " + subscriber[i].user_name + " cancel email has never been sent, lets send it");
+								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel email has never been sent, lets send it");
 
 								//no need to get any feedback from mongo write
 								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { is_active: false , payment_id: '', cancel_email_sent: true}}).exec();
 
 
+							}else{
+								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel email has already been sent");
 							}
 
-						}else if((date_diff > 0) && (date_diff <= 3)){
+						}else if((date_diff > 0) && (date_diff <= 3) && (subscriber[i].subscription_plan != "FREE")){
 							//reminder zone
 
 							if (!subscriber[i].cancel_reminder_sent){
-								console.log("Subscriber: " + subscriber[i].user_name + " cancel reminder email has never been sent, lets send it");
+								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel reminder email has never been sent, lets send it");
 
 								//no need to get any feedback from mongo write
 								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { cancel_reminder_sent: true}}).exec();
 
 
-							}
+							else{
+								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel reminder email already been sent");
 
+							}
 						}
 						
 					}
