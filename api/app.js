@@ -814,10 +814,10 @@ router.get('/api/test', function(req, res) {
 	expiration_date.setDate(expiration_date.getDate() + 1);
 
 	var expiration_date1 = new Date();
-	expiration_date1.setDate(expiration_date1.getDate() + 30);
+	expiration_date1.setDate(expiration_date1.getDate() + 0);
 
 	var expiration_date2 = new Date();
-	expiration_date2.setDate(expiration_date2.getDate() + 30);
+	expiration_date2.setDate(expiration_date2.getDate() + 1);
 
 	LikeSubscribers.update({ user_name: "michaelukpong" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
 	LikeSubscribers.update({ user_name: "neoterabyte" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
@@ -879,14 +879,31 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 							//cancelation zone
 
 							if (!subscriber[i].cancel_email_sent){
-								logger.info("Subscriber: " + subscriber[i].user_name + ": subscrition cancelled and email notification sent");
+								logger.info("Subscriber: " + subscriber[i].user_name + ": subscription cancelled and email notification sent");
 
 								//no need to get any feedback from mongo write
 								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { is_active: false , payment_id: '', cancel_email_sent: true}}).exec();
 
+								//send cancel email
+
+								if (subscriber[i].email && (subscriber[i].email != '')){
+									app.mailer.send('email-subscription-cancel', 
+										{
+								    		to: subscriber[i].email, 
+								    		subject: 'Promogram Subscription Cancellation', 
+								    		user_name: subscriber[i].user_name,
+											plan: subscriber[i].subscription_plan
+								  		}, function (err) {
+									    	if (err) {
+									      		logger.error("Error while sending confirmation email " + err);
+									      
+									    	}
+									  });
+								}
+
 
 							}else{
-								logger.info("Subscriber: " + subscriber[i].user_name + ": subscrition already cancelled");
+								logger.info("Subscriber: " + subscriber[i].user_name + ": subscription already cancelled");
 							}
 
 						}else if((date_diff > 0) && (date_diff <= 3) && (subscriber[i].subscription_plan != "FREE")){
@@ -897,6 +914,24 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 
 								//no need to get any feedback from mongo write
 								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { cancel_reminder_sent: true}}).exec();
+
+								//send cancel reminder email
+
+								if (subscriber[i].email && (subscriber[i].email != '')){
+									app.mailer.send('email-subscription-cancel-reminder', 
+										{
+								    		to: subscriber[i].email, 
+								    		subject: 'Promogram Subscription Cancellation', 
+								    		user_name: subscriber[i].user_name,
+											plan: subscriber[i].subscription_plan,
+											expiration_date: subscriber[i].subscription_end
+								  		}, function (err) {
+									    	if (err) {
+									      		logger.error("Error while sending confirmation email " + err);
+									      
+									    	}
+									  });
+								}
 
 
 							}else{
