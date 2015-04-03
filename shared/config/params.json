@@ -1,7 +1,7 @@
 {
 	"default_instagram_api_user": "neoterabyte",
 	"default_instagram_api_access_token": "1519198601.8409d3e.b670c5891b4a4e0c928b00a1fc40f4a7",
-	"order_email": "Promogram Orders <orders@promogram.me>",
+	"order_email": "orders@promogram.me",
 	"order_password": "Dumbled0re*",
 	"cache_prefix": "api:",
 	"error_response_code": "422",

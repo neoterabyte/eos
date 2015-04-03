@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 }));  
  
 mailer.extend(app, {
-	from: params.order_email,
+	from: "Promogram Orders <" + params.order_email + ">",
   	host: 'smtp.gmail.com', // hostname 
   	secureConnection: true, // use SSL 
   	port: 465, // port for secure SMTP 
