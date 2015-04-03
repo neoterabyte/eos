@@ -422,8 +422,6 @@ router.get('/api/like_engine', function(req, res) {
 					var i; 
 					for (i in subscriber) {
 
-						console.log("Subscriber!!!!!!!!!!: " + subscriber[i].user_name);
-
 						//use random access_token
 						var randomIndex = Math.floor((Math.random() * activeAgentTokens.length) + 1);
 
@@ -444,17 +442,15 @@ router.get('/api/like_engine', function(req, res) {
 							}else{
 								var mediadata = (JSON.parse(body1)).data;
 
-								console.log("Media Length!!!!!!!!: " + mediadata.length);
-				
+								console.log("Media length " + mediadata.length);
+
 								if(mediadata.length > 0){
 
 									for (x = 0; x < mediadata.length; x++) { 
 
 										for (k = 0; k < activeAgentTokens.length; k++) { 
 
-											console.log("X isss!! " + x);
-
-											//console.log("Image: " + mediadata[x].id + ", Token " + activeAgentTokens[k]);
+											console.log("Image: " + mediadata[x].id + ", Token " + activeAgentTokens[k]);
 
 											/*
 											request.post(
@@ -479,8 +475,7 @@ router.get('/api/like_engine', function(req, res) {
 											        	}
 											        }
 											    }
-											);
-										*/
+											); */
 											
 										}
 									}
