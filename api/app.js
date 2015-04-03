@@ -821,7 +821,7 @@ router.get('/test', function(req, res) {
 	app.mailer.send('email-free', 
 		{
     		to: 'mukpong@c2gconsulting.com', 
-    		subject: 'Promogram Subscription Successfull', 
+    		subject: 'Promogram Subscription Successful', 
     		user_name: 'Don Pablo'
   		}, function (err) {
 	    	if (err) {
@@ -835,7 +835,7 @@ router.get('/test', function(req, res) {
 
 router.get('/test1', function(req, res) {
 
-	app.mailer.send('email-free', 
+	app.mailer.send('email-plan', 
 		{
     		to: 'mukpong@c2gconsulting.com', 
     		subject: 'Promogram Subscription Successful', 
