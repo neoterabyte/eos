@@ -129,7 +129,7 @@ router.get('/api/oauth', function(req, res) {
 					
 					//Todo: consider also updating Mongo DB with the same information. 
 					//update cache with user's access token
-					//cache.hmset(params.cache_prefix + 'user:' + params.default_api_user, 'access_token', access_token);  
+					//cache.hmset(params.cache_prefix + 'user:' + params.default_instagram_api_user, 'access_token', access_token);  
 					
 					//update agents in mongo
 					Agents.findOneAndUpdate({user_name:user_name}, {user_name:user_name, access_token: access_token, is_active: true}, {upsert: true}, function (err, agent) {});
@@ -507,7 +507,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 	if (dataOk){
 
 		var options = {
-			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
+			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_instagram_api_access_token + "&count=1" 
 		};
 
 		request(options, function (error, response, body) {
@@ -686,7 +686,7 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 	if (dataOk){
 
 		var options = {
-			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
+			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_instagram_api_access_token + "&count=1" 
 		};
 
 		request(options, function (error, response, body) {
@@ -816,7 +816,7 @@ app.use('/', router);
 function addLikeSubscribers(user_id, user_name, subscription_plan, email, callback){
 	
 	var options1 = {
-		url: "https://api.instagram.com/v1/users/" + user_id + "/?access_token=" + params.default_api_access_token
+		url: "https://api.instagram.com/v1/users/" + user_id + "/?access_token=" + params.default_instagram_api_access_token
 	};
 
 	request(options1, function (error1, response1, body1) {

@@ -131,7 +131,7 @@ router.get('/api/oauth', function(req, res) {
 					
 					//Todo: consider also updating Mongo DB with the same information. 
 					//update cache with user's access token
-					//cache.hmset(params.cache_prefix + 'user:' + params.default_api_user, 'access_token', access_token);  
+					//cache.hmset(params.cache_prefix + 'user:' + params.default_instagram_api_user, 'access_token', access_token);  
 					
 					//update agents in mongo
 					Agents.findOneAndUpdate({user_name:user_name}, {user_name:user_name, access_token: access_token, is_active: true}, {upsert: true}, function (err, agent) {});
@@ -509,7 +509,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 	if (dataOk){
 
 		var options = {
-			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
+			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_instagram_api_access_token + "&count=1" 
 		};
 
 		request(options, function (error, response, body) {
@@ -647,7 +647,7 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 	if (dataOk){
 
 		var options = {
-			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_api_access_token + "&count=1" 
+			url: "https://api.instagram.com/v1/users/search?q=" + user_name + "&access_token=" + params.default_instagram_api_access_token + "&count=1" 
 		};
 
 		request(options, function (error, response, body) {
@@ -702,15 +702,50 @@ router.post('/api/charge', function(req, res) {
   	var stripeEmail = req.body.stripeEmail;
   	var plan = req.body.stripe_form_plan;
   	var user_name = req.body.stripe_form_user_name;
+  	var amount;
 
-  	console.log("stripeToken: " + stripeToken);
-  	console.log("stripeEmail: " + stripeEmail);
-  	console.log("plan: " + plan);
-  	console.log("user_name: " + user_name);
-  	console.log("\n: ");
+  	//console.log("stripeToken: " + stripeToken);
+  	//console.log("stripeEmail: " + stripeEmail);
+  	//console.log("plan: " + plan);
+  	//console.log("user_name: " + user_name);
+  
+  	if (plan == "BRONZE"){
+		amount = 1999;					
+	}else if (plan == "SILVER"){
+		amount = 2499;	
+	}else if (plan == "GOLD"){
+		amount = 4499;	
+	}
 
-	res.redirect("/home?status=success"); 
+	//overwrite amount for test purposes
+	amount = 200;
 
+	// Set your secret key: remember to change this to your live secret key in production
+	// See your keys here https://dashboard.stripe.com/account/apikeys
+	var stripe = require("stripe")(params.stripe_api_secret_key);
+
+	var charge = stripe.charges.create({
+	  amount: amount, // amount in cents, again
+	  currency: "usd",
+	  source: stripeToken,
+	  description: "user: " + user_name + ", email: " + stripeEmail
+	}, function(err, charge) {
+		if (err && err.type === 'StripeCardError') {
+	    	// The card has been declined
+	    	res.redirect("/home?status=error&message=" + encodeURI("credit card has been declined")); 
+	    	logger.info("card has been declined" );
+	  	}else if (err){
+	  		res.redirect("/home?status=error"); 
+	  		logger.error("Error charging card: " + JSON.stringify(err));
+	  	}else{
+
+	  		console.log("charge succeed: plan: " + plan);
+  			console.log("charge succeed: plan: user_name: " + user_name);
+	  		
+	  		res.redirect("/home?status=success"); 
+	  	}
+	});
+	
 });
 
 
@@ -721,7 +756,17 @@ router.get('/home', function(req, res) {
 
 	fs.readFile('./www/index.html', 'utf8', function (err,data) {
 		if (!err) {
-			res.end(String(data).replace('@subscription_result',status));
+
+			var message = '';
+
+			if (status && (status == "success"){
+				var message = req.query.message || "Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!";
+			}else if (status && (status == "error"){
+				var message = req.query.message || "oops! an error occurred, please try again...";
+			}
+
+			res.end(String(data).replace('@subscription_result',status)).replace('@subscription_message',message));
+
 		}else{
 			logger.error("Error reading index.html from file" );
 
@@ -752,7 +797,7 @@ app.use('/', router);
 function addLikeSubscribers(user_id, user_name, subscription_plan, email, paypal_agreement_id, callback){
 	
 	var options1 = {
-		url: "https://api.instagram.com/v1/users/" + user_id + "/?access_token=" + params.default_api_access_token
+		url: "https://api.instagram.com/v1/users/" + user_id + "/?access_token=" + params.default_instagram_api_access_token
 	};
 
 	request(options1, function (error1, response1, body1) {

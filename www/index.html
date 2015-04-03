@@ -194,6 +194,7 @@ jssor_slider1_starter('slider1_container');
             <div class="form-group form-group-lg">
               <input class="form-control" type="text" id="user_name" placeholder="Instagram User Name..." name="user_name">
               <input type="hidden" id="subscription_result" name="subscription_result" value="@subscription_result">
+              <input type="hidden" id="subscription_message" name="subscription_message" value="@subscription_message">
             </div>
             <div class="form-group form-group-lg">
               <select id="plan" name="plan" class="form-control">
@@ -432,10 +433,10 @@ function showHideCongratulations(){
 	
 	if( subscription_result == "error"){	
 		$("#subscription_block").show();
-		alertError("oops an error occurred, is your user name is correct? pls try again...");		
+		alertError( $( "#subscription_message" ).val());		
 	}else if( subscription_result == "success"){
 		$("#subscription_block").show();
-		alertSuccess("Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!");
+		alertSuccess($( "#subscription_message" ).val());
 	}
 }
 
