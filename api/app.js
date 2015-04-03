@@ -818,7 +818,21 @@ router.get('/api/html/*', function(req, res) {
 
 router.get('/test', function(req, res) {
 
-	res.render('email-free', { user_name: 'Don pablo picasso', date: new Date() });
+	res.render('email-free', { user_name: 'Don Pablo', date: new Date() });
+});
+
+router.get('/test1', function(req, res) {
+
+	res.render('email-plan', 
+		{ 
+			user_name: 'Don Pablo', 
+			date: new Date(), 
+			charge_id: 'XYZZZZZ', 
+			plan: 'SILVER UNITY', 
+			likes_count: '999',
+			expiration_date: new Date(),
+			amount: '19.99'
+		});
 });
 
 
