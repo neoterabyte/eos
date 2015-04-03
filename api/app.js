@@ -586,13 +586,10 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									res.end ("error connection to promogram data");
 
 								}else if ((likesubscriber == null) || (likesubscriber.payment_id == '')){
-
-									console.log("Hellooooxxxx " + userdata[0].id);
-									
-									var result = { "result": "stripe" };
+	
+									var result = { "result": "stripe", "user_id" : userdata[0].id)};
 									res.end (JSON.stringify(result));
-									
-									
+													
 								}else{
 									logger.info("User is already subscribed to another plan, please cancel the plan first");
 									
@@ -704,12 +701,14 @@ router.post('/api/charge', function(req, res) {
   	var stripeEmail = req.body.stripeEmail;
   	var plan = req.body.stripe_form_plan;
   	var user_name = req.body.stripe_form_user_name;
+  	var user_id = req.body.stripe_form_user_id;
   	var amount;
 
   	//console.log("stripeToken: " + stripeToken);
   	//console.log("stripeEmail: " + stripeEmail);
   	//console.log("plan: " + plan);
   	//console.log("user_name: " + user_name);
+  	console.log("user_id: " + user_id);
   
   	if (plan == "BRONZE"){
 		amount = 1999;					

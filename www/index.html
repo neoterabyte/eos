@@ -212,6 +212,7 @@ jssor_slider1_starter('slider1_container');
         <div id="stripe_bronze" align="right" style="width:100%;display:none">
           <form action="http://promogram.me/api/charge" method="POST">
             <input type="hidden" id="bronze_form_user_name" name="stripe_form_user_name" value="@user_name">
+            <input type="hidden" id="bronze_form_user_id" name="stripe_form_user_id" value="@userid">
             <input type="hidden" id="bronze_form_plan" name="stripe_form_plan" value="BRONZE">
             <script 
                 id="stripe_form_script"
@@ -227,6 +228,7 @@ jssor_slider1_starter('slider1_container');
         <div id="stripe_silver" align="right" style="width:100%;display:none">
           <form action="http://promogram.me/api/charge" method="POST">
             <input type="hidden" id="silver_form_user_name" name="stripe_form_user_name" value="@user_name">
+            <input type="hidden" id="silver_form_user_id" name="stripe_form_user_id" value="@user_id">
             <input type="hidden" id="silver_form_user_name" name="stripe_form_plan" value="SILVER">
             <script 
                 id="stripe_form_script"
@@ -242,6 +244,7 @@ jssor_slider1_starter('slider1_container');
         <div id="stripe_gold" align="right" style="width:100%;display:none">
           <form action="http://promogram.me/api/charge" method="POST">
             <input type="hidden" id="gold_form_user_name" name="stripe_form_user_name" value="@user_name">
+            <input type="hidden" id="gold_form_user_id" name="stripe_form_user_id" value="@user_id">
             <input type="hidden" id="gold_form_user_name" name="stripe_form_plan" value="GOLD">
             <script 
                 id="stripe_form_script"
@@ -361,6 +364,8 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 	posting.done(function( data ) {
 		
 		var result = JSON.parse(data).result;
+		var user_id = JSON.parse(data).user_id;
+		
 		if ((result) && (result == "stripe")){
 									
 			$("#go").hide();			
@@ -372,16 +377,19 @@ var posting = $.get( url, { user_name: user_name, subscription_plan: plan } );
 			
 			if (plan == "BRONZE"){
 				$("#bronze_form_user_name").val(user_name);	
+				$("#bronze_form_user_id").val(user_id);
 				$("#stripe_bronze").show();
 				$("#stripe_silver").hide();
 				$("#stripe_gold").hide();					
 			}else if (plan == "SILVER"){
 				$("#silver_form_user_name").val(user_name);	
+				$("#silver_form_user_id").val(user_id);
 				$("#stripe_bronze").hide();
 				$("#stripe_silver").show();
 				$("#stripe_gold").hide();
 			}else if (plan == "GOLD"){
 				$("#gold_form_user_name").val(user_name);	
+				$("#gold_form_user_id").val(user_id);
 				$("#stripe_bronze").hide();
 				$("#stripe_silver").hide();
 				$("#stripe_gold").show();
