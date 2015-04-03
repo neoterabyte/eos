@@ -821,9 +821,8 @@ router.get('/test', function(req, res) {
 	app.mailer.send('email-free', 
 		{
     		to: 'mukpong@c2gconsulting.com', 
-    		subject: 'Promogram subscription successfull', 
-    		user_name: 'Don Pablo', 
-    		date: new Date() 
+    		subject: 'Promogram Subscription Successfull', 
+    		user_name: 'Don Pablo'
   		}, function (err) {
 	    	if (err) {
 	      		logger.error("Error while sending confirmation email " + err);
@@ -831,15 +830,31 @@ router.get('/test', function(req, res) {
 	    	}
 	  });
 
-	res.render('email-free', { user_name: 'Don Pablo', date: new Date() });
+	res.render('email-free', { user_name: 'Don Pablo' });
 });
 
 router.get('/test1', function(req, res) {
 
+	app.mailer.send('email-free', 
+		{
+    		to: 'mukpong@c2gconsulting.com', 
+    		subject: 'Promogram Subscription Successfull', 
+    		user_name: 'Don Pablo',
+    		charge_id: 'XYZZZZZ', 
+			plan: 'SILVER UNITY', 
+			likes_count: '999',
+			expiration_date: new Date(),
+			amount: '19.99'
+  		}, function (err) {
+	    	if (err) {
+	      		logger.error("Error while sending confirmation email " + err);
+	      
+	    	}
+	  });
+
 	res.render('email-plan', 
 		{ 
 			user_name: 'Don Pablo', 
-			date: new Date(), 
 			charge_id: 'XYZZZZZ', 
 			plan: 'SILVER UNITY', 
 			likes_count: '999',
