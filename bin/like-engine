@@ -9,6 +9,6 @@ do
 
    curl "http://localhost/api/like_engine?time_stamp=$line"
 
-done < timestamp.txt
+done < /srv/www/promogram/bin/timestamp.txt
 
 
