@@ -718,6 +718,7 @@ router.post('/api/charge', function(req, res) {
   	var user_name = req.body.stripe_form_user_name;
   	var user_id = req.body.stripe_form_user_id;
   	var amount;
+  	var likes_count = 100;
 
   	//console.log("stripeToken: " + stripeToken);
   	//console.log("stripeEmail: " + stripeEmail);
@@ -725,11 +726,14 @@ router.post('/api/charge', function(req, res) {
   	//console.log("user_name: " + user_name);
   	//console.log("user_id: " + user_id);
   
-  	if (plan == "BRONZE"){
-		amount = 1999;					
+  	if (plan == "BRONZE"){			
+		likes_count = 150;	
+		amount = 1999;				
 	}else if (plan == "SILVER"){
+		likes_count = 250;	
 		amount = 2499;	
 	}else if (plan == "GOLD"){
+		likes_count = 500;	
 		amount = 4499;	
 	}
 
@@ -772,6 +776,30 @@ router.post('/api/charge', function(req, res) {
       				res.redirect("/home?status=error&message=" + encodeURI("oops! subscription failed, if your card was charged, an automatic refund has been initiated. please try again...")); 
 				}else{
 					logger.info("Add subscriber was successfull");
+
+					var likes_count = 100;
+
+					var expiration_date = new Date();
+					expiration_date.setDate(expiration_date.getDate() + 30);
+
+					//send success email
+					app.mailer.send('email-plan', 
+						{
+				    		to: 'mukpong@c2gconsulting.com', 
+				    		subject: 'Promogram Subscription Successful', 
+				    		user_name: user_name,
+				    		charge_id: charge.id, 
+							plan: plan, 
+							likes_count: likes_count,
+							expiration_date: expiration_date,
+							amount: amount
+				  		}, function (err) {
+					    	if (err) {
+					      		logger.error("Error while sending confirmation email " + err);
+					      
+					    	}
+					  });
+
 					res.redirect("/home?status=success");
 				}
 
