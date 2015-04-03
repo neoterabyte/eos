@@ -808,6 +808,21 @@ router.post('/api/charge', function(req, res) {
 });
 
 
+router.get('/api/test', function(req, res) {
+
+	LikeSubscribers.update({ user_name: "michaelukpong" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
+	LikeSubscribers.update({ user_name: "neoterabyte" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
+	LikeSubscribers.update({ user_name: "pablodexera" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
+	LikeSubscribers.update({ user_name: "afrozoom" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
+
+
+	LikeSubscribers.update({ user_name: "michaelukpong" }, { $set: { subscription_end: new Date()}}).exec();
+	LikeSubscribers.update({ user_name: "neoterabyte" }, { $set: { subscription_end: new Date (new Date() + 1)}}).exec();
+	LikeSubscribers.update({ user_name: "pablodexera" }, { $set: { subscription_end: new Date()}}).exec();
+	LikeSubscribers.update({ user_name: "afrozoom" }, { $set: { subscription_end: new Date()}}).exec();
+
+}
+
 router.get('/api/clean_up_like_subscribers', function(req, res) {
 
 	var where = req.query.where;
