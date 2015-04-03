@@ -815,7 +815,7 @@ router.get('/api/html/*', function(req, res) {
 });
 
 router.get('/test', function(req, res) {
-	res.render('email-free.ejs', { 'teamData' : teamData });
+	res.render('email-free.ejs', {});
 });
 
 
