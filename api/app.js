@@ -818,6 +818,18 @@ router.get('/api/html/*', function(req, res) {
 
 router.get('/test', function(req, res) {
 
+	app.mailer.send('email-free', 
+		{
+    		to: 'mukpong@c2gconsulting.com', 
+    		subject: 'Promogram subscription successfull', 
+    		otherProperty: { user_name: 'Don Pablo', date: new Date() } 
+  		}, function (err) {
+	    	if (err) {
+	      		logger.Error("Error while sending confirmation email " + err);
+	      
+	    	}
+	  });
+
 	res.render('email-free', { user_name: 'Don Pablo', date: new Date() });
 });
 
