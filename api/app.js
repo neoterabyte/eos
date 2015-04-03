@@ -748,7 +748,7 @@ router.post('/api/charge', function(req, res) {
 					logger.error("Add subscriber was not successul but payment was successful (will attempt to reverse payment): " + error);
       				
       				stripe.charges.createRefund(
-					  {charge.id},
+					  charge.id,
 					  {},
 					  function(err, refund) {
 					  }
