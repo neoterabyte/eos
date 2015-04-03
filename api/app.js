@@ -786,6 +786,10 @@ router.get('/www/*', function(req, res) {
 	res.sendFile(process.cwd() + req.path);	
 });
 
+router.get('/', function(req, res) {
+	res.sendFile(process.cwd() + "/www/index.html");	
+});
+
 // Register all our routes with /
 app.use('/', router);
 
