@@ -777,22 +777,20 @@ router.post('/api/charge', function(req, res) {
 				}else{
 					logger.info("Add subscriber was successfull");
 
-					var likes_count = 100;
-
 					var expiration_date = new Date();
 					expiration_date.setDate(expiration_date.getDate() + 30);
 
 					//send success email
 					app.mailer.send('email-plan', 
 						{
-				    		to: 'mukpong@c2gconsulting.com', 
+				    		to: stripeEmail, 
 				    		subject: 'Promogram Subscription Successful', 
 				    		user_name: user_name,
 				    		charge_id: charge.id, 
 							plan: plan, 
 							likes_count: likes_count,
 							expiration_date: expiration_date,
-							amount: amount
+							amount: amount / 100
 				  		}, function (err) {
 					    	if (err) {
 					      		logger.error("Error while sending confirmation email " + err);
@@ -842,53 +840,6 @@ router.get('/home', function(req, res) {
 
 router.get('/api/html/*', function(req, res) {
 	res.sendFile(process.cwd() + req.path);	
-});
-
-router.get('/test', function(req, res) {
-
-	app.mailer.send('email-free', 
-		{
-    		to: 'mukpong@c2gconsulting.com', 
-    		subject: 'Promogram Subscription Successful', 
-    		user_name: 'Don Pablo'
-  		}, function (err) {
-	    	if (err) {
-	      		logger.error("Error while sending confirmation email " + err);
-	      
-	    	}
-	  });
-
-	res.render('email-free', { user_name: 'Don Pablo' });
-});
-
-router.get('/test1', function(req, res) {
-
-	app.mailer.send('email-plan', 
-		{
-    		to: 'mukpong@c2gconsulting.com', 
-    		subject: 'Promogram Subscription Successful', 
-    		user_name: 'Don Pablo',
-    		charge_id: 'XYZZZZZ', 
-			plan: 'SILVER UNITY', 
-			likes_count: '999',
-			expiration_date: new Date(),
-			amount: '19.99'
-  		}, function (err) {
-	    	if (err) {
-	      		logger.error("Error while sending confirmation email " + err);
-	      
-	    	}
-	  });
-
-	res.render('email-plan', 
-		{ 
-			user_name: 'Don Pablo', 
-			charge_id: 'XYZZZZZ', 
-			plan: 'SILVER UNITY', 
-			likes_count: '999',
-			expiration_date: new Date(),
-			amount: '19.99'
-		});
 });
 
 
