@@ -873,8 +873,7 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 						var date_diff = Math.floor((expiration_date_utc - today_utc) / _MS_PER_DAY);
 
 						logger.info("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subscription day(s) left" );
-						logger.info("-----------------------" );
-
+						
 						if(date_diff <= 0){
 							//cancelation zone
 
@@ -921,7 +920,7 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 									app.mailer.send('email-subscription-cancel-reminder', 
 										{
 								    		to: subscriber[i].email, 
-								    		subject: 'Promogram Subscription Cancellation', 
+								    		subject: 'Reminder: Promogram Subscription Cancellation', 
 								    		user_name: subscriber[i].user_name,
 											plan: subscriber[i].subscription_plan,
 											expiration_date: subscriber[i].subscription_end
