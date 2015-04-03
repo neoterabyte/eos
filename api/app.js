@@ -846,7 +846,7 @@ router.get('/api/clean_up_like_subscribers', function(req, res) {
 
 						var date_diff = Math.floor((expiration_date_utc - today_utc) / _MS_PER_DAY);
 
-						console.log("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subcription day(s) left" );
+						//console.log("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subcription day(s) left" );
 
 
 							if (!subscriber[i].cancel_email_sent){
