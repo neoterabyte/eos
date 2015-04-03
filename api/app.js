@@ -8,6 +8,7 @@ var request = require('request');
 var http = require('http');
 var url = require('url');
 var bodyParser = require('body-parser');
+var mailer = require('express-mailer');
 
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
@@ -25,7 +26,19 @@ var router = express.Router();
 app.use( bodyParser.json() );       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: true
-})); 
+}));  
+ 
+mailer.extend(app, {
+	from: params.order_email,
+  	host: 'smtp.gmail.com', // hostname 
+  	secureConnection: true, // use SSL 
+  	port: 465, // port for secure SMTP 
+  	transportMethod: 'SMTP', // default is SMTP. Accepts anything that nodemailer accepts 
+  	auth: {
+    	user: params.order_email,
+    	pass: params.order_password
+  	}
+});
 
 
 var responseHeaderHTML, responseFooterHTML, responseContentHTML, responseErrorHTML;
