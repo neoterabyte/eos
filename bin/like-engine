@@ -5,10 +5,10 @@ do
    echo "latest time stamp: $line"
    current_time=`date +%s`
    echo "will save current time: $current_time in the file for next run"
-   echo "$current_time" > /srv/www/promogram/bin/timestamp.txt
+   echo "$current_time" > /srv/www/timestamp.txt
 
    curl "http://localhost/api/like_engine?time_stamp=$line"
    echo
-done < /srv/www/promogram/bin/timestamp.txt
+done < /srv/www/timestamp.txt
 
 
