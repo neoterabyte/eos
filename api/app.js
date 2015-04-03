@@ -16,6 +16,7 @@ var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
 // Create the Express application
 var app = exports.app = express(); 
 app.set('view engine', 'ejs');  
+app.set('views', __dirname + '/www');
 
 // Define environment variables
 var port = process.env.PORT || 80;
