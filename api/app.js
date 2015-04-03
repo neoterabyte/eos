@@ -759,9 +759,9 @@ router.get('/home', function(req, res) {
 
 			var message = '';
 
-			if (status && (status == "success"){
+			if (status && (status == "success")){
 				var message = req.query.message || "Congratulations, you have successfully registered, enjoy en masse likes on your new instagram posts!";
-			}else if (status && (status == "error"){
+			}else if (status && (status == "error")){
 				var message = req.query.message || "oops! an error occurred, please try again...";
 			}
 
