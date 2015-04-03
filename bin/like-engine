@@ -1,0 +1,14 @@
+#!/bin/bash
+
+while read line
+do
+   echo "latest time stamp: $line"
+   current_time=`date +%s`
+   echo "will save current time: $current_time in the file for next run"
+   echo "$current_time" > timestamp.txt
+
+   curl "http://localhost/api/like_engine?time_stamp=$line"
+
+done < timestamp.txt
+
+
