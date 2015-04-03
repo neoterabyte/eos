@@ -686,7 +686,7 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 				if (userdata.length > 0){										
 
 					//no need to get any feedback from mongo write
-					LikeSubscribers.update({ user_id: userdata[0].id }, { $set: { is_active: false }}).exec();
+					LikeSubscribers.update({ user_id: userdata[0].id }, { $set: { is_active: false , payment_id: ''}}).exec();
 
 					var reply = { "status": "success" };
 					res.end (JSON.stringify(reply));
