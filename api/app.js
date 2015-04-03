@@ -534,14 +534,14 @@ router.get('/api/add_like_subscriber', function(req, res) {
 				logger.error(errmsg + ", like subscriber name: " + user_name);	
 
 				res.statusCode = params.error_response_code;
-				res.end ("error connection to Instagram");
+				res.end ("error connecting to Instagram");
 							
 			} else if (response && response.statusCode != 200) {
 				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
 				logger.error(errmsg  + ", ike subscriber: " + user_name);
 
 				res.statusCode = params.error_response_code;
-				res.end ("error connection to Instagram");
+				res.end ("error connecting to Instagram");
 
 			}else{
 
@@ -671,14 +671,14 @@ router.get('/api/cancel_like_subscriber', function(req, res) {
 				logger.error(errmsg + ", like subscriber name: " + user_name);	
 
 				res.statusCode = params.error_response_code;
-				res.end ("error connection to Instagram");
+				res.end ("error connecting to Instagram");
 							
 			} else if (response && response.statusCode != 200) {
 				errmsg = "Instagram API error: " + http.STATUS_CODES[response.statusCode] + " (" + response.statusCode + ")";		    				
-				logger.error(errmsg  + ", ike subscriber: " + user_name);
+				logger.error(errmsg  + ", like subscriber: " + user_name);
 
 				res.statusCode = params.error_response_code;
-				res.end ("error connection to Instagram");
+				res.end ("error connecting to Instagram");
 
 			}else{
 
@@ -871,13 +871,13 @@ function addLikeSubscribers(user_id, user_name, subscription_plan, email, paymen
 			errmsg = "Instagram API error: " + error1;
 			logger.error(errmsg  + ", user name: " + user_name);
 
-			callback("error connection to Instagram");
+			callback("error connecting to Instagram");
 
 		} else if (response1 && response1.statusCode != 200) {
 			errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
 			logger.error(errmsg +  ", user name: " + user_name);
 
-			callback("error connection to Instagram");
+			callback("error connecting to Instagram");
 
 		}else{
 
