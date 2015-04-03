@@ -592,7 +592,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									res.statusCode = params.error_response_code;
 									res.end ("error connection to promogram data");
 
-								}else if ((likesubscriber == null) || (likesubscriber.paypal_agreement_id == '')){
+								}else if ((likesubscriber == null) || (likesubscriber.payment_id == '')){
 
 									//Paypal payment
 
@@ -997,7 +997,7 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
-function addLikeSubscribers(user_id, user_name, subscription_plan, email, paypal_agreement_id, callback){
+function addLikeSubscribers(user_id, user_name, subscription_plan, email, payment_id, callback){
 	
 	var options1 = {
 		url: "https://api.instagram.com/v1/users/" + user_id + "/?access_token=" + params.default_instagram_api_access_token
@@ -1053,7 +1053,7 @@ function addLikeSubscribers(user_id, user_name, subscription_plan, email, paypal
 					subscription_start: new Date(),
 					subscription_end: endDate,
 					subscription_price: amount,
-					paypal_agreement_id: paypal_agreement_id,
+					payment_id: payment_id,
 					is_active: true
 				},
 				{upsert: true}, 

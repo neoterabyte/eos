@@ -585,7 +585,9 @@ router.get('/api/add_like_subscriber', function(req, res) {
 									res.statusCode = params.error_response_code;
 									res.end ("error connection to promogram data");
 
-								}else if ((likesubscriber == null) || (likesubscriber.paypal_agreement_id == '')){
+								}else if ((likesubscriber == null) || (likesubscriber.payment_id == '')){
+
+									console.log("Hellooooxxxx " + userdata[0].id);
 									
 									var result = { "result": "stripe" };
 									res.end (JSON.stringify(result));
@@ -739,8 +741,19 @@ router.post('/api/charge', function(req, res) {
 	  		logger.error("Error charging card: " + JSON.stringify(err));
 	  	}else{
 
-	  		console.log("charge succeed: plan: " + plan);
-  			console.log("charge succeed: plan: user_name: " + user_name);
+	  		logger.info("Card charge successful for " + user_name +", will attempt to add subscriber to our data base" );
+
+/*	  		addLikeSubscribers(uid, uname, plan, mail, billingAgreement.id, function (error){
+
+				if(error){
+					logger.error("Add subscriber was not successul but paypal payment was successful: " + error);
+      				res.redirect("/home?status=error");
+				}else{
+					logger.error("Paypal payment successful: ");
+					res.redirect("/home?status=success");
+				}
+
+			});*/
 	  		
 	  		res.redirect("/home?status=success"); 
 	  	}
@@ -798,7 +811,7 @@ app.use('/', router);
 //  FUNCTIONS 
 //---------------------------
 
-function addLikeSubscribers(user_id, user_name, subscription_plan, email, paypal_agreement_id, callback){
+function addLikeSubscribers(user_id, user_name, subscription_plan, email, payment_id, callback){
 	
 	var options1 = {
 		url: "https://api.instagram.com/v1/users/" + user_id + "/?access_token=" + params.default_instagram_api_access_token
@@ -854,7 +867,7 @@ function addLikeSubscribers(user_id, user_name, subscription_plan, email, paypal
 					subscription_start: new Date(),
 					subscription_end: endDate,
 					subscription_price: amount,
-					paypal_agreement_id: paypal_agreement_id,
+					payment_id: payment_id,
 					is_active: true
 				},
 				{upsert: true}, 
