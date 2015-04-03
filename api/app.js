@@ -425,6 +425,8 @@ router.get('/api/like_engine', function(req, res) {
 						//use random access_token
 						var randomIndex = Math.floor((Math.random() * activeAgentTokens.length) + 1);
 
+						console.log("URL IS!!!: " + "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?access_token=" + activeAgentTokens[randomIndex] + "&MIN_TIMESTAMP=" + time_stamp);
+
 						var options1 = {
 							url: "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?access_token=" + activeAgentTokens[randomIndex] + "&MIN_TIMESTAMP=" + time_stamp
 						};
