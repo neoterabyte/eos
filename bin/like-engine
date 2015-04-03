@@ -7,7 +7,7 @@ do
    echo "will save current time: $current_time in the file for next run"
    echo "$current_time" > timestamp.txt
 
-   curl "http://localhost/api/like_engine?time_stamp=$line"
+   curl "http://localhost/api/like_engine?time_stamps=$line"
    echo
 done < /srv/www/promogram/bin/timestamp.txt
 
