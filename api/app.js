@@ -708,7 +708,7 @@ router.post('/api/charge', function(req, res) {
   	//console.log("stripeEmail: " + stripeEmail);
   	//console.log("plan: " + plan);
   	//console.log("user_name: " + user_name);
-  	console.log("user_id: " + user_id);
+  	//console.log("user_id: " + user_id);
   
   	if (plan == "BRONZE"){
 		amount = 1999;					
@@ -742,17 +742,26 @@ router.post('/api/charge', function(req, res) {
 
 	  		logger.info("Card charge successful for " + user_name +", will attempt to add subscriber to our data base" );
 
-/*	  		addLikeSubscribers(uid, uname, plan, mail, billingAgreement.id, function (error){
-
+			addLikeSubscribers(user_id, user_name, plan, stripeEmail, stripeToken, function (error){
+				console.log("heeeodooo  " + charge.id);
 				if(error){
-					logger.error("Add subscriber was not successul but paypal payment was successful: " + error);
+					logger.error("Add subscriber was not successul but payment was successful (will attempt to reverse payment): " + error);
+      				
+      				/*
+      				stripe.charges.createRefund(
+					  {CHARGE_ID},
+					  {},
+					  function(err, refund) {
+					  }
+					);*/
+
       				res.redirect("/home?status=error");
 				}else{
 					logger.error("Paypal payment successful: ");
 					res.redirect("/home?status=success");
 				}
 
-			});*/
+			});
 	  		
 	  		res.redirect("/home?status=success"); 
 	  	}
