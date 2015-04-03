@@ -818,7 +818,7 @@ router.get('/api/html/*', function(req, res) {
 
 router.get('/test', function(req, res) {
 
-	res.render('email-free', { user_name: 'Don pablo picasso' });
+	res.render('email-free', { user_name: 'Don pablo picasso', date: new Date() });
 });
 
 
