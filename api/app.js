@@ -808,149 +808,105 @@ router.post('/api/charge', function(req, res) {
 });
 
 
-router.get('/api/test', function(req, res) {
-
-	var expiration_date = new Date();
-	expiration_date.setDate(expiration_date.getDate() + 1);
-
-	var expiration_date1 = new Date();
-	expiration_date1.setDate(expiration_date1.getDate() + 0);
-
-	var expiration_date2 = new Date();
-	expiration_date2.setDate(expiration_date2.getDate() + 1);
-
-	LikeSubscribers.update({ user_name: "michaelukpong" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
-	LikeSubscribers.update({ user_name: "neoterabyte" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
-	LikeSubscribers.update({ user_name: "pablodexera" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
-	LikeSubscribers.update({ user_name: "afrozoom" }, { $set: { cancel_reminder_sent: false, cancel_email_sent: false}}).exec();
-
-
-	LikeSubscribers.update({ user_name: "michaelukpong" }, { $set: { subscription_end: new Date()}}).exec();
-	LikeSubscribers.update({ user_name: "neoterabyte" }, { $set: { subscription_end: expiration_date}}).exec();
-	LikeSubscribers.update({ user_name: "pablodexera" }, { $set: { subscription_end: expiration_date1}}).exec();
-	LikeSubscribers.update({ user_name: "afrozoom" }, { $set: { subscription_end: expiration_date2}}).exec();
-
-	res.end ('Cleanup');
-
-});
-
 router.get('/api/clean_up_like_subscribers', function(req, res) {
+	
+	//get all subscribers
 
-	var where = req.query.where;
+	var query  = LikeSubscribers.where({"is_active":"true"});		
+	query.find(function (err, subscriber) {
+		if(err){
+			logger.error("Error getting Like Subscribers: " + error);		
+		}else{
 
-	var dataOk = true,
-	invalidParam = '';
-		
-	if (!where) {
-		dataOk = false;
-		invalidParam = 'where';
-	}
-
-	if (dataOk){
-
-		//get all subscribers
-
-		var query  = LikeSubscribers.where(JSON.parse(where));		
-		query.find(function (err, subscriber) {
-			if(err){
-				logger.error("Error getting Like Subscribers: " + error);		
+			if (subscriber == null){
+				logger.error("Error Like Subscribers: Result returned null");	
 			}else{
 
-				if (subscriber == null){
-					logger.error("Error Like Subscribers: Result returned null");	
-				}else{
+				var i; 
+				for (i in subscriber) {
 
-					var i; 
-					for (i in subscriber) {
+					//subscriber[i].user_id
 
-						//subscriber[i].user_id
+					var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+					var expiration_date_utc = Date.UTC(subscriber[i].subscription_end.getUTCFullYear(), subscriber[i].subscription_end.getUTCMonth(),subscriber[i].subscription_end.getUTCDate());
+					var today_utc = new Date();
+					today_utc = Date.UTC(today_utc.getUTCFullYear(), today_utc.getUTCMonth(), today_utc.getUTCDate());
 
-						var _MS_PER_DAY = 1000 * 60 * 60 * 24;
-						var expiration_date_utc = Date.UTC(subscriber[i].subscription_end.getUTCFullYear(), subscriber[i].subscription_end.getUTCMonth(),subscriber[i].subscription_end.getUTCDate());
-						var today_utc = new Date();
-						today_utc = Date.UTC(today_utc.getUTCFullYear(), today_utc.getUTCMonth(), today_utc.getUTCDate());
+					var date_diff = Math.floor((expiration_date_utc - today_utc) / _MS_PER_DAY);
 
-						var date_diff = Math.floor((expiration_date_utc - today_utc) / _MS_PER_DAY);
+					logger.info("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subscription day(s) left" );
+					
+					if(date_diff <= 0){
+						//cancelation zone
 
-						logger.info("Subscriber: " + subscriber[i].user_name + " has " + date_diff + " subscription day(s) left" );
-						
-						if(date_diff <= 0){
-							//cancelation zone
+						if (!subscriber[i].cancel_email_sent){
+							logger.info("Subscriber: " + subscriber[i].user_name + ": subscription cancelled and email notification sent");
 
-							if (!subscriber[i].cancel_email_sent){
-								logger.info("Subscriber: " + subscriber[i].user_name + ": subscription cancelled and email notification sent");
+							//no need to get any feedback from mongo write
+							LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { is_active: false , payment_id: '', cancel_email_sent: true}}).exec();
 
-								//no need to get any feedback from mongo write
-								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { is_active: false , payment_id: '', cancel_email_sent: true}}).exec();
+							//send cancel email
 
-								//send cancel email
-
-								if (subscriber[i].email && (subscriber[i].email != '')){
-									app.mailer.send('email-subscription-cancel', 
-										{
-								    		to: subscriber[i].email, 
-								    		subject: 'Promogram Subscription Cancellation', 
-								    		user_name: subscriber[i].user_name,
-											plan: subscriber[i].subscription_plan
-								  		}, function (err) {
-									    	if (err) {
-									      		logger.error("Error while sending confirmation email " + err);
-									      
-									    	}
-									  });
-								}
-
-
-							}else{
-								logger.info("Subscriber: " + subscriber[i].user_name + ": subscription already cancelled");
+							if (subscriber[i].email && (subscriber[i].email != '')){
+								app.mailer.send('email-subscription-cancel', 
+									{
+							    		to: subscriber[i].email, 
+							    		subject: 'Promogram Subscription Cancellation', 
+							    		user_name: subscriber[i].user_name,
+										plan: subscriber[i].subscription_plan
+							  		}, function (err) {
+								    	if (err) {
+								      		logger.error("Error while sending confirmation email " + err);
+								      
+								    	}
+								  });
 							}
 
-						}else if((date_diff > 0) && (date_diff <= 3) && (subscriber[i].subscription_plan != "FREE")){
-							//reminder zone
 
-							if (!subscriber[i].cancel_reminder_sent){
-								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel reminder email has never been sent, lets send it");
-
-								//no need to get any feedback from mongo write
-								LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { cancel_reminder_sent: true}}).exec();
-
-								//send cancel reminder email
-
-								if (subscriber[i].email && (subscriber[i].email != '')){
-									app.mailer.send('email-subscription-cancel-reminder', 
-										{
-								    		to: subscriber[i].email, 
-								    		subject: 'Reminder: Promogram Subscription Cancellation', 
-								    		user_name: subscriber[i].user_name,
-											plan: subscriber[i].subscription_plan,
-											expiration_date: subscriber[i].subscription_end
-								  		}, function (err) {
-									    	if (err) {
-									      		logger.error("Error while sending confirmation email " + err);
-									      
-									    	}
-									  });
-								}
-
-
-							}else{
-								logger.info("Subscriber: " + subscriber[i].user_name + ": cancel reminder email already been sent");
-
-							}
+						}else{
+							logger.info("Subscriber: " + subscriber[i].user_name + ": subscription already cancelled");
 						}
-						
+
+					}else if((date_diff > 0) && (date_diff <= 3) && (subscriber[i].subscription_plan != "FREE")){
+						//reminder zone
+
+						if (!subscriber[i].cancel_reminder_sent){
+							logger.info("Subscriber: " + subscriber[i].user_name + ": cancel reminder email has never been sent, lets send it");
+
+							//no need to get any feedback from mongo write
+							LikeSubscribers.update({ user_id: subscriber[i].user_id }, { $set: { cancel_reminder_sent: true}}).exec();
+
+							//send cancel reminder email
+
+							if (subscriber[i].email && (subscriber[i].email != '')){
+								app.mailer.send('email-subscription-cancel-reminder', 
+									{
+							    		to: subscriber[i].email, 
+							    		subject: 'Reminder: Promogram Subscription Cancellation', 
+							    		user_name: subscriber[i].user_name,
+										plan: subscriber[i].subscription_plan,
+										expiration_date: subscriber[i].subscription_end
+							  		}, function (err) {
+								    	if (err) {
+								      		logger.error("Error while sending confirmation email " + err);
+								      
+								    	}
+								  });
+							}
+
+						}else{
+							logger.info("Subscriber: " + subscriber[i].user_name + ": cancel reminder email already been sent");
+
+						}
 					}
+					
 				}
 			}
-		});
-		
-		res.end ('Subscriber clean up initiated');
+		}
+	});
+	
+	res.end ('Subscriber clean up initiated');
 
-	}else{
-		res.statusCode = params.error_response_code;
-		res.end ('Missing parameter for: ' + invalidParam);
-		logger.error("Missing parameter for: " + invalidParam);
-	}
 });
 
 
