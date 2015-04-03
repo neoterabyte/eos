@@ -444,6 +444,8 @@ router.get('/api/like_engine', function(req, res) {
 				
 								if(mediadata.length > 0){
 
+									console.log("Media Length: " + mediadata.length);
+
 									for (x = 0; x < mediadata.length; x++) { 
 
 										for (k = 0; k < activeAgentTokens.length; k++) { 
