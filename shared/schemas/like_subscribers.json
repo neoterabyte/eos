@@ -14,6 +14,8 @@
   "is_active": "Boolean",
   "last_error": "String",
   "last_media_id": "String",
+  "cancel_email_sent": "Boolean",
+  "cancel_reminder_sent": "Boolean",
   "subscription_history" : 
   	[{
   		"subscription_plan": "String",
