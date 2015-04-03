@@ -743,27 +743,25 @@ router.post('/api/charge', function(req, res) {
 	  		logger.info("Card charge successful for " + user_name +", will attempt to add subscriber to our data base" );
 
 			addLikeSubscribers(user_id, user_name, plan, stripeEmail, stripeToken, function (error){
-				console.log("heeeodooo  " + charge.id);
+				
 				if(error){
 					logger.error("Add subscriber was not successul but payment was successful (will attempt to reverse payment): " + error);
       				
-      				/*
       				stripe.charges.createRefund(
-					  {CHARGE_ID},
+					  {charge.id},
 					  {},
 					  function(err, refund) {
 					  }
-					);*/
+					);
 
-      				res.redirect("/home?status=error");
+      				res.redirect("/home?status=error&message=" + encodeURI("oops! subscription failed, if your card was charged, an automatic refund has been initiated. please try again...")); 
 				}else{
-					logger.error("Paypal payment successful: ");
+					logger.info("Add subscriber was successfull");
 					res.redirect("/home?status=success");
 				}
 
 			});
-	  		
-	  		res.redirect("/home?status=success"); 
+
 	  	}
 	});
 	
