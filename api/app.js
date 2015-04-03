@@ -821,6 +821,8 @@ router.get('/api/test', function(req, res) {
 	LikeSubscribers.update({ user_name: "pablodexera" }, { $set: { subscription_end: new Date()}}).exec();
 	LikeSubscribers.update({ user_name: "afrozoom" }, { $set: { subscription_end: new Date()}}).exec();
 
+	res.end ('Cleanup');
+
 }
 
 router.get('/api/clean_up_like_subscribers', function(req, res) {
