@@ -443,10 +443,10 @@ router.get('/api/like_engine', function(req, res) {
 
 							}else{
 								var mediadata = (JSON.parse(body1)).data;
+
+								console.log("Media Length!!!!!!!!: " + mediadata.length);
 				
 								if(mediadata.length > 0){
-
-									console.log("Media Length!!!!!!!!: " + mediadata.length);
 
 									for (x = 0; x < mediadata.length; x++) { 
 
@@ -454,6 +454,7 @@ router.get('/api/like_engine', function(req, res) {
 
 											console.log("Image: " + mediadata[x].id + ", Token " + activeAgentTokens[k]);
 
+											/*
 											request.post(
 											    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
 											    { form: { 
@@ -477,6 +478,7 @@ router.get('/api/like_engine', function(req, res) {
 											        }
 											    }
 											);
+										*/
 											
 										}
 									}
