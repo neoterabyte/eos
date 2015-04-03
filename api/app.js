@@ -765,7 +765,7 @@ router.get('/home', function(req, res) {
 				var message = req.query.message || "oops! an error occurred, please try again...";
 			}
 
-			res.end(String(data).replace('@subscription_result',status)).replace('@subscription_message',message));
+			res.end((String(data).replace('@subscription_result',status)).replace('@subscription_message',message));
 
 		}else{
 			logger.error("Error reading index.html from file" );
