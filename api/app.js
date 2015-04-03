@@ -823,7 +823,7 @@ router.get('/api/test', function(req, res) {
 
 	res.end ('Cleanup');
 
-}
+});
 
 router.get('/api/clean_up_like_subscribers', function(req, res) {
 
