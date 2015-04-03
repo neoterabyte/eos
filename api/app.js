@@ -15,6 +15,7 @@ var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
 
 // Create the Express application
 var app = exports.app = express(); 
+app.set('view engine', 'ejs');  
 
 // Define environment variables
 var port = process.env.PORT || 80;
@@ -815,7 +816,8 @@ router.get('/api/html/*', function(req, res) {
 });
 
 router.get('/test', function(req, res) {
-	res.render('email-free.ejs', {});
+	//res.render('email-free.ejs', {});
+	res.render('email-free', {});
 });
 
 
