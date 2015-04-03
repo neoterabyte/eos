@@ -814,6 +814,11 @@ router.get('/api/html/*', function(req, res) {
 	res.sendFile(process.cwd() + req.path);	
 });
 
+router.get('/test', function(req, res) {
+	res.render('email-free.ejs', { 'teamData' : teamData });
+});
+
+
 router.get('/www/*', function(req, res) {
 	res.sendFile(process.cwd() + req.path);	
 });
