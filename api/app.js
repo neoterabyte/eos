@@ -838,7 +838,7 @@ router.get('/test1', function(req, res) {
 	app.mailer.send('email-free', 
 		{
     		to: 'mukpong@c2gconsulting.com', 
-    		subject: 'Promogram Subscription Successfull', 
+    		subject: 'Promogram Subscription Successful', 
     		user_name: 'Don Pablo',
     		charge_id: 'XYZZZZZ', 
 			plan: 'SILVER UNITY', 
