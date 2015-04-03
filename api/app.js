@@ -587,7 +587,7 @@ router.get('/api/add_like_subscriber', function(req, res) {
 
 								}else if ((likesubscriber == null) || (likesubscriber.payment_id == '')){
 	
-									var result = { "result": "stripe", "user_id" : userdata[0].id)};
+									var result = { "result": "stripe", "user_id" : userdata[0].id};
 									res.end (JSON.stringify(result));
 													
 								}else{
