@@ -825,7 +825,7 @@ router.get('/test', function(req, res) {
     		otherProperty: { user_name: 'Don Pablo', date: new Date() } 
   		}, function (err) {
 	    	if (err) {
-	      		logger.Error("Error while sending confirmation email " + err);
+	      		logger.error("Error while sending confirmation email " + err);
 	      
 	    	}
 	  });
