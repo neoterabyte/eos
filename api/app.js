@@ -339,6 +339,7 @@ router.get('/api/update_agent_plan', function(req, res) {
 	
 	var user_name = req.query.user_name;
 	var plan = req.query.plan;
+	var overwrite = req.query.overwrite;
 
 	var dataOk = true,
 	invalidParam = '';
@@ -366,15 +367,19 @@ router.get('/api/update_agent_plan', function(req, res) {
 					res.end("No record found: " + err);
 				}else{
 
-					console.log("Agent like plan: " + agent.like_plans);
-					console.log("Agent user_name: " + agent.user_name);
-
-					if (agent.like_plans){
-
-						Agents.update({ user_name: user_name }, { $set: { like_plans: agent.like_plans + ", " + plan}}).exec();
+					if (overwrite){
+						
+						Agents.update({ user_name: user_name }, { $set: { like_plans: plan}}).exec();
 
 					}else{
-						Agents.update({ user_name: user_name }, { $set: { like_plans: plan}}).exec();
+
+						if (agent.like_plans){
+
+							Agents.update({ user_name: user_name }, { $set: { like_plans: agent.like_plans + ", " + plan}}).exec();
+
+						}else{
+							Agents.update({ user_name: user_name }, { $set: { like_plans: plan}}).exec();
+						}
 					}
 					
 					res.end ('Ok');
