@@ -373,6 +373,8 @@ router.get('/api/update_agent_plan', function(req, res) {
 						Agents.update({ user_name: user_name }, { $set: { like_plans: like_plans}}).exec();
 					}
 					
+					res.end ('Ok');
+
 				}
   			}
 		});
