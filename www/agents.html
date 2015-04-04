@@ -38,6 +38,7 @@
 <body class="bs-docs-home" onLoad="loadData();">
 <table id="data" class="table table-bordered table-striped">
   <tr>
+  	<td>#</td>
     <td>user name</td>
     <td>media acount</td>
     <td>follows</td>
@@ -72,21 +73,23 @@
              {},
              function(data) {
 				
-				var table, row, cell_user_name, cell_user_name, cell_media_acount, cell_follows, cell_followed_by, cell_access_token, cell_is_active;
+				var table, row;
 				table = document.getElementById("data");
 				
 				var agents = JSON.parse(data);
 				
 				for (i = 0; i < agents.length; i++) { 
 					row = table.insertRow(0);
-					row.insertCell(0).innerHTML = agents[i].user_name;
-					row.insertCell(0).innerHTML = agents[i].media_count;
-					row.insertCell(0).innerHTML = agents[i].follows;
-					row.insertCell(0).innerHTML = agents[i].followed_by;
-					row.insertCell(0).innerHTML = agents[i].access_token;
-					row.insertCell(0).innerHTML = agents[i].is_active;
+					row.insertCell(1).innerHTML = i+1;
+					row.insertCell(1).innerHTML = agents[i].user_name;
+					row.insertCell(1).innerHTML = agents[i].media_count;
+					row.insertCell(1).innerHTML = agents[i].follows;
+					row.insertCell(1).innerHTML = agents[i].followed_by;
+					row.insertCell(1).innerHTML = agents[i].access_token;
+					row.insertCell(1).innerHTML = agents[i].is_active;
 				}
-             }
+			
+		 	}
 
           );	
 	}
