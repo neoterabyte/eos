@@ -353,7 +353,7 @@ router.get('/api/update_agent_plan', function(req, res) {
 
 	if (dataOk){
 
-		var query  = Agents.where({user_name: username});
+		var query  = Agents.where({user_name: user_name});
 
 		query.find(function (err, agent) {
 			if(err){
