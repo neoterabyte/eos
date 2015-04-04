@@ -367,6 +367,7 @@ router.get('/api/update_agent_plan', function(req, res) {
 				}else{
 
 					console.log("Agent like plan: " + agent.like_plans);
+					console.log("Agent user_name: " + agent.user_name);
 
 					if (agent.like_plans){
 
