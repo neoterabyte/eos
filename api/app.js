@@ -355,7 +355,7 @@ router.get('/api/update_agent_plan', function(req, res) {
 
 		var query  = Agents.where({user_name: user_name});
 
-		query.find(function (err, agent) {
+		query.findOne(function (err, agent) {
 			if(err){
 				res.statusCode = params.error_response_code
 				res.end("Error: " + err);				
