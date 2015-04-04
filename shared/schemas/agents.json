@@ -6,6 +6,8 @@
   "followed_by": "Number",
   "media_count": "Number",
   "last_error": "Boolean",
-  "is_active": "Boolean"
+  "is_active": "Boolean",
+  "like_plans": "String"
+
 }
 

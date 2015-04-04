@@ -334,6 +334,55 @@ router.get('/api/update_agent', function(req, res) {
 	}
 });
 
+router.get('/api/update_agent_plan', function(req, res) {
+
+	
+	var user_name = req.query.user_name;
+	var plan = req.query.plan;
+
+	var dataOk = true,
+	invalidParam = '';
+		
+	if (!user_name) {
+		dataOk = false;
+		invalidParam = 'user_name';
+	}else if (!plan) {
+		dataOk = false;
+		invalidParam = 'plan';
+	}
+
+	if (dataOk){
+
+		var query  = Agents.where({user_name: username});
+
+		query.find(function (err, agent) {
+			if(err){
+				res.statusCode = params.error_response_code
+				res.end("Error: " + err);				
+			}else{
+
+				if (agent == null){
+					res.statusCode = params.error_response_code
+					res.end("No record found: " + err);
+				}else{
+					if (agent.like_plans){
+
+						Agents.update({ user_name: user_name }, { $set: { like_plans: agent.like_plans + ", " + plan}}).exec();
+
+					}else{
+						Agents.update({ user_name: user_name }, { $set: { like_plans: like_plans}}).exec();
+					}
+					
+				}
+  			}
+		});
+	}else{
+		res.statusCode = params.error_response_code;
+		res.end ('Missing parameter for: ' + invalidParam);
+		logger.error("Missing parameter for: " + invalidParam);
+	}
+});
+
 
 
 router.get('/api/agent_inter_follow', function(req, res) {
