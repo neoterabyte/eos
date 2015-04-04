@@ -79,7 +79,7 @@
 				var agents = JSON.parse(data);
 				
 				for (i = 0; i < agents.length; i++) { 
-					row = table.insertRow(1);
+					row = table.insertRow(-1);
 					row.insertCell(-1).innerHTML = i+1;
 					row.insertCell(-1).innerHTML = agents[i].user_name;
 					row.insertCell(-1).innerHTML = agents[i].media_count;
