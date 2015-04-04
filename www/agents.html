@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Meta, title, CSS, favicons, etc. -->
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Promogram: Get famous on instragram in no time">
+<meta name="keywords" content="Instagram, likes, comments, followers, following, fame">
+<meta name="author" content="Promogram Development Team">
+<title>Promogram &middot; Get famous on instragram in no time!</title>
+
+<!-- Bootstrap core CSS -->
+
+<link href="/www/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Documentation extras -->
+
+<link href="/www/css/docs.min.css" rel="stylesheet">
+
+<!--[if lt IE 9]><script src="/www/js/ie8-responsive-file-warning.js"></script><![endif]-->
+<script src="/www/js/ie-emulation-modes-warning.js"></script>
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+<link href="/www/css/jssor.min.css" rel="stylesheet">
+<link href="/www/css/style.css" rel="stylesheet">
+<script src="/www/js/jssor.js"></script>
+
+<!-- Favicons -->
+<link rel="apple-touch-icon" href="/www/img/apple-touch-icon.png">
+<link rel="icon" href="/www/img/favicon.ico">
+</head>
+
+<body class="bs-docs-home" onLoad="loadData();">
+<table id="data" class="table table-bordered table-striped">
+  <tr>
+    <td>user name</td>
+    <td>media acount</td>
+    <td>follows</td>
+    <td>followed by</td>
+    <td>access token</td>
+    <td>active</td>
+  </tr>
+</table>
+
+<!-- Bootstrap core JavaScript
+================================================== --> 
+<!-- Placed at the end of the document so the pages load faster --> 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
+<script src="/www/js/bootstrap.min.js"></script> 
+<script src="/www/js/docs.min.js"></script> 
+
+<!-- IE10 viewport hack for Surface/desktop Windows 8 bug --> 
+<script src="/www/js/ie10-viewport-bug-workaround.js"></script> 
+<script>
+  window.twttr = (function (d,s,id) {
+    var t, js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return; js=d.createElement(s); js.id=id; js.async=1;
+    js.src="https://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
+    return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+  }(document, "script", "twitter-wjs"));
+</script> 
+<script>
+	function loadData(){	
+				
+		$.get( 
+             "http://promogram.me/api/find_agent?where={}",
+             {},
+             function(data) {
+				
+				var table, row, cell_user_name, cell_user_name, cell_media_acount, cell_follows, cell_followed_by, cell_access_token, cell_is_active;
+				table = document.getElementById("data");
+				
+				var agents = JSON.parse(data);
+				
+				for (i = 0; i < agents.length; i++) { 
+					row = table.insertRow(0);
+					row.insertCell(0).innerHTML = agents[i].user_name;
+					row.insertCell(0).innerHTML = agents[i].media_count;
+					row.insertCell(0).innerHTML = agents[i].follows;
+					row.insertCell(0).innerHTML = agents[i].followed_by;
+					row.insertCell(0).innerHTML = agents[i].access_token;
+					row.insertCell(0).innerHTML = agents[i].is_active;
+				}
+             }
+
+          );	
+	}
+</script>
+</body>
+</html>
