@@ -365,6 +365,9 @@ router.get('/api/update_agent_plan', function(req, res) {
 					res.statusCode = params.error_response_code
 					res.end("No record found: " + err);
 				}else{
+
+					console.log("Agent like plan: " + agent.like_plans);
+
 					if (agent.like_plans){
 
 						Agents.update({ user_name: user_name }, { $set: { like_plans: agent.like_plans + ", " + plan}}).exec();
