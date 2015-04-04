@@ -79,14 +79,14 @@
 				var agents = JSON.parse(data);
 				
 				for (i = 0; i < agents.length; i++) { 
-					row = table.insertRow(0);
-					row.insertCell(1).innerHTML = i+1;
-					row.insertCell(1).innerHTML = agents[i].user_name;
-					row.insertCell(1).innerHTML = agents[i].media_count;
-					row.insertCell(1).innerHTML = agents[i].follows;
-					row.insertCell(1).innerHTML = agents[i].followed_by;
-					row.insertCell(1).innerHTML = agents[i].access_token;
-					row.insertCell(1).innerHTML = agents[i].is_active;
+					row = table.insertRow(1);
+					row.insertCell(-1).innerHTML = i+1;
+					row.insertCell(-1).innerHTML = agents[i].user_name;
+					row.insertCell(-1).innerHTML = agents[i].media_count;
+					row.insertCell(-1).innerHTML = agents[i].follows;
+					row.insertCell(-1).innerHTML = agents[i].followed_by;
+					row.insertCell(-1).innerHTML = agents[i].access_token;
+					row.insertCell(-1).innerHTML = agents[i].is_active;
 				}
 			
 		 	}
