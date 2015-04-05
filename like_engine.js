@@ -24,6 +24,7 @@ db.getModel('like_subscribers', function(err, model) {
 function startLikeEngine (agent, timeout){
 
 	var cache_agent_subscriber_queue = params.cache_prefix + "agent:" + agent.user_name + ":subscriber_queue";
+	var cache_agent_subscriber_last_access_time = params.cache_prefix + "agent:" + agent.user_name + ":last_access_time";
 	var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status"
 
 	if (agent.like_plans){
@@ -68,21 +69,7 @@ function startLikeEngine (agent, timeout){
 							//load keys
 							for (i in subscribers) {
 
-								var last_access_time;
-
-								if (subscribers[i].last_access_time){
-									last_access_time = subscribers[i].last_access_time;
-								}else{
-									var last_access_date =  new Date();
-									last_access_date.setDate(last_access_date.getDate() - 1); //set default last access time to yesterday
-									last_access_time = Math.floor(last_access_date / 1000);
-								}
-
-								//update the last access time to now
-								LikeSubscribers.update({ user_id: subscribers[i].user_id }, { $set: { last_access_time: Math.floor(Date.now() / 1000) }}).exec();
-
-
-								cache.lpush(cache_agent_subscriber_queue, subscribers[i].user_id + "::" + last_access_time, function (){});
+								cache.lpush(cache_agent_subscriber_queue, subscribers[i].user_id, function (){});
 								
 							}                                    
 
@@ -93,19 +80,37 @@ function startLikeEngine (agent, timeout){
 
 			}else{
 
-				var subscriber_details =  subscriber.split("::");
-				var subscriber_id = subscriber_details[0];
-				var last_access_time = subscriber_details[1];
+				cache.get (cache_agent_subscriber_last_access_time) function (err, last_access){
 
-				logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber_id + ", last access: " + last_access_time);
+					var last_access_time;
 
-				logger.info("...");
-				logger.info("...");
-				logger.info("...");
+					if (err){
+						logger.error("Error getting last access time for by agent on subscriber" + err);
 
-				logger.info("liking done: " + agent.user_name + ", on subscriber: " + subscriber_id + ", entering into sleep... ");
+					}else if (last_access == null){	
 
-				setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
+						var last_access_date =  new Date();
+						last_access_date.setDate(last_access_date.getDate() - 1); //set default last access time to yesterday
+						last_access_time = Math.floor(last_access_date / 1000);
+
+						
+					}else{
+						last_access_time = last_access;
+					}
+
+					cache.put (cache_agent_subscriber_last_access_time, Math.floor(Date.now() / 1000) ,  function (){});
+
+					logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
+
+					logger.info("...");
+					logger.info("...");
+					logger.info("...");
+
+					logger.info("liking done: " + agent.user_name + ", on subscriber: " + subscriber + ", entering into sleep... ");
+
+					setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
+
+				});
 
 			}
 
