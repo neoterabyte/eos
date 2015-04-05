@@ -100,6 +100,7 @@ function startLikeEngine (agent, timeout){
 					}
 
 					cache.set (cache_agent_subscriber_last_access_time, Math.floor(Date.now() / 1000) ,  function (){});
+					cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
 
 					logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
 
