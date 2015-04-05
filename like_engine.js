@@ -9,6 +9,10 @@ var url = require('url');
 
 var cache_prefix = params.cache_prefix + "agent:";
 
+// Initialize logger
+var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
+
+
 // Retrieve leave context
 db.getModel('like_subscribers', function(err, model) {
     if (err) {
