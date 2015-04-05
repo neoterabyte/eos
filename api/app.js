@@ -482,6 +482,8 @@ router.get('/api/start_like_engine', function(req, res) {
 							cache.set (cache_agent_status, "run",  function (){});	
 						}else if ((agent_status == null) || (agent_status == "stop")){	
 							//status doesnt exist or status is stop, start and set status
+							logger.info("Agent " + agents[i].user_name + ": was not running, will start it now...");
+								
 							
 							likeEngine.startLikeEngine(agents[i], TIMEOUT, true);
 							cache.set (cache_agent_status, "run",  function (){});
