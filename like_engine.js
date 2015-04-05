@@ -21,7 +21,7 @@ db.getModel('like_subscribers', function(err, model) {
 
 function startLikeEngine (agent, timeout){
 
-	console.log("Agent: " + agent);
+	console.log("Agent: " + agent.user_name + " beginning liking...");
 
 	if (agent.like_plans){
 		var plans = agent.like_plans.split(",");
@@ -54,7 +54,7 @@ function startLikeEngine (agent, timeout){
 					var i; 
 					for (i in subscriber) {
 
-						cache.lpush(cache_prefix + agent.user_name, subscriber.user_id, function (){});
+						cache.lpush(cache_prefix + agent.user_name, subscriber[i].user_id, function (){});
 						
 					}
 				}
