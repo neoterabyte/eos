@@ -515,7 +515,7 @@ router.get('/api/stop_like_engine', function(req, res) {
 
 	var TIMEOUT = 7000;
 	var i;
-	
+
 	var query  = Agents.where({is_active: true});
 	query.find(function (err, agents) {
 		if(err){
@@ -549,7 +549,7 @@ router.get('/api/stop_like_engine', function(req, res) {
 						}else if (agent_status == "stop"){
 							//agent already stopped ignoring
 
-							logger.info("Agent " + agents[i].user_name + ": is already stopped ignoring...");
+							logger.info("Agent " + agents[0].user_name + ": is already stopped ignoring...");
 						}
 					});
 				}
