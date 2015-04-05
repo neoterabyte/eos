@@ -162,8 +162,8 @@ cache.del(cache_prefix + agent1.user_name, function (){});
 cache.del(cache_prefix + agent2.user_name, function (){});
 cache.del(cache_prefix + agent3.user_name, function (){});
 
-//startLikeEngine(agent1, 910000);
-//startLikeEngine(agent2, 7000);
+startLikeEngine(agent1, 7000);
+startLikeEngine(agent2, 7000);
 startLikeEngine(agent3, 7000);
 
 
