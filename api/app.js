@@ -527,8 +527,11 @@ router.get('/api/stop_like_engine', function(req, res) {
 				res.end("No agent record found: " + err);
 			}else{
 	
+				var i; 					
+				var agent;
+				for (i = 0; i < agents.length; i++) {
 				
-				for (var agent in agents) {
+					agent = agents[i];
 					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status";
 					
 					(function(agent) { 
