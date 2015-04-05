@@ -80,7 +80,7 @@ function startLikeEngine (agent, timeout){
 
 			}else{
 
-				logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
+				logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber);
 				setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
 
 
