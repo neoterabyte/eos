@@ -99,7 +99,13 @@ function startLikeEngine (agent, timeout){
 
 				logger.info("Beginning liking from agent: " + agent.user_name + ", on subscriber: " + subscriber_id + ", last access: " + last_access_time);
 
-				setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
+				logger.info("...");
+				logger.info("...");
+				logger.info("...");
+
+				logger.info("liking done: " + agent.user_name + ", on subscriber: " + subscriber_id + ", entering into sleep... ");
+
+				setTimeout(function(){ logger.info(agent + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
 
 			}
 
@@ -156,8 +162,8 @@ cache.del(cache_prefix + agent1.user_name, function (){});
 cache.del(cache_prefix + agent2.user_name, function (){});
 cache.del(cache_prefix + agent3.user_name, function (){});
 
-startLikeEngine(agent1, 910000);
-startLikeEngine(agent2, 7000);
+//startLikeEngine(agent1, 910000);
+//startLikeEngine(agent2, 7000);
 startLikeEngine(agent3, 7000);
 
 
