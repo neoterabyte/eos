@@ -469,9 +469,9 @@ router.get('/api/start_like_engine', function(req, res) {
 				res.end("No agent record found: " + err);
 			}else{
 	
-				var i; 					
+				//var i; 					
 				//load keys
-				for (i in agents) {
+				for (i = 0; i < agents.length; i++)) {
 					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status"
 
 					cache.get (cache_agent_status, function (err, agent_status){					
@@ -527,9 +527,9 @@ router.get('/api/stop_like_engine', function(req, res) {
 				res.end("No agent record found: " + err);
 			}else{
 	
-				var i; 					
+				/var i; 					
 				//load keys
-				for (i in agents) {
+				for (i = 0; i < agents.length; i++)) {
 					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status"
 
 					cache.get (cache_agent_status, function (err, agent_status){					
