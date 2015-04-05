@@ -22,7 +22,6 @@ db.getModel('like_subscribers', function(err, model) {
     }   
 });
 
-cache.del(cache_prefix + agent.user_name, function (){});
 
 function startLikeEngine (agent, timeout){
 
@@ -133,6 +132,10 @@ var agent3 =
 "followed_by": 0,
 "like_plans": "FREE,SILVER,GOLD"
 };
+
+cache.del(cache_prefix + agent1.user_name, function (){});
+cache.del(cache_prefix + agent2.user_name, function (){});
+cache.del(cache_prefix + agent3.user_name, function (){});
 
 startLikeEngine(agent1, 10000);
 startLikeEngine(agent2, 600000);
