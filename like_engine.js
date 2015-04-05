@@ -72,7 +72,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 								
 							}                                    
 
-							setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " has woken up"); startLikeEngine(agent, timeout, false); }, timeout);
+							setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " has woken up"); startLikeEngine(agent, timeout, reset_last_access); }, timeout);
 						}
 					}
 				});
