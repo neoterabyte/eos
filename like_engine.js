@@ -27,6 +27,20 @@ function startLikeEngine (agent, timeout){
 
 	console.log("Agent: " + agent.user_name + " beginning liking...");
 
+	cache.rpop(cache_prefix + agent.user_name, function (err, _subscriber){
+
+		if (err){
+			console.log("error popping! " + error);
+		}else{
+			console.long("yaay no error");
+		}
+
+	});
+	
+	/*
+	//clean up key
+	cache.del(cache_prefix + agent.user_name, function (){});
+
 	if (agent.like_plans){
 		var plans = agent.like_plans.split(",");
 		var where = {};
@@ -55,10 +69,7 @@ function startLikeEngine (agent, timeout){
 					logger.error("Error Like Subscribers: Result returned null");	
 				}else{
 
-					var i; 
-					//clean up key
-					cache.del(cache_prefix + agent.user_name, function (){});
-
+					var i; 					
 					//load keys
 					for (i in subscriber) {
 
@@ -70,9 +81,9 @@ function startLikeEngine (agent, timeout){
 		});
 
 	}
-
-
+*/
 	setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
+
 }
 
 
