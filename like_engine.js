@@ -22,68 +22,72 @@ db.getModel('like_subscribers', function(err, model) {
     }   
 });
 
+cache.del(cache_prefix + agent.user_name, function (){});
 
 function startLikeEngine (agent, timeout){
 
-	console.log("Agent: " + agent.user_name + " beginning liking...");
 
-	
-	cache.rpop(cache_prefix + agent.user_name, function (err, _subscriber){
-
-		if (err){
-			console.log("error popping! " + error);
-		}else{
-			console.log("yaay no error: " +  _subscriber);
-		}
-
-	});
-	
-	
-	//clean up key
-	//cache.del(cache_prefix + agent.user_name, function (){});
-/*
 	if (agent.like_plans){
-		var plans = agent.like_plans.split(",");
-		var where = {};
 
-		if (plans.length == 1){
-			where = {is_active: true, subscription_plan: plans[0]};
-		}else if (plans.length == 2){
+	
+		cache.rpop(cache_prefix + agent.user_name, function (err, subscriber){
 
-			where =  { $and : [ { is_active: true }, { $or : [ { subscription_plan : plans[0] }, { subscription_plan : plans[1] } ] } ] };
+			if (err){
+				logger.error("Error popping subscriber data for agent" + agent.user_name + " from redis: " + err);	
+			}else if (subscriber == null){
+				logger.info("All subscriber data popped for" + agent.user_name + " from redis, beginning reloading");	
 
-		}else if (plans.length == 3){
+				var plans = agent.like_plans.split(",");
+				var where = {};
 
-			where =  { $and : [ { is_active: true }, { $or : [ { subscription_plan : plans[0] }, { subscription_plan : plans[1] }, { subscription_plan : plans[2] } ] } ] };
-		}
+				if (plans.length == 1){
+					where = {is_active: true, subscription_plan: plans[0]};
+				}else if (plans.length == 2){
+
+					where =  { $and : [ { is_active: true }, { $or : [ { subscription_plan : plans[0] }, { subscription_plan : plans[1] } ] } ] };
+
+				}else if (plans.length == 3){
+
+					where =  { $and : [ { is_active: true }, { $or : [ { subscription_plan : plans[0] }, { subscription_plan : plans[1] }, { subscription_plan : plans[2] } ] } ] };
+				}
 
 
-		//get all subscribers
+				//get all subscribers
 
-		var query  = LikeSubscribers.where(where);		
-		query.find(function (err, subscriber) {
-			if(err){
-				logger.error("Error getting Like Subscribers: " + error);		
+				var query  = LikeSubscribers.where(where);		
+				query.find(function (err, subscribers) {
+					if(err){
+						logger.error("Error getting Like Subscribers: " + error);		
+					}else{
+
+						if (subscribers == null){
+							logger.error("Error Like Subscribers: Result returned null");	
+						}else{
+
+							var i; 					
+							//load keys
+							for (i in subscribers) {
+
+								cache.lpush(cache_prefix + agent.user_name, subscribers[i].user_id, function (){});
+								
+							}
+
+							setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
+						}
+					}
+				});
+
 			}else{
 
-				if (subscriber == null){
-					logger.error("Error Like Subscribers: Result returned null");	
-				}else{
+				logger.info("Beginning liking for" + agent.user_name + ", subscriber: " + subscriber);	
 
-					var i; 					
-					//load keys
-					for (i in subscriber) {
+				setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
 
-						cache.lpush(cache_prefix + agent.user_name, subscriber[i].user_id, function (){});
-						
-					}
-				}
 			}
+
 		});
-
-	}*/
-
-	setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
+	}
+	
 
 }
 
@@ -130,7 +134,7 @@ var agent3 =
 "like_plans": "FREE,SILVER,GOLD"
 };
 
-startLikeEngine(agent1, 600000);
+startLikeEngine(agent1, 10000);
 startLikeEngine(agent2, 600000);
 startLikeEngine(agent3, 600000);
 
