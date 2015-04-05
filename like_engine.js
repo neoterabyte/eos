@@ -72,7 +72,17 @@ function startLikeEngine (agent, timeout, reset_last_access){
 								
 							}                                    
 
-							setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " has woken up"); startLikeEngine(agent, timeout, reset_last_access); }, timeout);
+							cache.get (cache_agent_status, function (err, agent_status){					
+								if (err) {
+									logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
+								}else if (agent_status == null){	
+									//status doesnt exist, proceed
+									setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " has woken up"); startLikeEngine(agent, timeout, reset_last_access); }, timeout);
+									cache.set (cache_agent_status, "run",  function (){});
+								}else if (agent_status == "stop"){	
+									logger.info("Stopped agent: " + agent.user_name);	
+								}
+							});
 						}
 					}
 				});
@@ -154,8 +164,18 @@ function startLikeEngine (agent, timeout, reset_last_access){
 						}
 					});
 
-					setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " has woken up"); startLikeEngine(agent, timeout, false); }, timeout);
-
+					cache.get (cache_agent_status, function (err, agent_status){					
+						if (err) {
+							logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
+						}else if (agent_status == null){	
+							//status doesnt exist, proceed
+							setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " has woken up"); startLikeEngine(agent, timeout, false); }, timeout);
+							cache.set (cache_agent_status, "run",  function (){});
+						}else if (agent_status == "stop"){	
+							logger.info("Stopped agent: " + agent.user_name);	
+						}
+					});
+					
 				});
 
 			}
@@ -165,8 +185,11 @@ function startLikeEngine (agent, timeout, reset_last_access){
 	
 }
 
+module.exports.startLikeEngine = startLikeEngine;
 
+/*
 
+//Test Data
 
 var agent1 = {
 	"_id": "551f31e418d55d47997e86b2",
@@ -215,6 +238,7 @@ cache.del( params.cache_prefix + "agent:"  + agent3.user_name + ":subscriber_que
 startLikeEngine(agent1, 7000, true);
 startLikeEngine(agent2, 7000, true);
 startLikeEngine(agent3, 7000, true);
+*/
 
 
 
