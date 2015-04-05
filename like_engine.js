@@ -80,11 +80,6 @@ function startLikeEngine (agent, timeout){
 
 			}else{
 
-				logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber);
-				setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
-
-
-				/*
 				var cache_agent_subscriber_last_access_time = params.cache_prefix + "agent:" + agent.user_name + ":subscriber:" + subscriber + ":last_access_time";
 
 				cache.get (cache_agent_subscriber_last_access_time, function (err, last_access){
@@ -169,7 +164,6 @@ function startLikeEngine (agent, timeout){
 					setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
 
 				});
-			*/
 
 			}
 
