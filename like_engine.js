@@ -32,7 +32,7 @@ function startLikeEngine (agent, timeout){
 		if (err){
 			console.log("error popping! " + error);
 		}else{
-			console.long("yaay no error");
+			console.log("yaay no error");
 		}
 
 	});
