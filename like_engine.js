@@ -226,8 +226,8 @@ cache.del( params.cache_prefix + "agent:" + agent1.user_name + ":subscriber_queu
 cache.del( params.cache_prefix + "agent:"  + agent2.user_name + ":subscriber_queue", function (){});
 cache.del( params.cache_prefix + "agent:"  + agent3.user_name + ":subscriber_queue", function (){});
 
-startLikeEngine(agent1, 7000);
-startLikeEngine(agent2, 7000);
+//startLikeEngine(agent1, 7000);
+//startLikeEngine(agent2, 7000);
 startLikeEngine(agent3, 7000);
 
 
