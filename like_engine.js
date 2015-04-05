@@ -27,19 +27,20 @@ function startLikeEngine (agent, timeout){
 
 	console.log("Agent: " + agent.user_name + " beginning liking...");
 
+	/*
 	cache.rpop(cache_prefix + agent.user_name, function (err, _subscriber){
 
 		if (err){
 			console.log("error popping! " + error);
 		}else{
-			console.log("yaay no error");
+			console.log("yaay no error: " +  _subscriber);
 		}
 
 	});
+	*/
 	
-	/*
 	//clean up key
-	cache.del(cache_prefix + agent.user_name, function (){});
+	//cache.del(cache_prefix + agent.user_name, function (){});
 
 	if (agent.like_plans){
 		var plans = agent.like_plans.split(",");
@@ -81,7 +82,7 @@ function startLikeEngine (agent, timeout){
 		});
 
 	}
-*/
+
 	setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
 
 }
