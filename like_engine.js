@@ -29,11 +29,11 @@ function startLikeEngine (agent, timeout){
 	if (agent.like_plans){
 
 	
-		cache.rpop(cache_agent_subscriber_queue, function (err, subscriber){
+		cache.spop(cache_agent_subscriber_queue, function (err, subscriber){
 
 			if (err){
 				logger.error("Error popping subscriber data for agent" + agent.user_name + " from redis: " + err);	
-			}else if (subscriber == null){	
+			}else if ((subscriber == null) || (subscriber.length = 0)){	
 
 				var plans = agent.like_plans.split(",");
 				var where = {};
@@ -69,7 +69,7 @@ function startLikeEngine (agent, timeout){
 							for (i in subscribers) {
 
 								//put subscriber in queue
-								cache.lpush(cache_agent_subscriber_queue, subscribers[i].user_id, function (){});
+								cache.sadd(cache_agent_subscriber_queue, subscribers[i].user_id, function (){});
 								
 							}                                    
 
@@ -80,6 +80,10 @@ function startLikeEngine (agent, timeout){
 
 			}else{
 
+				logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
+
+
+				/*
 				var cache_agent_subscriber_last_access_time = params.cache_prefix + "agent:" + agent.user_name + ":subscriber:" + subscriber + ":last_access_time";
 
 				cache.get (cache_agent_subscriber_last_access_time, function (err, last_access){
@@ -104,15 +108,67 @@ function startLikeEngine (agent, timeout){
 
 					logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
 
-					logger.info("...");
-					logger.info("...");
-					logger.info("...");
+					
+					var options1 = {
+						url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=10&min_timestamp=" + last_access_time
+					};
 
-					logger.info("liking done: " + agent.user_name + ", on subscriber: " + subscriber + ", entering into sleep... ");
+					request(options1, function (error1, response1, body1) {
+
+						if (error1){
+							errmsg = "Instagram API error: " + error1;
+							logger.error(errmsg);
+
+						} else if (response1 && response1.statusCode != 200) {
+							errmsg = "Instagram API error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+							logger.error(errmsg);
+
+						}else{
+							var mediadata = (JSON.parse(body1)).data;
+
+							console.log("Media length " + mediadata.length);
+
+							if(mediadata.length > 0){
+
+								for (x = 0; x < mediadata.length; x++) { 
+
+										
+										request.post(
+										    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
+										    { form: { 
+										    	access_token: agent.access_token
+											} },
+										    function (error2, response2, body2) {									        
+										    	if (error2){
+										    		errmsg = "Instagram like error: " + error2;
+										            logger.error(errmsg);
+										    	} else if (response2 && response2.statusCode != 200) {
+										    		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
+										    		logger.error(errmsg);
+										        }else{
+										        	var code = (JSON.parse(body2)).meta.code;
+										        	if(code != "200"){
+										        		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
+										    			logger.error(errmsg);
+										        	}else{
+										        		logger.info("like done");
+										        	}
+										        }
+										    }
+										); 
+										
+									}
+								}
+
+							}
+
+						}
+					});
 
 					setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
 
 				});
+			*/
 
 			}
 
@@ -165,9 +221,9 @@ var agent3 =
 "like_plans": "FREE,SILVER,GOLD"
 };
 
-cache.del( params.cache_prefix + "agent:" + agent1.user_name + ":subscriber_queue", function (){});
-cache.del( params.cache_prefix + "agent:"  + agent2.user_name + ":subscriber_queue", function (){});
-cache.del( params.cache_prefix + "agent:"  + agent3.user_name + ":subscriber_queue", function (){});
+//cache.del( params.cache_prefix + "agent:" + agent1.user_name + ":subscriber_queue", function (){});
+//cache.del( params.cache_prefix + "agent:"  + agent2.user_name + ":subscriber_queue", function (){});
+//cache.del( params.cache_prefix + "agent:"  + agent3.user_name + ":subscriber_queue", function (){});
 
 startLikeEngine(agent1, 7000);
 startLikeEngine(agent2, 7000);

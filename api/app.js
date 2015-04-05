@@ -488,7 +488,7 @@ router.get('/api/like_engine', function(req, res) {
 						//console.log("URL IS!!!: " + "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?access_token=" + activeAgentTokens[randomIndex] + "&count=50&min_timestamp=" + time_stamp);
 
 						var options1 = {
-							url: "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?access_token=" + activeAgentTokens[randomIndex] + "&count=50&min_timestamp=" + time_stamp
+							url: "https://api.instagram.com/v1/users/" + subscriber[i].user_id + "/media/recent/?access_token=" + activeAgentTokens[randomIndex] + "&count=10&min_timestamp=" + time_stamp
 						};
 
 						request(options1, function (error1, response1, body1) {
