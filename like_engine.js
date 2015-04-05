@@ -75,7 +75,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							cache.get (cache_agent_status, function (err, agent_status){					
 								if (err) {
 									logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
-								}else if (agent_status == null){	
+								}else if ((agent_status == null) || (agent_status == "run")){	
 									//status doesnt exist, proceed
 									setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " has woken up"); startLikeEngine(agent, timeout, reset_last_access); }, timeout);
 									cache.set (cache_agent_status, "run",  function (){});
@@ -167,7 +167,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 					cache.get (cache_agent_status, function (err, agent_status){					
 						if (err) {
 							logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
-						}else if (agent_status == null){	
+						}else if ((agent_status == null) || (agent_status == "run")){	
 							//status doesnt exist, proceed
 							setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " has woken up"); startLikeEngine(agent, timeout, false); }, timeout);
 							cache.set (cache_agent_status, "run",  function (){});
@@ -185,7 +185,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 	
 }
 
-module.exports.startLikeEngine = startLikeEngine;
+//module.exports.startLikeEngine = startLikeEngine;
 
 //Test Data
 
