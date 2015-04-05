@@ -476,7 +476,10 @@ router.get('/api/start_like_engine', function(req, res) {
 
 					cache.get (cache_agent_status, function (err, agent_status){					
 						if (err) {
-							logger.error("Error setting agent run status for " + agents[i].user_name + ": " + err);	
+							logger.error("Error getting agent run status for " + agents[i].user_name + ": " + err + ", will still send the start command anyway");	
+
+							//try to start it anyway
+							cache.set (cache_agent_status, "run",  function (){});	
 						}else if ((agent_status == null) || (agent_status == "stop")){	
 							//status doesnt exist or status is stop, start and set status
 							
@@ -492,8 +495,7 @@ router.get('/api/start_like_engine', function(req, res) {
 								//wait a few secs and start
 								setTimeout(function(){ likeEngine.startLikeEngine(agents[i], TIMEOUT, true); }, TIMEOUT);
 							}else{
-								logger.info("Agent " + agents[i].user_name + ": already running, force restart is off therefore will ignore start");
-								
+								logger.info("Agent " + agents[i].user_name + ": already running, force restart is off therefore will ignore start");								
 							}
 
 						}
@@ -527,7 +529,26 @@ router.get('/api/stop_like_engine', function(req, res) {
 				//load keys
 				for (i in agents) {
 					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status"
-					cache.set (cache_agent_status, "stop",  function (){});
+
+					cache.get (cache_agent_status, function (err, agent_status){					
+						if (err) {
+							logger.error("Error getting agent run status for " + agents[i].user_name + ": " + err + ", will still send the stop command anyway");	
+
+
+							//try to stop it anyway
+							cache.set (cache_agent_status, "stop",  function (){});	
+						}else if ((agent_status == null) || (agent_status == "run")){	
+							//Agent was probably running, try to stop
+							
+							logger.info("Agent " + agents[i].user_name + ": was running, will try to stop");
+							cache.set (cache_agent_status, "stop",  function (){});	
+								
+						}else if (agent_status == "stop"){
+							//agent already stopped ignoring
+
+							logger.info("Agent " + agents[i].user_name + ": is already stopped ignoring...");
+						}
+					});
 				}
 
 				res.end("Stop like engine initiated, check logs for details");  
