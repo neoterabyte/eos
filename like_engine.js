@@ -62,7 +62,7 @@ function startLikeEngine (agent, timeout){
 							logger.error("Error Like Subscribers: Result returned null");	
 						}else{
 
-							logger.info("All subscriber data popped for agent: " + agent.user_name + " from redis, beginning reloading");
+							logger.info("All subscriber data popped for agent: " + agent.user_name + " from redis, reloading...");
 
 							var i; 					
 							//load keys
@@ -86,7 +86,7 @@ function startLikeEngine (agent, timeout){
 								
 							}                                    
 
-							setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
+							setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
 						}
 					}
 				});
@@ -105,7 +105,7 @@ function startLikeEngine (agent, timeout){
 
 				logger.info("liking done: " + agent.user_name + ", on subscriber: " + subscriber_id + ", entering into sleep... ");
 
-				setTimeout(function(){ logger.info(agent + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
+				setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
 
 			}
 
