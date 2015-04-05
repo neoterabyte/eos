@@ -7,8 +7,6 @@ var request = require('request');
 var http = require('http');
 var url = require('url');
 
-var cache_prefix = params.cache_prefix + "agent:";
-
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
 
@@ -25,11 +23,13 @@ db.getModel('like_subscribers', function(err, model) {
 
 function startLikeEngine (agent, timeout){
 
+	var cache_agent_subscriber_queue = params.cache_prefix + "agent:" + agent.user_name + ":subscriber_queue";
+	var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status"
 
 	if (agent.like_plans){
 
 	
-		cache.rpop(cache_prefix + agent.user_name, function (err, subscriber){
+		cache.rpop(cache_agent_subscriber_queue, function (err, subscriber){
 
 			if (err){
 				logger.error("Error popping subscriber data for agent" + agent.user_name + " from redis: " + err);	
@@ -82,7 +82,7 @@ function startLikeEngine (agent, timeout){
 								LikeSubscribers.update({ user_id: subscribers[i].user_id }, { $set: { last_access_time: Math.floor(Date.now() / 1000) }}).exec();
 
 
-								cache.lpush(cache_prefix + agent.user_name, subscribers[i].user_id + "::" + last_access_time, function (){});
+								cache.lpush(cache_agent_subscriber_queue, subscribers[i].user_id + "::" + last_access_time, function (){});
 								
 							}                                    
 
