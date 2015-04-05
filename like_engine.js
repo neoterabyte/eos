@@ -24,7 +24,6 @@ db.getModel('like_subscribers', function(err, model) {
 function startLikeEngine (agent, timeout){
 
 	var cache_agent_subscriber_queue = params.cache_prefix + "agent:" + agent.user_name + ":subscriber_queue";
-	var cache_agent_subscriber_last_access_time = params.cache_prefix + "agent:" + agent.user_name + ":last_access_time";
 	var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status"
 
 	if (agent.like_plans){
@@ -80,6 +79,8 @@ function startLikeEngine (agent, timeout){
 
 			}else{
 
+				var cache_agent_subscriber_last_access_time = params.cache_prefix + "agent:" + agent.user_name + ":subscriber:" + subscriber + ":last_access_time";
+
 				cache.get (cache_agent_subscriber_last_access_time, function (err, last_access){
 
 					var last_access_time;
@@ -92,7 +93,6 @@ function startLikeEngine (agent, timeout){
 						var last_access_date =  new Date();
 						last_access_date.setDate(last_access_date.getDate() - 1); //set default last access time to yesterday
 						last_access_time = Math.floor(last_access_date / 1000);
-
 						
 					}else{
 						last_access_time = last_access;
