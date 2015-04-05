@@ -80,7 +80,7 @@ function startLikeEngine (agent, timeout){
 
 			}else{
 
-				cache.get (cache_agent_subscriber_last_access_time), function (err, last_access){
+				cache.get (cache_agent_subscriber_last_access_time, function (err, last_access){
 
 					var last_access_time;
 
