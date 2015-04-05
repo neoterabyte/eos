@@ -52,6 +52,10 @@ function startLikeEngine (agent, timeout){
 				}else{
 
 					var i; 
+					//clean up key
+					cache.del(cache_prefix + agent.user_name, function (){});
+
+					//load keys
 					for (i in subscriber) {
 
 						cache.lpush(cache_prefix + agent.user_name, subscriber[i].user_id, function (){});
