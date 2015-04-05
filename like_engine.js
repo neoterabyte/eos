@@ -158,9 +158,9 @@ var agent3 =
 "like_plans": "FREE,SILVER,GOLD"
 };
 
-cache.del(cache_prefix + agent1.user_name, function (){});
-cache.del(cache_prefix + agent2.user_name, function (){});
-cache.del(cache_prefix + agent3.user_name, function (){});
+cache.del(cache_prefix + agent1.user_name + ":subscriber_queue", function (){});
+cache.del(cache_prefix + agent2.user_name + ":subscriber_queue", function (){});
+cache.del(cache_prefix + agent3.user_name + ":subscriber_queue", function (){});
 
 startLikeEngine(agent1, 7000);
 startLikeEngine(agent2, 7000);
