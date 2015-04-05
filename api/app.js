@@ -475,10 +475,9 @@ router.get('/api/start_like_engine', function(req, res) {
 				for (i = 0; i < agents.length; i++) {
 				
 					agent = agents[i];
-					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status";
-					
+									
 					(function(agent) { 
-
+						var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status";
 						cache.get (cache_agent_status, function (err, agent_status){					
 							if (err) {
 								logger.error("Error getting agent run status for " + agent.user_name + ": " + err + ", will still send the start command anyway");	
@@ -504,7 +503,7 @@ router.get('/api/start_like_engine', function(req, res) {
 									(function(agent) { 
 										setTimeout(function(){ likeEngine.startLikeEngine(agent, TIMEOUT, true); }, TIMEOUT);
 									})(agent);
-									
+
 								}else{
 									logger.info("Agent " + agent.user_name + ": already running, force restart is off therefore will ignore start");								
 								}
@@ -540,11 +539,11 @@ router.get('/api/stop_like_engine', function(req, res) {
 				var agent;
 				for (i = 0; i < agents.length; i++) {
 				
-					agent = agents[i];
-					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status";
+					agent = agents[i];					
 					
 					(function(agent) { 
 
+						var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status";
 						cache.get (cache_agent_status, function (err, agent_status){					
 							if (err) {
 								logger.error("Error getting agent run status for " + agent.user_name + ": " + err + ", will still send the stop command anyway");	
