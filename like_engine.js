@@ -68,9 +68,23 @@ function startLikeEngine (agent, timeout){
 							//load keys
 							for (i in subscribers) {
 
-								cache.lpush(cache_prefix + agent.user_name, subscribers[i].user_id, function (){});
+								var last_access_time;
+
+								if (subscribers[i].last_access_time){
+									last_access_time = subscribers[i].last_access_time;
+								}else{
+									var last_access_date =  new Date();
+									last_access_date.setDate(last_access_date.getDate() - 1); //set default last access time to yesterday
+									last_access_time = Math.floor(last_access_date / 1000);
+								}
+
+								//update the last access time to now
+								LikeSubscribers.update({ user_id: subscribers[i].user_id }, { $set: { last_access_time: Math.floor(Date.now() / 1000) }}).exec();
+
+
+								cache.lpush(cache_prefix + agent.user_name, subscribers[i].user_id + "::" + last_access_time, function (){});
 								
-							}
+							}                                    
 
 							setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
 						}
@@ -79,7 +93,11 @@ function startLikeEngine (agent, timeout){
 
 			}else{
 
-				logger.info("Beginning liking from agent: " + agent.user_name + ", on subscriber: " + subscriber);	
+				var subscriber_details =  subscriber.split("::");
+				var subscriber_id = subscriber_details[0];
+				var last_access_time = subscriber_details[1];
+
+				logger.info("Beginning liking from agent: " + agent.user_name + ", on subscriber: " + subscriber_id + ", last access: " + last_access_time);
 
 				setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
 
@@ -124,7 +142,7 @@ var agent3 =
 {
 "_id": "551f340418d55d47997e86be",
 "user_name": "jakeogden613_",
-"is_active": true,
+"is_active": true,                           
 "access_token": "1526512795.8409d3e.ec4e1d1e35bd4098a4035be0a0734c75",
 "__v": 0,
 "user_id": "1526512795",
