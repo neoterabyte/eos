@@ -68,6 +68,7 @@ function startLikeEngine (agent, timeout){
 							//load keys
 							for (i in subscribers) {
 
+								//put subscriber in queue
 								cache.lpush(cache_agent_subscriber_queue, subscribers[i].user_id, function (){});
 								
 							}                                    
@@ -91,7 +92,7 @@ function startLikeEngine (agent, timeout){
 					}else if (last_access == null){	
 
 						var last_access_date =  new Date();
-						last_access_date.setDate(last_access_date.getDate() - 1000); //set default last access time to yesterday
+						last_access_date.setDate(last_access_date.getDate() - 1); //set default last access time to yesterday
 						last_access_time = Math.floor(last_access_date / 1000);
 						
 					}else{
