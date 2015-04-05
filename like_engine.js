@@ -81,6 +81,7 @@ function startLikeEngine (agent, timeout){
 			}else{
 
 				logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
+				setTimeout(function(){ logger.info(agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
 
 
 				/*
@@ -221,9 +222,9 @@ var agent3 =
 "like_plans": "FREE,SILVER,GOLD"
 };
 
-//cache.del( params.cache_prefix + "agent:" + agent1.user_name + ":subscriber_queue", function (){});
-//cache.del( params.cache_prefix + "agent:"  + agent2.user_name + ":subscriber_queue", function (){});
-//cache.del( params.cache_prefix + "agent:"  + agent3.user_name + ":subscriber_queue", function (){});
+cache.del( params.cache_prefix + "agent:" + agent1.user_name + ":subscriber_queue", function (){});
+cache.del( params.cache_prefix + "agent:"  + agent2.user_name + ":subscriber_queue", function (){});
+cache.del( params.cache_prefix + "agent:"  + agent3.user_name + ":subscriber_queue", function (){});
 
 startLikeEngine(agent1, 7000);
 startLikeEngine(agent2, 7000);
