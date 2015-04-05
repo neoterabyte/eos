@@ -33,8 +33,7 @@ function startLikeEngine (agent, timeout){
 
 			if (err){
 				logger.error("Error popping subscriber data for agent" + agent.user_name + " from redis: " + err);	
-			}else if (subscriber == null){
-				logger.info("All subscriber data popped for" + agent.user_name + " from redis, beginning reloading");	
+			}else if (subscriber == null){	
 
 				var plans = agent.like_plans.split(",");
 				var where = {};
@@ -63,6 +62,8 @@ function startLikeEngine (agent, timeout){
 							logger.error("Error Like Subscribers: Result returned null");	
 						}else{
 
+							logger.info("All subscriber data popped for " + agent.user_name + " from redis, beginning reloading");
+
 							var i; 					
 							//load keys
 							for (i in subscribers) {
@@ -78,7 +79,7 @@ function startLikeEngine (agent, timeout){
 
 			}else{
 
-				logger.info("Beginning liking for" + agent.user_name + ", subscriber: " + subscriber);	
+				logger.info("Beginning liking for " + agent.user_name + ", subscriber: " + subscriber);	
 
 				setTimeout(function(){ startLikeEngine(agent, timeout); }, timeout);
 
@@ -137,8 +138,8 @@ cache.del(cache_prefix + agent1.user_name, function (){});
 cache.del(cache_prefix + agent2.user_name, function (){});
 cache.del(cache_prefix + agent3.user_name, function (){});
 
-startLikeEngine(agent1, 10000);
-startLikeEngine(agent2, 600000);
+startLikeEngine(agent1, 910000);
+startLikeEngine(agent2, 10000);
 startLikeEngine(agent3, 600000);
 
 
