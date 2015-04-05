@@ -21,7 +21,7 @@ db.getModel('like_subscribers', function(err, model) {
 });
 
 
-function startLikeEngine (agent, timeout){
+function startLikeEngine (agent, timeout, reset_last_access){
 
 	var cache_agent_subscriber_queue = params.cache_prefix + "agent:" + agent.user_name + ":subscriber_queue";
 	var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status"
@@ -72,7 +72,7 @@ function startLikeEngine (agent, timeout){
 								
 							}                                    
 
-							setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
+							setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " has woken up"); startLikeEngine(agent, timeout, false); }, timeout);
 						}
 					}
 				});
@@ -88,10 +88,10 @@ function startLikeEngine (agent, timeout){
 					if (err){
 						logger.error("Error getting last access time for by agent on subscriber" + err);
 
-					}else if (last_access == null){	
+					}else if ((last_access == null) || (reset_last_access)){	
 
 						var last_access_date =  new Date();
-						last_access_date.setDate(last_access_date.getDate() - 1); //set default last access time to yesterday
+						last_access_date.setDate(last_access_date.getDate() - 100); //set default last access time to yesterday
 						last_access_time = Math.floor(last_access_date / 1000);
 						
 					}else{
@@ -154,7 +154,7 @@ function startLikeEngine (agent, timeout){
 						}
 					});
 
-					setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " has woken up"); startLikeEngine(agent, timeout); }, timeout);
+					setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " has woken up"); startLikeEngine(agent, timeout, false); }, timeout);
 
 				});
 
@@ -178,7 +178,7 @@ var agent1 = {
 	"media_count": 8,
 	"follows": 0,
 	"followed_by": 0,
-	"like_plans": "FREE"
+	"like_plans": "FREE,SILVER"
 };
 
 var agent2 ={
@@ -191,7 +191,7 @@ var agent2 ={
 "media_count": 7,
 "follows": 0,
 "followed_by": 0,
-"like_plans": "FREE,SILVER"
+"like_plans": "BRONZE,SILVER"
 };
 
 var agent3 =
@@ -205,16 +205,16 @@ var agent3 =
 "media_count": 4,
 "follows": 0,
 "followed_by": 0,
-"like_plans": "FREE,SILVER,GOLD"
+"like_plans": "FREE,BRONZE"
 };
 
 cache.del( params.cache_prefix + "agent:" + agent1.user_name + ":subscriber_queue", function (){});
 cache.del( params.cache_prefix + "agent:"  + agent2.user_name + ":subscriber_queue", function (){});
 cache.del( params.cache_prefix + "agent:"  + agent3.user_name + ":subscriber_queue", function (){});
 
-//startLikeEngine(agent1, 7000);
-//startLikeEngine(agent2, 7000);
-startLikeEngine(agent3, 7000);
+startLikeEngine(agent1, 7000, true);
+startLikeEngine(agent2, 7000, true);
+startLikeEngine(agent3, 7000, true);
 
 
 
