@@ -452,30 +452,90 @@ router.get('/api/agent_inter_follow', function(req, res) {
 });
 
 
-router.get('/api/like_engine', function(req, res) {
+router.get('/api/start_like_engine', function(req, res) {
 
-	var time_stamp = req.query.time_stamp;
+	var TIMEOUT = 7000;
+	var force_restart = req.query.force_restart;
 
-	var dataOk = true,
-	invalidParam = '';
-		
-	if (!time_stamp) {
-		dataOk = false;
-		invalidParam = 'time_stamp';
-	}
+	var query  = Agents.where({is_active: true});
+	query.find(function (err, agents) {
+		if(err){
+			res.statusCode = params.error_response_code
+			res.end("Error: " + err);				
+		}else{
 
-	if (dataOk){
+			if (agents == null){
+				res.statusCode = params.error_response_code
+				res.end("No agent record found: " + err);
+			}else{
+	
+				var i; 					
+				//load keys
+				for (i in agents) {
+					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status"
 
-		
-		res.end ('like engine initiated');
+					cache.get (cache_agent_status, function (err, agent_status){					
+						if (err) {
+							logger.error("Error setting agent run status for " + agents[i].user_name + ": " + err);	
+						}else if ((agent_status == null) || (agent_status == "stop")){	
+							//status doesnt exist or status is stop, start and set status
+							
+							likeEngine.startLikeEngine(agents[i], TIMEOUT, true);
+							cache.set (cache_agent_status, "run",  function (){});
+						}else if (agent_status == "run"){
+							//agent running, check if force_restart is on, if on, restart, if not ignore. 
 
-	}else{
-		res.statusCode = params.error_response_code;
-		res.end ('Missing parameter for: ' + invalidParam);
-		logger.error("Missing parameter for: " + invalidParam);
-	}
+							if (force_restart){
+								logger.info("Agent " + agents[i].user_name + ": already running, force restart is active therefore will kill agent first and restart");
+								cache.set (cache_agent_status, "stop",  function (){});
 
+								//wait a few secs and start
+								setTimeout(function(){ likeEngine.startLikeEngine(agents[i], TIMEOUT, true); }, TIMEOUT);
+							}else{
+								logger.info("Agent " + agents[i].user_name + ": already running, force restart is off therefore will ignore start");
+								
+							}
+
+						}
+					});
+
+				}
+
+				res.end("Like engine initiated, check logs for details");  
+			}
+		}
+	});
 });
+
+router.get('/api/stop_like_engine', function(req, res) {
+
+	var TIMEOUT = 7000;
+	
+	var query  = Agents.where({is_active: true});
+	query.find(function (err, agents) {
+		if(err){
+			res.statusCode = params.error_response_code
+			res.end("Error: " + err);				
+		}else{
+
+			if (agents == null){
+				res.statusCode = params.error_response_code
+				res.end("No agent record found: " + err);
+			}else{
+	
+				var i; 					
+				//load keys
+				for (i in agents) {
+					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status"
+					cache.set (cache_agent_status, "stop",  function (){});
+				}
+
+				res.end("Stop like engine initiated, check logs for details");  
+			}
+		}
+	});
+});
+
 
 
 router.get('/api/add_like_subscriber', function(req, res) {
