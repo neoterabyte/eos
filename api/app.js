@@ -514,6 +514,7 @@ router.get('/api/start_like_engine', function(req, res) {
 router.get('/api/stop_like_engine', function(req, res) {
 
 	var TIMEOUT = 7000;
+	var i;
 	
 	var query  = Agents.where({is_active: true});
 	query.find(function (err, agents) {
