@@ -27,11 +27,10 @@ function startLikeEngine (agent, timeout){
 	var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status"
 
 	if (agent.like_plans){
-
 	
 		cache.spop(cache_agent_subscriber_queue, function (err, subscriber){
 
-			if (err){
+			if (err) {
 				logger.error("Error popping subscriber data for agent" + agent.user_name + " from redis: " + err);	
 			}else if ((subscriber == null) || (subscriber.length = 0)){	
 
@@ -124,38 +123,32 @@ function startLikeEngine (agent, timeout){
 
 							console.log("Media length " + mediadata.length);
 
-							if(mediadata.length > 0){
-
-								for (x = 0; x < mediadata.length; x++) { 
-
+							for (x = 0; x < mediadata.length; x++) { 
 										
-										request.post(
-										    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
-										    { form: { 
-										    	access_token: agent.access_token
-											} },
-										    function (error2, response2, body2) {									        
-										    	if (error2){
-										    		errmsg = "Instagram like error: " + error2;
-										            logger.error(errmsg);
-										    	} else if (response2 && response2.statusCode != 200) {
-										    		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
-										    		logger.error(errmsg);
-										        }else{
-										        	var code = (JSON.parse(body2)).meta.code;
-										        	if(code != "200"){
-										        		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
-										    			logger.error(errmsg);
-										        	}else{
-										        		logger.info("like done");
-										        	}
-										        }
-										    }
-										); 
-										
-									}
-								}
-
+								request.post(
+								    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
+								    { form: { 
+								    	access_token: agent.access_token
+									} },
+								    function (error2, response2, body2) {									        
+								    	if (error2){
+								    		errmsg = "Instagram like error: " + error2;
+								            logger.error(errmsg);
+								    	} else if (response2 && response2.statusCode != 200) {
+								    		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
+								    		logger.error(errmsg);
+								        }else{
+								        	var code = (JSON.parse(body2)).meta.code;
+								        	if(code != "200"){
+								        		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
+								    			logger.error(errmsg);
+								        	}else{
+								        		logger.info("like done");
+								        	}
+								        }
+								    }
+								); 
+								
 							}
 
 						}
@@ -170,7 +163,6 @@ function startLikeEngine (agent, timeout){
 		});
 	}
 	
-
 }
 
 
