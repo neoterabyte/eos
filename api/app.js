@@ -530,12 +530,15 @@ router.get('/api/stop_like_engine', function(req, res) {
 	
 				//var i; 					
 				//load keys
+				var agent;
+
 				for (i = 0; i < agents.length; i++) {
 					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status"
+					agent = agents[i];
 
 					cache.get (cache_agent_status, function (err, agent_status){					
 						if (err) {
-							logger.error("Error getting agent run status for " + agents[i].user_name + ": " + err + ", will still send the stop command anyway");	
+							logger.error("Error getting agent run status for " + agent.user_name + ": " + err + ", will still send the stop command anyway");	
 
 
 							//try to stop it anyway
@@ -549,7 +552,7 @@ router.get('/api/stop_like_engine', function(req, res) {
 						}else if (agent_status == "stop"){
 							//agent already stopped ignoring
 
-							logger.info("Agent " + agents[0].user_name + ": is already stopped ignoring...");
+							logger.info("Agent " + agent.user_name + ": is already stopped ignoring...");
 						}
 					});
 				}
