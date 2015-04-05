@@ -54,7 +54,7 @@ function startLikeEngine (agent, timeout){
 					var i; 
 					for (i in subscriber) {
 
-						cache.lpush(cache_prefix + agent.user_name, subscriber.user_id);
+						cache.lpush(cache_prefix + agent.user_name, subscriber.user_id, function (){});
 						
 					}
 				}
