@@ -9,6 +9,7 @@ var http = require('http');
 var url = require('url');
 var bodyParser = require('body-parser');
 var mailer = require('express-mailer');
+var likeEngine = require('../like_engine');
 
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
@@ -469,40 +470,48 @@ router.get('/api/start_like_engine', function(req, res) {
 				res.end("No agent record found: " + err);
 			}else{
 	
-				//var i; 					
-				//load keys
+				var i; 					
+				var agent;
 				for (i = 0; i < agents.length; i++) {
+				
+					agent = agents[i];
 					var cache_agent_status = params.cache_prefix + "agent:" + agents[i].user_name + ":status";
+					
+					(function(agent) { 
 
-					cache.get (cache_agent_status, function (err, agent_status){					
-						if (err) {
-							logger.error("Error getting agent run status for " + agents[i].user_name + ": " + err + ", will still send the start command anyway");	
+						cache.get (cache_agent_status, function (err, agent_status){					
+							if (err) {
+								logger.error("Error getting agent run status for " + agent.user_name + ": " + err + ", will still send the start command anyway");	
 
-							//try to start it anyway
-							cache.set (cache_agent_status, "run",  function (){});	
-						}else if ((agent_status == null) || (agent_status == "stop")){	
-							//status doesnt exist or status is stop, start and set status
-							logger.info("Agent " + agents[i].user_name + ": was not running, will start it now...");
+								//try to start it anyway
+								likeEngine.startLikeEngine(agent, TIMEOUT, true);
+								cache.set (cache_agent_status, "run",  function (){});	
+							}else if ((agent_status == null) || (agent_status == "stop")){	
+								//status doesnt exist or status is stop, start and set status
+								logger.info("Agent " + agent.user_name + ": was not running, will start it now...");
+									
 								
-							
-							likeEngine.startLikeEngine(agents[i], TIMEOUT, true);
-							cache.set (cache_agent_status, "run",  function (){});
-						}else if (agent_status == "run"){
-							//agent running, check if force_restart is on, if on, restart, if not ignore. 
+								likeEngine.startLikeEngine(agent, TIMEOUT, true);
+								cache.set (cache_agent_status, "run",  function (){});
+							}else if (agent_status == "run"){
+								//agent running, check if force_restart is on, if on, restart, if not ignore. 
 
-							if (force_restart){
-								logger.info("Agent " + agents[i].user_name + ": already running, force restart is active therefore will kill agent first and restart");
-								cache.set (cache_agent_status, "stop",  function (){});
+								if (force_restart){
+									logger.info("Agent " + agent.user_name + ": already running, force restart is active therefore will kill agent first and restart");
+									cache.set (cache_agent_status, "stop",  function (){});
 
-								//wait a few secs and start
-								setTimeout(function(){ likeEngine.startLikeEngine(agents[i], TIMEOUT, true); }, TIMEOUT);
-							}else{
-								logger.info("Agent " + agents[i].user_name + ": already running, force restart is off therefore will ignore start");								
+									//wait a few secs and start
+									(function(agent) { 
+										setTimeout(function(){ likeEngine.startLikeEngine(agent, TIMEOUT, true); }, TIMEOUT);
+									})(agent);
+									
+								}else{
+									logger.info("Agent " + agent.user_name + ": already running, force restart is off therefore will ignore start");								
+								}
+
 							}
-
-						}
-					});
-
+						});
+					})(agent);
 				}
 
 				res.end("Like engine initiated, check logs for details");  

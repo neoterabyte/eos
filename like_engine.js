@@ -168,7 +168,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 						if (err) {
 							logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
 						}else if ((agent_status == null) || (agent_status == "run")){	
-							//status doesnt exist, proceed
+							//status doesnt exist or status is run, proceed
 							setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " has woken up"); startLikeEngine(agent, timeout, false); }, timeout);
 							cache.set (cache_agent_status, "run",  function (){});
 						}else if (agent_status == "stop"){	
@@ -185,8 +185,9 @@ function startLikeEngine (agent, timeout, reset_last_access){
 	
 }
 
-//module.exports.startLikeEngine = startLikeEngine;
+module.exports.startLikeEngine = startLikeEngine;
 
+/*
 //Test Data
 
 var agent1 = {
@@ -236,6 +237,7 @@ cache.del( params.cache_prefix + "agent:"  + agent3.user_name + ":subscriber_que
 startLikeEngine(agent1, 7000, true);
 startLikeEngine(agent2, 7000, true);
 startLikeEngine(agent3, 7000, true);
+*/
 
 
 
