@@ -97,7 +97,7 @@ function startLikeEngine (agent, timeout){
 				var subscriber_id = subscriber_details[0];
 				var last_access_time = subscriber_details[1];
 
-				logger.info("Beginning liking from agent: " + agent.user_name + ", on subscriber: " + subscriber_id + ", last access: " + last_access_time);
+				logger.info("Start agent liking: " + agent.user_name + ", on subscriber: " + subscriber_id + ", last access: " + last_access_time);
 
 				logger.info("...");
 				logger.info("...");
