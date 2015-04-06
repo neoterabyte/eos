@@ -123,11 +123,11 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							//logger.info("LIKEENGINE: hourly api limit for agent: " + agent.user_name + ", " + response1.headers["X-Ratelimit-Limit"]);
 										
 							if (error1){
-								errmsg = "Instagram API error: agent: " + agent + ", error: " + error1;
+								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + error1;
 								logger.error(errmsg);
 
 							} else if (response1 && response1.statusCode != 200) {
-								errmsg = "Instagram API error: agent: " + agent + ", error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
 								logger.error(errmsg);
 
 							}else{
@@ -135,12 +135,12 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 								//console.log("Media length " + mediadata.length);
 
-								for (x = 0; x < mediadata.length; x++) { 
+								if (mediadata.length > 0){
 
-									if (mediadata.length > 0){
+									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
+																		
+									for (x = 0; x < mediadata.length; x++) { 
 
-										logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
-										
 										/*	
 										request.post(
 										    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
