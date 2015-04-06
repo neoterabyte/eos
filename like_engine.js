@@ -119,7 +119,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 						request(options1, function (error1, response1, body1) {
 
-							logger.info("LIKEENGINE: remaining hourly api limit for agent: " + agent.user_name + ", " + response1.headers["X-Ratelimit-Remaining"]);
+							//logger.info("LIKEENGINE: remaining hourly api limit for agent: " + agent.user_name + ", " + response1.headers["X-Ratelimit-Remaining"]);
 							//logger.info("LIKEENGINE: hourly api limit for agent: " + agent.user_name + ", " + response1.headers["X-Ratelimit-Limit"]);
 										
 							if (error1){
@@ -139,7 +139,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 									if (mediadata.length > 0){
 
-										//logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
+										logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
 										
 										/*	
 										request.post(
