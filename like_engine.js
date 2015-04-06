@@ -61,7 +61,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							logger.error("Error Like Subscribers: Result returned null");	
 						}else{
 
-							logger.info("LIKEENGINE: all subscriber data popped for agent: " + agent.user_name + " from redis, reloading...");
+							//logger.info("LIKEENGINE: all subscriber data popped for agent: " + agent.user_name + " from redis, reloading...");
 
 							var i; 					
 							//load keys
@@ -77,7 +77,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 									logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
 								}else if ((agent_status == null) || (agent_status == "run")){	
 									//status doesnt exist, proceed
-									setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " has woken up"); startLikeEngine(agent, timeout, reset_last_access); }, timeout);
+									setTimeout(function(){ /*logger.info("LIKEENGINE: " +  agent.user_name + " has woken up");*/ startLikeEngine(agent, timeout, reset_last_access); }, timeout);
 									cache.set (cache_agent_status, "run",  function (){});
 								}else if (agent_status == "stop"){	
 									logger.info("Stopped agent: " + agent.user_name);	
@@ -113,7 +113,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 					logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
 
-					
+					/*
 					var options1 = {
 						url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=10&min_timestamp=" + last_access_time
 					};
@@ -131,7 +131,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 						}else{
 							var mediadata = (JSON.parse(body1)).data;
 
-							console.log("Media length " + mediadata.length);
+							//console.log("Media length " + mediadata.length);
 
 							for (x = 0; x < mediadata.length; x++) { 
 										
@@ -162,14 +162,14 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							}
 
 						}
-					});
+					});*/
 
 					cache.get (cache_agent_status, function (err, agent_status){					
 						if (err) {
 							logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
 						}else if ((agent_status == null) || (agent_status == "run")){	
 							//status doesnt exist or status is run, proceed
-							setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " has woken up"); startLikeEngine(agent, timeout, false); }, timeout);
+							setTimeout(function(){ /*logger.info("LIKEENGINE: " + agent.user_name + " has woken up");*/ startLikeEngine(agent, timeout, false); }, timeout);
 							cache.set (cache_agent_status, "run",  function (){});
 						}else if (agent_status == "stop"){	
 							logger.info("Stopped agent: " + agent.user_name);	

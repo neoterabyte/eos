@@ -455,9 +455,9 @@ router.get('/api/agent_inter_follow', function(req, res) {
 
 router.get('/api/start_like_engine', function(req, res) {
 
-	logger.info("----------------------------------------------------------\nLike Engine Start Process:\n----------------------------------------------------------");
+	logger.info("\nLike Engine Start Process:\n----------------------------------------------------------");
 
-	var TIMEOUT = 7000;
+	var TIMEOUT = 15000;
 	var force_restart = req.query.force_restart;
 
 	var query  = Agents.where({is_active: true});
@@ -524,9 +524,9 @@ router.get('/api/start_like_engine', function(req, res) {
 router.get('/api/stop_like_engine', function(req, res) {
 
 	
-	logger.info("----------------------------------------------------------\nLike Engine Stop Process:\n----------------------------------------------------------");
+	logger.info("\nLike Engine Stop Process:\n----------------------------------------------------------");
 
-		var TIMEOUT = 7000;
+		var TIMEOUT = 15000;
 
 	var query  = Agents.where({is_active: true});
 	query.find(function (err, agents) {
