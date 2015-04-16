@@ -114,7 +114,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 					(function(agent) { 
 					
 						var options1 = {
-							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=10&min_timestamp=" + last_access_time
+							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time
 						};
 
 						request(options1, function (error1, response1, body1) {
@@ -141,7 +141,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 																		
 									for (x = 0; x < mediadata.length; x++) { 
 
-										/*	
+										
 										request.post(
 										    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
 										    { form: { 
@@ -164,7 +164,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 										        	}
 										        }
 										    }
-										); */
+										); 
 									}
 									
 								}
