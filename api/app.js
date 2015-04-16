@@ -457,7 +457,7 @@ router.get('/api/start_like_engine', function(req, res) {
 
 	logger.info("\nLike Engine Start Process:\n----------------------------------------------------------");
 
-	var TIMEOUT = 15000;
+	var TIMEOUT = 30000;
 	var force_restart = req.query.force_restart;
 
 	var query  = Agents.where({is_active: true});
@@ -476,7 +476,7 @@ router.get('/api/start_like_engine', function(req, res) {
 				var agent;
 				for (i = 0; i < agents.length; i++) {
 				
-					agent = agents[i];
+					aa = agents[i];
 									
 					(function(agent) { 
 						var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status";
@@ -512,7 +512,7 @@ router.get('/api/start_like_engine', function(req, res) {
 
 							}
 						});
-					})(agent);
+					})(aa);
 				}
 
 				res.end("Like engine initiated, check logs for details");  
@@ -544,7 +544,7 @@ router.get('/api/stop_like_engine', function(req, res) {
 				var agent;
 				for (i = 0; i < agents.length; i++) {
 				
-					agent = agents[i];					
+					aa = agents[i];					
 					
 					(function(agent) { 
 
@@ -569,7 +569,7 @@ router.get('/api/stop_like_engine', function(req, res) {
 							}
 						});
 
-					})(agent);
+					})(aa);
 				}
 
 				res.end("Stop like engine initiated, check logs for details");  
