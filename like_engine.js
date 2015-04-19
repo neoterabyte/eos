@@ -52,8 +52,6 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 				//get all subscribers
 
-				console.log("hiiii");
-
 				var query  = LikeSubscribers.where(where);		
 				query.find(function (err, subscribers) {
 					if(err){
@@ -64,7 +62,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							logger.error("Error Like Subscribers: Result returned null");	
 						}else{
 
-							//logger.info("LIKEENGINE: all subscriber data popped for agent: " + agent.user_name + " from redis, reloading...");
+							logger.info("LIKEENGINE: all subscriber data popped for agent: " + agent.user_name + " from redis, reloading...");
 
 							var i; 					
 							//load keys
