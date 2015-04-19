@@ -6,6 +6,7 @@ var cache = require('./shared/lib/cache').getRedisClient();
 var request = require('request');
 var http = require('http');
 var url = require('url');
+var crypto = require('crypto');
 
 // Initialize logger
 var logger = new Log(process.env.PROMOGRAM_LOG_LEVEL || 'info');
@@ -112,10 +113,16 @@ function startLikeEngine (agent, timeout, reset_last_access){
 					cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
 
 					(function(agent) { 
+
+						var signature = "/users/" + subscriber + "|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
+						var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
+
+						console.log("Signature is: " + sig);
 					
 						var options1 = {
 							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time
 						};
+
 
 						request(options1, function (error1, response1, body1) {
 
