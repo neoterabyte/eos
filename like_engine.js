@@ -120,7 +120,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 						console.log("Signature is: " + sig);
 					
 						var options1 = {
-							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time
+							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
 						};
 
 
@@ -140,7 +140,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							}else{
 								var mediadata = (JSON.parse(body1)).data;
 
-								//console.log("Media length " + mediadata.length);
+								console.log("Media length " + mediadata.length);
 
 								if (mediadata.length > 0){
 
