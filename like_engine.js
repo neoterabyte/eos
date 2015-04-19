@@ -115,7 +115,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 					(function(agent) { 
 
 						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
-						var sig = "x"+crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
+						var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
 
 						var options1 = {
 							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
@@ -158,7 +158,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 										    		errmsg = "Instagram like error: " + error2;
 										            logger.error(errmsg);
 										    	} else if (response2 && response2.statusCode != 200) {
-										    		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + ")";
+										    		errmsg = "Instagram like error: Invalid response: " + http.STATUS_CODES[response2.statusCode] + " (" + response2.statusCode + "), details: " + JSON.parse(response1.body).error_message;
 										    		logger.error(errmsg);
 										        }else{
 										        	var code = (JSON.parse(body2)).meta.code;
