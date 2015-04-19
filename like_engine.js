@@ -115,7 +115,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 					(function(agent) { 
 
 						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
-						var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
+						var sig = "x"+crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
 
 						var options1 = {
 							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
@@ -134,7 +134,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							} else if (response1 && response1.statusCode != 200) {
 								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
 								logger.error(errmsg);
-								logger.error("Detailed error message: " + response1.error_message);
+								logger.error("Detailed error message: " + body1.error_message);
 
 							}else{
 								var mediadata = (JSON.parse(body1)).data;
@@ -268,6 +268,6 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
-//startLikeEngine(agent4, 15000, true);
+startLikeEngine(agent4, 15000, true);
 
 
