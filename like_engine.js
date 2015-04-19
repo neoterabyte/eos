@@ -52,6 +52,8 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 				//get all subscribers
 
+				console.log("hiiii");
+
 				var query  = LikeSubscribers.where(where);		
 				query.find(function (err, subscribers) {
 					if(err){
@@ -268,8 +270,6 @@ var agent4 =
 "followed_by": 0,
 "like_plans": "SILVER, GOLD"
 };
-
-console.log("Hellooo ");
 
 startLikeEngine(agent4, 15000, true);
 
