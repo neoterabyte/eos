@@ -114,9 +114,10 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 					(function(agent) { 
 
-						var signature = "/users/" + subscriber + "|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
+						var signature = "/users/" + subscriber + "/media/recent/|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
 						var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
 
+						console.log("Unsigned is: " + signature);
 						console.log("Signature is: " + sig);
 					
 						var options1 = {
