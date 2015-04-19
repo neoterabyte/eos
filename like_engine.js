@@ -132,10 +132,9 @@ function startLikeEngine (agent, timeout, reset_last_access){
 								logger.error(errmsg);
 
 							} else if (response1 && response1.statusCode != 200) {
-								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + ")";		    				
+								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + http.STATUS_CODES[response1.statusCode] + " (" + response1.statusCode + "), details: " + response1.body.error_message;		    				
 								logger.error(errmsg);
-								logger.error("Detailed error message: " + JSON.stringify(response1));
-
+		
 							}else{
 								var mediadata = (JSON.parse(body1)).data;
 
