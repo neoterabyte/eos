@@ -32,7 +32,7 @@
   		},
   	"instagram_api" : {
 		"client_id": "78bc0182510044c99f31aae56759dd1d", 
-		"client_secret": "22ead498a1474eeb8f635f4fdb055c65", 
+		"client_secret": "7c672db4bcf44436b2b3e9e3c128430b", 
 		"redirect_uri": "http://promogram.me/api/oauth/?user_name=@user_name",
 		"max_media_count": "15"
 		}
