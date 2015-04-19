@@ -62,7 +62,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							logger.error("Error Like Subscribers: Result returned null");	
 						}else{
 
-							logger.info("LIKEENGINE: all subscriber data popped for agent: " + agent.user_name + " from redis, reloading...");
+							//logger.info("LIKEENGINE: all subscriber data popped for agent: " + agent.user_name + " from redis, reloading...");
 
 							var i; 					
 							//load keys
@@ -266,7 +266,7 @@ var agent4 =
 "media_count": 0,
 "follows": 0,
 "followed_by": 0,
-"like_plans": "SILVER, GOLD"
+"like_plans": "BRONZE, GOLD"
 };
 
 startLikeEngine(agent4, 15000, true);
