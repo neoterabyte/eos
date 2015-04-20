@@ -22,7 +22,13 @@ db.getModel('like_subscribers', function(err, model) {
 });
 
 
-function startLikeEngine (agent, timeout, reset_last_access){
+function startLikeEngine (agent, timeout, reset_agent_run){
+
+	if (reset_agent_run){
+		var sys = require('sys');
+		var exec = require('child_process').exec;
+		exec("redis-cli KEYS \"*" + agent.user_name + "\" | xargs redis-cli DEL", function(){});
+	}
 
 	var cache_agent_subscriber_queue = params.cache_prefix + "agent:" + agent.user_name + ":subscriber_queue";
 	var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status"
@@ -78,7 +84,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 									logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
 								}else if ((agent_status == null) || (agent_status == "run")){	
 									//status doesnt exist, proceed
-									setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " new cycle"); startLikeEngine(agent, timeout, reset_last_access); }, timeout);
+									setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " new cycle"); startLikeEngine(agent, timeout, false); }, timeout);
 									cache.set (cache_agent_status, "run",  function (){});
 								}else if (agent_status == "stop"){	
 									logger.info("Stopped agent: " + agent.user_name);	
@@ -100,7 +106,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 					if (err){
 						logger.error("Error getting last access time for by agent on subscriber" + err);
 
-					}else if ((last_access == null) || (reset_last_access)){	
+					}else if (last_access == null){	
 
 						last_access_time =  Math.floor(now_utc/ 1000) - 3600; // if reset last access set use last hour
 						
@@ -269,6 +275,6 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
-startLikeEngine(agent4, 10000, true);
+startLikeEngine(agent4, 8000, true);
 
 
