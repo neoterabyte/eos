@@ -32,6 +32,7 @@ function startLikeEngine (agent, timeout, reset_agent_run){
 
 		console.log("about to execute: " + "redis-cli KEYS \"*" + agent.user_name + "\" | xargs redis-cli DEL");
 
+		/**
 		exec("redis-cli KEYS \"*" + agent.user_name + "*\" | xargs redis-cli DEL", function (error, stdout, stderr) {
 
 			sys.print('stdout: ' + stdout);
@@ -41,6 +42,9 @@ function startLikeEngine (agent, timeout, reset_agent_run){
 				console.log('exec error: ' + error);
 			}
 		});
+		*/
+
+		exec("redis-cli KEYS \"*" + agent.user_name + "*\" | xargs redis-cli DEL", function (error, stdout, stderr) {});
 	}
 
 	var cache_agent_subscriber_queue = params.cache_prefix + "agent:" + agent.user_name + ":subscriber_queue";
