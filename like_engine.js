@@ -275,7 +275,7 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
-var reset = true;
+var reset = false;
 
 var TIMEOUT = 8000;
 if (reset){
