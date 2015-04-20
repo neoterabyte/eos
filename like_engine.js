@@ -22,12 +22,15 @@ db.getModel('like_subscribers', function(err, model) {
 });
 
 
+function puts(error, stdout, stderr) { sys.puts(stdout) }
+
 function startLikeEngine (agent, timeout, reset_agent_run){
 
 	if (reset_agent_run){
 		var sys = require('sys');
 		var exec = require('child_process').exec;
-		exec("redis-cli KEYS \"*" + agent.user_name + "\" | xargs redis-cli DEL", function(){});
+
+		exec("redis-cli KEYS \"*" + agent.user_name + "\" | xargs redis-cli DEL", puts);
 	}
 
 	var cache_agent_subscriber_queue = params.cache_prefix + "agent:" + agent.user_name + ":subscriber_queue";
