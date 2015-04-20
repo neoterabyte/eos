@@ -118,9 +118,10 @@ function startLikeEngine (agent, timeout){
 
 						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
 						var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
-
+						//url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
+					
 						var options1 = {
-							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
+							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=2&sig=" + sig
 						};
 
 						request(options1, function (error1, response1, body1) {
@@ -143,9 +144,11 @@ function startLikeEngine (agent, timeout){
 								var mediadata = (JSON.parse(body1)).data;
 
 								logger.info("Media length " + mediadata.length);
+								logger.info(JSON.stringify(mediadata));
 
 								if (mediadata.length > 0){
 
+									/*
 									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time + ", remaining api limit: " + response1.headers['x-ratelimit-remaining']);									
 																		
 									for (x = 0; x < mediadata.length; x++) { 
@@ -178,7 +181,7 @@ function startLikeEngine (agent, timeout){
 										        }
 										    }
 										); 
-									}
+									}*/
 									
 								}
 
