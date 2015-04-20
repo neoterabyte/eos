@@ -124,9 +124,8 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 						request(options1, function (error1, response1, body1) {
 
-							//logger.info("LIKEENGINE: remaining hourly api limit for agent: " + agent.user_name + ", " + response1.headers["X-Ratelimit-Remaining"]);
-							//logger.info("LIKEENGINE: hourly api limit for agent: " + agent.user_name + ", " + response1.headers["X-Ratelimit-Limit"]);
-										
+							console.log(JSON.stringify(response1.headers));
+								
 							if (error1){
 								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + error1;
 								logger.error(errmsg);
@@ -267,6 +266,6 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
-startLikeEngine(agent4, 15000, true);
+startLikeEngine(agent4, 40000, true);
 
 
