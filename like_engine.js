@@ -113,8 +113,7 @@ function startLikeEngine (agent, timeout){
 					//set last access time moved to inside callback so its set just after the request to instagram returns
 					//cache.set (cache_agent_subscriber_last_access_time, Math.floor(now_utc/ 1000) ,  function (){});
 					//cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
-					console.log("Date now is: " + new Date());
-
+					
 					(function(agent) { 
 
 						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
@@ -124,11 +123,7 @@ function startLikeEngine (agent, timeout){
 							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
 						};
 
-						console.log("Date now is1: " + new Date());
-
 						request(options1, function (error1, response1, body1) {
-
-							console.log("Date now is2: " + new Date());
 
 							var now1 = new Date(); 
 							var now_utc1 = new Date(now1.getUTCFullYear(), now1.getUTCMonth(), now1.getUTCDate(),  now1.getUTCHours(), now1.getUTCMinutes(), now1.getUTCSeconds());
@@ -147,7 +142,7 @@ function startLikeEngine (agent, timeout){
 							}else{
 								var mediadata = (JSON.parse(body1)).data;
 
-								//logger.info("Media length " + mediadata.length);
+								logger.info("Media length " + mediadata.length);
 
 								if (mediadata.length > 0){
 
