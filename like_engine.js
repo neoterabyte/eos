@@ -78,7 +78,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 									logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
 								}else if ((agent_status == null) || (agent_status == "run")){	
 									//status doesnt exist, proceed
-									setTimeout(function(){ /*logger.info("LIKEENGINE: " +  agent.user_name + " has woken up");*/ startLikeEngine(agent, timeout, reset_last_access); }, timeout);
+									setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " new cycle"); startLikeEngine(agent, timeout, reset_last_access); }, timeout);
 									cache.set (cache_agent_status, "run",  function (){});
 								}else if (agent_status == "stop"){	
 									logger.info("Stopped agent: " + agent.user_name);	
@@ -124,8 +124,6 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 						request(options1, function (error1, response1, body1) {
 
-							logger.info("Instagram Remaining Limit for agent: " + agent.user_name + ": " + response1.headers['x-ratelimit-remaining']);
-
 							if (error1){
 								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + error1;
 								logger.error(errmsg);
@@ -137,11 +135,12 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							}else{
 								var mediadata = (JSON.parse(body1)).data;
 
-								console.log("Media length " + mediadata.length);
+								//console.log("Media length " + mediadata.length);
 
 								if (mediadata.length > 0){
 
-									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);
+									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);									
+									logger.info("Instagram Remaining Limit for agent: " + agent.user_name + ": " + response1.headers['x-ratelimit-remaining']);
 																		
 									for (x = 0; x < mediadata.length; x++) { 
 
@@ -185,7 +184,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 							logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
 						}else if ((agent_status == null) || (agent_status == "run")){	
 							//status doesnt exist or status is run, proceed
-							setTimeout(function(){ /*logger.info("LIKEENGINE: " + agent.user_name + " has woken up");*/ startLikeEngine(agent, timeout, false); }, timeout);
+							setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " new cycle"); startLikeEngine(agent, timeout, false); }, timeout);
 							cache.set (cache_agent_status, "run",  function (){});
 						}else if (agent_status == "stop"){	
 							logger.info("Stopped agent: " + agent.user_name);	
