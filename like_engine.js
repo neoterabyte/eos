@@ -269,9 +269,9 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
-var reset = false;
+var reset = true;
 
-var TIMEOUT = 15000;
+var TIMEOUT = 40000;
 if (reset){
 	var sys = require('sys');
 	var exec = require('child_process').exec;
