@@ -116,7 +116,8 @@ function startLikeEngine (agent, timeout){
 					
 					(function(agent) { 
 
-						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
+						//var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
+						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=2";
 						var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
 						//url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
 					
