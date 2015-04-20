@@ -145,12 +145,15 @@ function startLikeEngine (agent, timeout, reset_last_access){
 																		
 									for (x = 0; x < mediadata.length; x++) { 
 
-										/*
+										var signature = "/media/" + mediadata[x].id + "/likes|access_token=" + agent.access_token;
+										var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
+
 										
 										request.post(
 										    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
 										    { form: { 
-										    	access_token: agent.access_token
+										    	access_token: agent.access_token,
+										    	sig: sig
 											} },
 										    function (error2, response2, body2) {									        
 										    	if (error2){
@@ -169,7 +172,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 										        	}
 										        }
 										    }
-										); */
+										); 
 									}
 									
 								}
