@@ -93,14 +93,15 @@ function startLikeEngine (agent, timeout){
 
 				cache.get (cache_agent_subscriber_last_access_time, function (err, last_access){
 
-					var now = new Date(); 
-					var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 						
 					if (err){
 						logger.error("Error getting last access time for by agent on subscriber" + err);
 
 					}else if (last_access == null){	
 
+						var now = new Date(); 
+						var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+					
 						last_access_time =  Math.floor(now_utc/ 1000) - 3600; // if reset last access set use last hour
 						
 					}else{
@@ -109,9 +110,10 @@ function startLikeEngine (agent, timeout){
 
 					logger.info("LIKEENGINE: " + cache_agent_subscriber_last_access_time + ": " + new Date(last_access_time * 1000));
 
-					cache.set (cache_agent_subscriber_last_access_time, Math.floor(now_utc/ 1000) ,  function (){});
-					cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
-					/*
+					//set last access time moved to inside callback so its set just after the request to instagram returns
+					//cache.set (cache_agent_subscriber_last_access_time, Math.floor(now_utc/ 1000) ,  function (){});
+					//cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
+					
 					(function(agent) { 
 
 						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
@@ -123,6 +125,13 @@ function startLikeEngine (agent, timeout){
 
 
 						request(options1, function (error1, response1, body1) {
+
+							var now1 = new Date(); 
+							var now_utc1 = new Date(now1.getUTCFullYear(), now1.getUTCMonth(), now1.getUTCDate(),  now1.getUTCHours(), now1.getUTCMinutes(), now1.getUTCSeconds());
+				
+							cache.set (cache_agent_subscriber_last_access_time, Math.floor(now_utc1/ 1000) ,  function (){});
+							cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
+					
 
 							if (error1){
 								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + error1;
@@ -178,7 +187,7 @@ function startLikeEngine (agent, timeout){
 
 							}
 						});
-					})(agent);*/
+					})(agent);
 					cache.get (cache_agent_status, function (err, agent_status){					
 						if (err) {
 							logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
