@@ -94,20 +94,23 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 				cache.get (cache_agent_subscriber_last_access_time, function (err, last_access){
 
-					var last_access_time;
-
+					var now = new Date(); 
+					var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+						
 					if (err){
 						logger.error("Error getting last access time for by agent on subscriber" + err);
 
 					}else if ((last_access == null) || (reset_last_access)){	
 
-						last_access_time = Math.floor((Date.UTC() - 3600)/ 1000); // if reset last access set use last hour
+						last_access_time =  Math.floor(now_utc/ 1000) - 3600; // if reset last access set use last hour
 						
 					}else{
 						last_access_time = last_access;
 					}
 
-					cache.set (cache_agent_subscriber_last_access_time, Math.floor(Date.UTC() / 1000) ,  function (){});
+					logger.info("LIKEENGINE: last access time for agent: " + agent.user_name + " " + new Date(last_access_time * 1000));
+					
+					cache.set (cache_agent_subscriber_last_access_time, Math.floor(now_utc/ 1000) ,  function (){});
 					cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
 
 					(function(agent) { 
@@ -138,7 +141,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 								if (mediadata.length > 0){
 
 									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);									
-									logger.info("Instagram Remaining Limit for agent: " + agent.user_name + ": " + response1.headers['x-ratelimit-remaining']);
+									logger.info("LIKEENGINE: Instagram Remaining Limit for agent: " + agent.user_name + ": " + response1.headers['x-ratelimit-remaining']);
 																		
 									for (x = 0; x < mediadata.length; x++) { 
 
