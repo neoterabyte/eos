@@ -21,29 +21,7 @@ db.getModel('like_subscribers', function(err, model) {
     }   
 });
 
-
-function puts(error, stdout, stderr) { sys.puts(stdout) }
-
-function startLikeEngine (agent, timeout, reset_agent_run){
-
-	if (reset_agent_run){
-		var sys = require('sys');
-		var exec = require('child_process').exec;
-
-		/**
-		exec("redis-cli KEYS \"*" + agent.user_name + "*\" | xargs redis-cli DEL", function (error, stdout, stderr) {
-
-			sys.print('stdout: ' + stdout);
-			sys.print('stderr: ' + stderr);
-
-			if (error !== null) {
-				console.log('exec error: ' + error);
-			}
-		});
-		*/
-
-		exec("redis-cli KEYS \"*" + agent.user_name + "*\" | xargs redis-cli DEL", function (error, stdout, stderr) {});
-	}
+function startLikeEngine (agent, timeout){
 
 	var cache_agent_subscriber_queue = params.cache_prefix + "agent:" + agent.user_name + ":subscriber_queue";
 	var cache_agent_status = params.cache_prefix + "agent:" + agent.user_name + ":status"
@@ -99,7 +77,7 @@ function startLikeEngine (agent, timeout, reset_agent_run){
 									logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
 								}else if ((agent_status == null) || (agent_status == "run")){	
 									//status doesnt exist, proceed
-									setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " new cycle"); startLikeEngine(agent, timeout, false); }, timeout);
+									setTimeout(function(){ logger.info("LIKEENGINE: " +  agent.user_name + " new cycle"); startLikeEngine(agent, timeout); }, timeout);
 									cache.set (cache_agent_status, "run",  function (){});
 								}else if (agent_status == "stop"){	
 									logger.info("Stopped agent: " + agent.user_name);	
@@ -206,7 +184,7 @@ function startLikeEngine (agent, timeout, reset_agent_run){
 							logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
 						}else if ((agent_status == null) || (agent_status == "run")){	
 							//status doesnt exist or status is run, proceed
-							setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " new cycle"); startLikeEngine(agent, timeout, false); }, timeout);
+							setTimeout(function(){ logger.info("LIKEENGINE: " + agent.user_name + " new cycle"); startLikeEngine(agent, timeout); }, timeout);
 							cache.set (cache_agent_status, "run",  function (){});
 						}else if (agent_status == "stop"){	
 							logger.info("Stopped agent: " + agent.user_name);	
@@ -290,6 +268,18 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
-startLikeEngine(agent4, 8000, true);
+var reset = true;
+
+var TIMEOUT = 8000;
+if (reset){
+	var sys = require('sys');
+	var exec = require('child_process').exec;
+	exec("redis-cli KEYS \"*" + agent4.user_name + "*\" | xargs redis-cli DEL", function (error, stdout, stderr) {
+		startLikeEngine(agent4, TIMEOUT);	
+	});
+}else{
+	startLikeEngine(agent4, TIMEOUT);	
+}
+
 
 
