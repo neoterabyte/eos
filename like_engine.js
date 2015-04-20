@@ -101,15 +101,13 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 					}else if ((last_access == null) || (reset_last_access)){	
 
-						var last_access_date =  new Date();
-						last_access_date.setDate(last_access_date.getDate() - 100); //set default last access time to yesterday
-						last_access_time = Math.floor(last_access_date / 1000);
+						last_access_time = Math.floor((Date.UTC() - 3600)/ 1000); // if reset last access set use last hour
 						
 					}else{
 						last_access_time = last_access;
 					}
 
-					cache.set (cache_agent_subscriber_last_access_time, Math.floor(Date.now() / 1000) ,  function (){});
+					cache.set (cache_agent_subscriber_last_access_time, Math.floor(Date.UTC() / 1000) ,  function (){});
 					cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
 
 					(function(agent) { 
