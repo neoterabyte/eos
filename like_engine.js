@@ -132,7 +132,6 @@ function startLikeEngine (agent, timeout){
 							cache.set (cache_agent_subscriber_last_access_time, Math.floor(now_utc1/ 1000) ,  function (){});
 							cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
 					
-
 							if (error1){
 								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + error1;
 								logger.error(errmsg);
@@ -144,19 +143,18 @@ function startLikeEngine (agent, timeout){
 							}else{
 								var mediadata = (JSON.parse(body1)).data;
 
-								//console.log("Media length " + mediadata.length);
+								//logger.info("Media length " + mediadata.length);
 
 								if (mediadata.length > 0){
 
-									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time);									
-									logger.info("LIKEENGINE: Instagram Remaining Limit for agent: " + agent.user_name + ": " + response1.headers['x-ratelimit-remaining']);
+									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time ", remaining api limit: " + response1.headers['x-ratelimit-remaining']);									
 																		
 									for (x = 0; x < mediadata.length; x++) { 
 
 										var signature = "/media/" + mediadata[x].id + "/likes|access_token=" + agent.access_token;
 										var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
 
-										
+										/*
 										request.post(
 										    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
 										    { form: { 
@@ -180,7 +178,7 @@ function startLikeEngine (agent, timeout){
 										        	}
 										        }
 										    }
-										); 
+										); */
 									}
 									
 								}
@@ -277,7 +275,7 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
-var reset = false;
+var reset = true;
 
 var TIMEOUT = 8000;
 if (reset){
