@@ -132,7 +132,7 @@ function startLikeEngine (agent, timeout){
 							var now1 = new Date(); 
 							var now_utc1 = new Date(now1.getUTCFullYear(), now1.getUTCMonth(), now1.getUTCDate(),  now1.getUTCHours(), now1.getUTCMinutes(), now1.getUTCSeconds());
 				
-							cache.set (cache_agent_subscriber_last_access_time, Math.floor(now_utc1/ 1000) ,  function (){});
+							cache.set (cache_agent_subscriber_last_access_time, (Math.floor(now_utc1/ 1000) - 3) ,  function (){});
 							cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
 					
 							if (error1){
@@ -282,7 +282,7 @@ var agent4 =
 
 var reset = false;
 
-var TIMEOUT = 8000;
+var TIMEOUT = 15000;
 if (reset){
 	var sys = require('sys');
 	var exec = require('child_process').exec;
