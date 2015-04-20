@@ -112,7 +112,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 					cache.set (cache_agent_subscriber_last_access_time, Math.floor(now_utc/ 1000) ,  function (){});
 					cache.expire (cache_agent_subscriber_last_access_time, 86400, function (){}); //set this key to expire after one day
-
+					/*
 					(function(agent) { 
 
 						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
@@ -179,7 +179,7 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 							}
 						});
-					})(agent);
+					})(agent);*/
 					cache.get (cache_agent_status, function (err, agent_status){					
 						if (err) {
 							logger.error("Error setting agent run status for " + agent.user_name + ": " + err);	
@@ -269,6 +269,6 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
-startLikeEngine(agent4, 40000, true);
+startLikeEngine(agent4, 10000, true);
 
 
