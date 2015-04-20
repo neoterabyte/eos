@@ -269,6 +269,19 @@ var agent4 =
 "like_plans": "BRONZE, GOLD"
 };
 
+var agent5 =
+{
+"_id": "55338b8b18d55d47997e8919",
+"user_name": "maxmathis764_",
+"is_active": true,
+"access_token": "1526507985.8409d3e.c6c8f75c27044f41962cecd367a2e1f6",
+"user_id": "1526507985",
+"media_count": 0,
+"follows": 0,
+"followed_by": 0,
+"like_plans": "BRONZE, GOLD"
+};
+
 var reset = true;
 
 var TIMEOUT = 40000;
@@ -277,6 +290,10 @@ if (reset){
 	var exec = require('child_process').exec;
 	exec("redis-cli KEYS \"*" + agent4.user_name + "*\" | xargs redis-cli DEL", function (error, stdout, stderr) {
 		startLikeEngine(agent4, TIMEOUT);	
+	});
+
+	exec("redis-cli KEYS \"*" + agent5.user_name + "*\" | xargs redis-cli DEL", function (error, stdout, stderr) {
+		startLikeEngine(agent5, TIMEOUT);	
 	});
 }else{
 	startLikeEngine(agent4, TIMEOUT);	
