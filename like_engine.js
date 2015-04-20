@@ -282,6 +282,7 @@ var agent5 =
 "like_plans": "BRONZE, GOLD"
 };
 
+/*
 var reset = true;
 
 var TIMEOUT = 40000;
@@ -298,6 +299,6 @@ if (reset){
 }else{
 	startLikeEngine(agent4, TIMEOUT);	
 }
-
+*/
 
 

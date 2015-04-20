@@ -473,7 +473,7 @@ router.get('/api/start_like_engine', function(req, res) {
 			}else{
 	
 				var i; 					
-				var agent;
+				var aa;
 				for (i = 0; i < agents.length; i++) {
 				
 					aa = agents[i];
@@ -541,7 +541,7 @@ router.get('/api/stop_like_engine', function(req, res) {
 			}else{
 	
 				var i; 					
-				var agent;
+				var aa;
 				for (i = 0; i < agents.length; i++) {
 				
 					aa = agents[i];					
