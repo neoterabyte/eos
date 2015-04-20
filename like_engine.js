@@ -154,7 +154,7 @@ function startLikeEngine (agent, timeout){
 										var signature = "/media/" + mediadata[x].id + "/likes|access_token=" + agent.access_token;
 										var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
 
-										/*
+										
 										request.post(
 										    "https://api.instagram.com/v1/media/" + mediadata[x].id + "/likes",
 										    { form: { 
@@ -178,7 +178,7 @@ function startLikeEngine (agent, timeout){
 										        	}
 										        }
 										    }
-										); */
+										); 
 									}
 									
 								}
