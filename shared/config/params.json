@@ -31,8 +31,8 @@
     	"client_secret" : "EGZy2E82nETpmD0Th5jeLV9Udihm3Us-XRY4jka0M7oAPaBo0yZ1KMj0DOn8q3ZmB1DRTK7ZjYX8O3Ks"
   		},
   	"instagram_api" : {
-		"client_id": "78bc0182510044c99f31aae56759dd1d", 
-		"client_secret": "7c672db4bcf44436b2b3e9e3c128430b", 
+		"client_id": "8409d3e26cc84366b4527d90fb2bfa7d", 
+		"client_secret": "5c39cec67a0e4cd6993940cc6bf8e942", 
 		"redirect_uri": "http://promogram.me/api/oauth/?user_name=@user_name",
 		"max_media_count": "15"
 		}

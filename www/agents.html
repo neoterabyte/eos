@@ -40,6 +40,7 @@
   <tr>
   	<td>#</td>
     <td>user name</td>
+    <td>user id</td>
     <td>media acount</td>
     <td>follows</td>
     <td>followed by</td>
@@ -83,6 +84,7 @@
 					row = table.insertRow(-1);
 					row.insertCell(-1).innerHTML = i+1;
 					row.insertCell(-1).innerHTML = agents[i].user_name;
+					row.insertCell(-1).innerHTML = agents[i].user_id;
 					row.insertCell(-1).innerHTML = agents[i].media_count;
 					row.insertCell(-1).innerHTML = agents[i].follows;
 					row.insertCell(-1).innerHTML = agents[i].followed_by;
