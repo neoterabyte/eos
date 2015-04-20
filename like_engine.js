@@ -31,8 +31,8 @@ function startLikeEngine (agent, timeout, reset_agent_run){
 		var exec = require('child_process').exec;
 
 		console.log("about to execute: " + "redis-cli KEYS \"*" + agent.user_name + "\" | xargs redis-cli DEL");
-		
-		exec("redis-cli KEYS \"*" + agent.user_name + "\" | xargs redis-cli DEL", function (error, stdout, stderr) {
+
+		exec("redis-cli KEYS \"*" + agent.user_name + "*\" | xargs redis-cli DEL", function (error, stdout, stderr) {
 
 			sys.print('stdout: ' + stdout);
 			sys.print('stderr: ' + stderr);
