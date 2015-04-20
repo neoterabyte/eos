@@ -124,8 +124,9 @@ function startLikeEngine (agent, timeout, reset_last_access){
 
 						request(options1, function (error1, response1, body1) {
 
-							console.log(JSON.stringify(response1.headers));
-								
+							var headers = JSON.stringify(response1.headers);
+							logger.info("Instagram Remaining Limit for agent: " + agent.user_name + ": " + headers.x-ratelimit-remaining);
+
 							if (error1){
 								errmsg = "Instagram API error: agent: " + agent.user_name + ", error: " + error1;
 								logger.error(errmsg);
