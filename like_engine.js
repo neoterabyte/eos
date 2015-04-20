@@ -147,7 +147,7 @@ function startLikeEngine (agent, timeout){
 
 								if (mediadata.length > 0){
 
-									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time ", remaining api limit: " + response1.headers['x-ratelimit-remaining']);									
+									logger.info("LIKEENGINE: start agent liking: " + agent.user_name + ", on subscriber: " + subscriber + ", last access: " + last_access_time + ", remaining api limit: " + response1.headers['x-ratelimit-remaining']);									
 																		
 									for (x = 0; x < mediadata.length; x++) { 
 
