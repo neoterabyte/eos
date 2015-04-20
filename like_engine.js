@@ -116,13 +116,15 @@ function startLikeEngine (agent, timeout){
 					
 					(function(agent) { 
 
-						//var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
-						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=2";
+						var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=1|min_timestamp=" + last_access_time;
+						//var signature = "/users/" + subscriber + "/media/recent|access_token=" + agent.access_token + "|count=2";
 						var sig = crypto.createHmac('sha256', params.instagram_api.client_secret).update(signature).digest('hex');
 						//url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
 					
 						var options1 = {
-							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=2&sig=" + sig
+							//url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=2&sig=" + sig
+							url: "https://api.instagram.com/v1/users/" + subscriber + "/media/recent/?access_token=" + agent.access_token + "&count=1&min_timestamp=" + last_access_time +"&sig=" + sig
+					
 						};
 
 						request(options1, function (error1, response1, body1) {
@@ -145,7 +147,7 @@ function startLikeEngine (agent, timeout){
 								var mediadata = (JSON.parse(body1)).data;
 
 								logger.info("Media length " + mediadata.length);
-								logger.info(JSON.stringify(mediadata));
+								//logger.info(JSON.stringify(mediadata));
 
 								if (mediadata.length > 0){
 
